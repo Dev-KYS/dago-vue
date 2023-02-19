@@ -1,0 +1,26 @@
+.button {
+  cursor: pointer;
+  border: none;
+  &.primary {
+    background: #FF0099;
+    color: white;
+  }
+
+  &.small {
+    //width: 75px;
+    padding: 6px 11.5px;
+    box-sizing: border-box;
+    height: 32px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  &.mid {
+    padding: 15px 20px;
+    box-sizing: border-box;
+    border-radius: 15px;
+    font-size: 20px;
+    font-weight: bold;
+  }
+}
