@@ -6,6 +6,11 @@
     color: white;
   }
 
+  &.natural {
+    background: white;
+    border: 1px solid #424242;
+  }
+
   &.small {
     //width: 75px;
     padding: 6px 11.5px;
@@ -21,6 +26,8 @@
     box-sizing: border-box;
     border-radius: 15px;
     font-size: 20px;
+    height: 48px;
     font-weight: bold;
+    width: 100%;
   }
 }

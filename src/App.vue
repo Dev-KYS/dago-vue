@@ -1,8 +1,7 @@
 <template>
     <header-nav />
-    <div class="container">
-      <router-view></router-view>
-    </div>
+
+    <router-view></router-view>
 </template>
 
 <style lang="scss">
@@ -10,6 +9,9 @@
 .container {
   width: 1160px;
   margin: 0 auto;
+}
+body {
+  margin: 0;
 }
 </style>
 <script setup>
