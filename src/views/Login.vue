@@ -1,12 +1,8 @@
 <template>
-<div class="register-container">
-  <h2>회원가입</h2>
-  <div class="register-form">
-    <div class="register-input-form">
-      <div class="input-group">
-        <span>이름</span>
-        <input type="text" class="" v-model="name">
-      </div>
+<div class="login-container">
+  <h2>로그인</h2>
+  <div class="login-form">
+    <div class="login-input-form">
       <div class="input-group">
         <span>이메일</span>
         <input type="email" class="" v-model="email">
@@ -15,48 +11,35 @@
         <span>비밀번호</span>
         <input type="password" class="" v-model="password">
       </div>
-      <div class="input-group">
-        <span>비밀번호 확인</span>
-        <input type="password" class="" v-model="password_confirmation">
-      </div>
     </div>
-
-    <div class="checkbox-form">
-      <custom-checkbox text="전체동의" />
-      <custom-checkbox text="(필수) 이용약관 동의" />
-      <custom-checkbox text="(필수) 개인정보 수집 및 이용 동의" />
-      <custom-checkbox text="(필수) 만 14세 이상입니다" />
+    <button class="button primary mid">이메일로 로그인</button>
+    <div class="">
+      <ul>
+        <li><router-link to="">비밀번호 찾기</router-link></li>
+        <li><router-link to="/auth/register">회원가입</router-link></li>
+      </ul>
     </div>
+    <div class="">
 
-    <button class="button primary mid" @click="registerCall">회원가입</button>
+    </div>
   </div>
 </div>
 </template>
 
 <script>
-import CustomCheckbox from "@/components/CustomCheckbox.vue";
-
 export default {
-  name: "Register",
-  components: {CustomCheckbox},
+  name: "Login",
   data() {
     return {
-      name: '',
       email: '',
       password: '',
-      password_confirmation: '',
-    }
-  },
-  methods: {
-    registerCall() {
-      console.log(this.name)
     }
   }
 }
 </script>
 
 <style lang="scss">
-.register-container {
+.login-container {
   padding-top: 112px;
   display: flex;
   width: 400px;
@@ -64,10 +47,10 @@ export default {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  .register-form {
+  .login-form {
     width: 100%;
     margin-top: 40px;
-    .register-input-form {
+    .login-input-form {
       width: 100%;
       .input-group {
         width: 100%;

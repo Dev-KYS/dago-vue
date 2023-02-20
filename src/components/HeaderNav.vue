@@ -36,7 +36,7 @@
           </router-link>
         </li>
         <li>
-          <router-link to="" class="">
+          <router-link to="/auth/login" class="">
             로그인
           </router-link>
         </li>
@@ -65,6 +65,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 88px;
+  background: white;
   .nav-wrapper {
     width: 1160px;
     display: flex;
