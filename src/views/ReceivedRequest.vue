@@ -10,8 +10,12 @@
     </div>
     <div class="request-list-container">
       <div class="request-card-wrapper">
-        <request-card-item />
+        <request-card-item v-for="item in requestData" :name="item.name" :title="item.title" :contents="item.contents" :date="item.date" :end-time="item.endTime" />
+        <request-card-item v-for="item in requestData" :name="item.name" :title="item.title" :contents="item.contents" :date="item.date" :end-time="item.endTime" />
       </div>
+    </div>
+    <div class="more-btn-wrapper">
+      <button class="button natural mid">더보기</button>
     </div>
   </div>
 </template>
@@ -21,7 +25,14 @@ import RequestCardItem from "@/components/RequestCardItem.vue";
 
 export default {
   name: "ReceivedRequest",
-  components: {RequestCardItem}
+  components: {RequestCardItem},
+  data() {
+    return {
+      requestData: [
+        {name: 'test',  title: 'test', contents: 'test', date: '2023-03-02', endTime: 2}
+      ]
+    }
+  }
 }
 </script>
 
@@ -61,9 +72,25 @@ export default {
     background: #F9F9F9;
     padding: 20px 0;
     box-sizing: border-box;
+    margin-top: 20px;
     .request-card-wrapper {
       width: 760px;
       margin: 0 auto;
+      .request-card-item {
+        &:not(:first-child) {
+          margin-top: 20px;
+        }
+      }
+    }
+  }
+  .more-btn-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    .button {
+      width: 160px;
     }
   }
 }

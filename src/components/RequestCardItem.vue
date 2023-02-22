@@ -2,22 +2,22 @@
 <div class="request-card-item">
   <div class="profile-wrapper">
     <img class="profile-img" src="" />
-    <p class="name">김다른 고객님</p>
+    <p class="name">{{ name }} 고객님</p>
     <span class="label request-send">의뢰도착</span>
   </div>
   <div class="contents-wrapper">
     <div>
-      <p class="title">사업계획서 작성</p>
-      <p class="contents">현재 온라인 거래를 이용한 플랫폼을 구상하고 있습니다. 만나서 사업계획서를 구상부터 기획까지 회의를 통해 작성하길 원합니다.</p>
+      <p class="title">{{ title }}</p>
+      <p class="contents">{{ contents }}</p>
     </div>
     <div class="date-wrapper">
-      <span>2023년 2월 3일까지</span><span>6시간 후 견적 마감</span>
+      <span>{{ dayjs(date).format('YYYY년 MM월 DD일') }}까지</span><span>{{ endTime }}시간 후 견적 마감</span>
     </div>
   </div>
   <div class="button-wrapper">
     <button class="like-btn" @click="isActive = !isActive">
-      <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8.88659 16.6603L8.88587 16.6596C6.30081 14.3155 4.19567 12.4057 2.73078 10.6147C1.27162 8.83074 0.5 7.22576 0.5 5.5C0.5 2.69614 2.69614 0.5 5.5 0.5C7.08861 0.5 8.62112 1.24197 9.61932 2.41417L10 2.8612L10.3807 2.41417C11.3789 1.24197 12.9114 0.5 14.5 0.5C17.3039 0.5 19.5 2.69614 19.5 5.5C19.5 7.22577 18.7284 8.83077 17.2691 10.6161C15.8065 12.4055 13.7058 14.3144 11.1265 16.6583L11.1148 16.669L11.1137 16.67L10.0013 17.675L8.88659 16.6603Z" fill="{{isActive ? '#FF0099' : 'white'}}" stroke="#FF0099"/>
+      <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg" :class="isActive ? 'active' : ''">
+        <path d="M8.88659 16.6603L8.88587 16.6596C6.30081 14.3155 4.19567 12.4057 2.73078 10.6147C1.27162 8.83074 0.5 7.22576 0.5 5.5C0.5 2.69614 2.69614 0.5 5.5 0.5C7.08861 0.5 8.62112 1.24197 9.61932 2.41417L10 2.8612L10.3807 2.41417C11.3789 1.24197 12.9114 0.5 14.5 0.5C17.3039 0.5 19.5 2.69614 19.5 5.5C19.5 7.22577 18.7284 8.83077 17.2691 10.6161C15.8065 12.4055 13.7058 14.3144 11.1265 16.6583L11.1148 16.669L11.1137 16.67L10.0013 17.675L8.88659 16.6603Z" fill="white" stroke="#FF0099"/>
       </svg>
     </button>
     <button class="button natural small">상세보기</button>
@@ -26,12 +26,29 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
+
 export default {
   name: "RequestCardItem",
+  computed: {
+    dayjs() {
+      return dayjs
+    }
+  },
+  props: {
+    name: String,
+    title: String,
+    contents: String,
+    date: Date,
+    endTime: Number,
+  },
   data() {
     return {
       isActive: false
     }
+  },
+  methods: {
+
   }
 }
 </script>
@@ -127,6 +144,13 @@ export default {
       background: transparent;
       border: none;
       cursor: pointer;
+      svg {
+        &.active {
+          path {
+            fill: #FF0099;
+          }
+        }
+      }
     }
   }
 }
