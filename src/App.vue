@@ -2,6 +2,8 @@
     <header-nav />
 
     <router-view></router-view>
+
+  <footer-nav></footer-nav>
 </template>
 
 <style lang="scss">
@@ -16,4 +18,5 @@ body {
 </style>
 <script setup>
 import HeaderNav from "@/components/organisms/HeaderNav.vue";
+import FooterNav from "@/components/organisms/FooterNav.vue";
 </script>
