@@ -131,6 +131,7 @@ export default {
       padding: 10px;
       margin: auto;
       text-align: center;
+      cursor: pointer;
       span {
         font-size: 18px;
         color: #FFFFFF;
