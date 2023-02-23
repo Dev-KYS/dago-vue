@@ -29,6 +29,9 @@
       <h3>김대표만의 검증된 프로세스</h3>
       <process-slide />
     </div>
+    <div class="information-wrapper">
+      <home-information-side />
+    </div>
   </div>
 </template>
 
@@ -37,10 +40,11 @@ import 'vue3-carousel/dist/carousel.css'
 import CategoryList from "@/components/CategoryList.vue";
 import { Carousel, Slide, Pagination, Navigation } from "vue3-carousel";
 import ProcessSlide from "@/components/ProcessSlide.vue";
+import HomeInformationSide from "@/components/HomeInformationSide.vue";
 
 export default {
   name: "Home",
-  components: {ProcessSlide, CategoryList, Carousel, Slide, Pagination, Navigation},
+  components: {ProcessSlide, CategoryList, HomeInformationSide, Carousel, Slide, Pagination, Navigation},
 }
 </script>
 
@@ -78,6 +82,10 @@ export default {
 }
 
 .process-wrapper {
+  margin-top: 91px;
+}
+
+.information-wrapper {
   margin-top: 91px;
 }
 </style>

@@ -5,30 +5,37 @@
     <div class="register-input-form">
       <div class="input-group">
         <span>이름</span>
-        <input type="text" class="" v-model="name">
+        <input type="text" class="" v-model="name" placeholder="홍길동">
+      </div>
+      <div class="input-group">
+        <span>휴대폰번호</span>
+        <input type="text" class="" v-model="phone" placeholder="010-0000-0000">
       </div>
       <div class="input-group">
         <span>이메일</span>
-        <input type="email" class="" v-model="email">
+        <input type="email" class="" v-model="email" placeholder="dareunkorea@email.com">
       </div>
       <div class="input-group">
         <span>비밀번호</span>
-        <input type="password" class="" v-model="password">
+        <input type="password" class="" v-model="password" placeholder="영문+숫자 조합 8자리 이상 입력해주세요">
       </div>
       <div class="input-group">
         <span>비밀번호 확인</span>
-        <input type="password" class="" v-model="password_confirmation">
+        <input type="password" class="" v-model="password_confirmation" placeholder="비밀번호가 맞는지 확인해주세요">
       </div>
     </div>
 
     <div class="checkbox-form">
       <custom-checkbox text="전체동의" />
+      <hr>
       <custom-checkbox text="(필수) 이용약관 동의" />
       <custom-checkbox text="(필수) 개인정보 수집 및 이용 동의" />
       <custom-checkbox text="(필수) 만 14세 이상입니다" />
     </div>
 
-    <button class="button primary mid" @click="registerCall">회원가입</button>
+    <div class="button-wrapper">
+      <button class="button primary mid" @click="registerCall">회원가입</button>
+    </div>
   </div>
 </div>
 </template>
@@ -42,6 +49,7 @@ export default {
   data() {
     return {
       name: '',
+      phone: '',
       email: '',
       password: '',
       password_confirmation: '',
@@ -92,8 +100,20 @@ export default {
           padding: 11px 21px;
           box-sizing: border-box;
         }
+        input::placeholder {
+          color: #AEAEAE;
+        }
       }
     }
   }
+  .checkbox-form {
+    margin: 50px 0 50px 0;
+  }
+  .button-wrapper {
+    margin: 50px 0 50px 0;
+  }
+}
+hr {
+  border: 1px solid #E3E3E3;
 }
 </style>
