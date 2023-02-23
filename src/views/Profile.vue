@@ -24,11 +24,8 @@
   <input-group />
 
   <div class="category-select-wrapper">
-    <p>제공 서비스</p>
-    <div class="category-wrapper">
-      <ul>
-        <li>문서 및 글작성</li>
-      </ul>
+    <div class="title-wrapper">
+      <p>제공 서비스</p>
       <button class="category-add-btn" @click="showCategoryModal = true">
         <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15.335 10.627H10.085V15.877H8.58496V10.627H3.33496V9.12695H8.58496V3.87695H10.085V9.12695H15.335V10.627Z" fill="#FF0099"/>
@@ -38,13 +35,22 @@
       <Teleport to="body">
         <category-select :show="showCategoryModal" @close="showCategoryModal = false" />
       </Teleport>
-      <div class="category-list">
-        <div class="category-item">
-          <span>문서 및 글 작성</span>
-          <button class="remove-btn">
-            <img src="/assets/icons/close_gray.png" />
-          </button>
-        </div>
+    </div>
+    <div class="category-wrapper">
+      <div class="category-select-tab">
+        <button
+          v-for="(tab, index) in categoryList"
+          :key="index"
+          @click.prevent="currentTab = index"
+          :class="{'active': currentTab === index}">
+          {{ tab.text }}
+        </button>
+      </div>
+      <div class="tab-contents" v-if="currentTab === 0">
+        1
+      </div>
+      <div class="tab-contents" v-if="currentTab === 1">
+        2
       </div>
     </div>
   </div>
@@ -62,15 +68,28 @@
 import InputGroup from "@/components/molecules/InputGroup.vue";
 import CategorySelect from "@/components/modal/CategorySelect.vue";
 import CompanyInfoCreate from "@/components/modal/CompanyInfoCreate.vue";
+import TabItem from "@/components/atoms/TabItem.vue";
 
 export default {
   name: "Profile",
-  components: {CompanyInfoCreate, CategorySelect, InputGroup},
+  components: {TabItem, CompanyInfoCreate, CategorySelect, InputGroup},
   data() {
     return {
       businessYn: false,
       showCategoryModal: false,
       showCompanyModal: false,
+      currentTab: 0,
+      categoryList: [
+        {id: 1, text: '문서 및 글작성', contents: '1'},
+        {id: 2, text: '디자인', contents: '2'},
+        {id: 3, text: 'SW개발', contents: '3'},
+        {id: 4, text: 'HW개발', contents: '4'},
+      ]
+    }
+  },
+  computed: {
+    current() {
+      return this.categoryList.find(el => el.id === this.currentId) || {}
     }
   },
   methods: {
