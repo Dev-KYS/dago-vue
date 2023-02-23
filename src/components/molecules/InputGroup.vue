@@ -1,5 +1,5 @@
 <template>
-<div class="custom-input-group">
+<div class="custom-input-group" :style="style">
   <label>{{ labelText }}</label>
   <custom-input :type="type" />
 </div>
@@ -13,7 +13,13 @@ export default {
   components: {CustomInput},
   props: {
     type: String,
-    labelText: String
+    labelText: String,
+    width: 200
+  },
+  computed: {
+    style() {
+      return 'width:' + this.width + 'px';
+    }
   }
 }
 </script>
@@ -22,6 +28,7 @@ export default {
 .custom-input-group {
   display: flex;
   flex-direction: column;
+  width: 100px;
   label {
     font-weight: bold;
     margin-bottom: 5px;

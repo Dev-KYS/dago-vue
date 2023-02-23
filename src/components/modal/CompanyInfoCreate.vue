@@ -2,26 +2,32 @@
 <Transition name="modal">
   <div class="modal-mask" v-if="show">
     <div class="modal-container">
-      <div class="modal-header">
-        <h2>사업자 등록증 입력</h2>
-      </div>
-      <div class="modal-body">
-        <input-group label-text="사업자 이름" type="text" />
-        <input-group label-text="사업자 등록번호" type="text" />
-        <input-group label-text="직원 수" type="number" />
-
-        <div class="bill-publish">
-          <button>여</button>
-          <button>부</button>
+      <div class="modal-wrapper">
+        <div class="modal-header">
+          <h2>사업자 등록증 입력</h2>
         </div>
-        <div class="attach-wrapper">
-          <button>+ 첨부하기</button>
+        <div class="modal-body">
+          <div class="form-input-wrapper">
+            <input-group label-text="사업자 이름" type="text" width="133" />
+            <input-group label-text="사업자 등록번호" type="text" width="210" />
+            <input-group label-text="직원 수" type="number" width="133" />
+          </div>
+
+          <div class="bill-publish">
+            <p>세금 계산서 발행 여부</p>
+            <check-box-button text="여" />
+            <check-box-button text="부" />
+          </div>
+          <div class="attach-wrapper">
+            <p>사업자 등록증 첨부</p>
+            <file-selector />
+          </div>
         </div>
       </div>
       <div class="modal-footer">
         <div class="button-wrapper">
-          <button class="">저장하기</button>
-          <button class="" @click="$emit('close')">취소</button>
+          <custom-button text="저장하기" button-class="primary mid" />
+          <custom-button text="취소" button-class="natural mid" @click="$emit('close')" />
         </div>
       </div>
     </div>
@@ -32,12 +38,18 @@
 <script>
 import CustomInput from "@/components/atoms/CustomInput.vue";
 import InputGroup from "@/components/molecules/InputGroup.vue";
+import FileSelector from "@/components/molecules/FileSelector.vue";
+import CheckBoxButton from "@/components/atoms/CheckBoxButton.vue";
+import CustomButton from "@/components/atoms/CustomButton.vue";
 
 export default {
   name: "CompanyInfoCreate",
-  components: {InputGroup, CustomInput},
+  components: {CustomButton, CheckBoxButton, FileSelector, InputGroup, CustomInput},
   props: {
     show: Boolean
+  },
+  data() {
+    isBillActive: false
   }
 }
 </script>
@@ -66,16 +78,24 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-
-    .modal-header {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .modal-body {
-
+    .modal-wrapper {
+      width: 100%;
+      .modal-header {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .modal-body {
+        .form-input-wrapper {
+          .custom-input-group {
+            &:not(:last-child) {
+              margin-bottom: 23px;
+            }
+          }
+        }
+      }
     }
     .modal-footer {
 

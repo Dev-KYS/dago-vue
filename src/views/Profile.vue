@@ -26,6 +26,9 @@
   <div class="category-select-wrapper">
     <p>제공 서비스</p>
     <div class="category-wrapper">
+      <ul>
+        <li>문서 및 글작성</li>
+      </ul>
       <button class="category-add-btn" @click="showCategoryModal = true">
         <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15.335 10.627H10.085V15.877H8.58496V10.627H3.33496V9.12695H8.58496V3.87695H10.085V9.12695H15.335V10.627Z" fill="#FF0099"/>

@@ -1,5 +1,5 @@
 <template>
-<button class="button" :type="type">{{ text }}</button>
+<button class="button" :class="buttonClass" :type="type">{{ text }}</button>
 </template>
 
 <script>
@@ -8,13 +8,10 @@ export default {
   props: {
     text: String,
     type: String,
-    size: String,
-    theme: String
+    buttonClass: String
   },
   computed: {
-    size() {
 
-    }
   }
 }
 </script>

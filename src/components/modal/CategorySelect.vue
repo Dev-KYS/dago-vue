@@ -27,13 +27,20 @@
             <category-select-btn text="경영지원" />
             <category-select-btn text="문서 및 글작성" />
           </div>
+          <div class="select-category-list">
+            <select-category-item srt="1" first-category="문서 및 글작성" second-category="사업계획서 작성" />
+            <select-category-item />
+            <select-category-item />
+            <select-category-item />
+            <select-category-item />
+            <select-category-item />
+          </div>
         </div>
       </div>
       <div class="modal-footer">
         <div class="button-wrapper">
-          <button class="button primary mid">저장하기</button>
-          <button class="button natural mid" @click="$emit('close')">취소</button>
-          <custom-button type="button" text="저장하기" size="mid" />
+          <custom-button type="button" text="저장하기" button-class="primary mid" />
+          <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
         </div>
       </div>
     </div>
@@ -44,10 +51,11 @@
 <script>
 import CategorySelectBtn from "@/components/atoms/CategorySelectBtn.vue";
 import CustomButton from "@/components/atoms/CustomButton.vue";
+import SelectCategoryItem from "@/components/molecules/SelectCategoryItem.vue";
 
 export default {
   name: "CategorySelect",
-  components: {CustomButton, CategorySelectBtn},
+  components: {SelectCategoryItem, CustomButton, CategorySelectBtn},
   props: {
     show: Boolean
   }
@@ -67,7 +75,7 @@ export default {
   transition: opacity 0.3s ease;
   .modal-container {
     width: 500px;
-    height: 700px;
+    height: 830px;
     margin: auto;
     padding: 20px 30px;
     background-color: #fff;
@@ -112,6 +120,27 @@ export default {
             &:not(:last-child) {
               margin-right: 10px;
             }
+          }
+        }
+        .select-category-list {
+          margin-top: 30px;
+          height: 220px;
+          overflow-y: scroll;
+          padding: 20px 0;
+          background: #EEEEEE;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+          .select-category-item {
+            &:not(:last-child) {
+              margin-bottom: 20px;
+            }
+          }
+          &::-webkit-scrollbar {
+            display: none;
           }
         }
       }
