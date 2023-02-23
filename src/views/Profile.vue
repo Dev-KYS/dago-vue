@@ -13,8 +13,11 @@
   <div class="business-yn-wrapper">
     <h3>사업자 등록 여부</h3>
     <div class="business-btn">
-      <button class="check-btn" :class="{'active': businessYn === true}" @click="businessYn = !businessYn">여</button>
-      <button class="check-btn" :class="{'active': businessYn === false}" @click="businessYn = !businessYn">부</button>
+      <button class="check-btn" :class="{'active': businessYn === true}" @click="this.companyCreate(true)">여</button>
+      <button class="check-btn" :class="{'active': businessYn === false}" @click="companyCreate(false)">부</button>
+      <Teleport to="body">
+        <company-info-create :show="showCompanyModal" @close="showCompanyModal = false" />
+      </Teleport>
     </div>
   </div>
 
@@ -23,14 +26,14 @@
   <div class="category-select-wrapper">
     <p>제공 서비스</p>
     <div class="category-wrapper">
-      <button class="category-add-btn" @click="showModal = true">
+      <button class="category-add-btn" @click="showCategoryModal = true">
         <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15.335 10.627H10.085V15.877H8.58496V10.627H3.33496V9.12695H8.58496V3.87695H10.085V9.12695H15.335V10.627Z" fill="#FF0099"/>
         </svg>
         서비스 추가
       </button>
       <Teleport to="body">
-        <category-select :show="showModal" @close="showModal = false" />
+        <category-select :show="showCategoryModal" @close="showCategoryModal = false" />
       </Teleport>
       <div class="category-list">
         <div class="category-item">
@@ -53,16 +56,26 @@
 </template>
 
 <script>
-import InputGroup from "@/components/InputGroup.vue";
+import InputGroup from "@/components/molecules/InputGroup.vue";
 import CategorySelect from "@/components/modal/CategorySelect.vue";
+import CompanyInfoCreate from "@/components/modal/CompanyInfoCreate.vue";
 
 export default {
   name: "Profile",
-  components: {CategorySelect, InputGroup},
+  components: {CompanyInfoCreate, CategorySelect, InputGroup},
   data() {
     return {
       businessYn: false,
-      showModal: false,
+      showCategoryModal: false,
+      showCompanyModal: false,
+    }
+  },
+  methods: {
+    companyCreate(bol) {
+      this.businessYn = bol
+      if(this.businessYn === true) {
+        this.showCompanyModal = true
+      }
     }
   }
 }

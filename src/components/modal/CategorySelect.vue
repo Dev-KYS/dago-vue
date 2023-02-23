@@ -2,28 +2,38 @@
 <Transition name="modal">
   <div class="modal-mask" v-if="show">
     <div class="modal-container">
-      <div class="modal-header">
-        <h2>제공 서비스</h2>
-      </div>
-      <div class="modal-body">
-        <p>대분류</p>
-        <div class="first-category-list">
-          <button class="category-item-btn">문서 및 글작성</button>
-          <button class="">SW개발</button>
-          <button class="">HW개발</button>
-          <button class="">디자인</button>
-          <button class="">마케팅</button>
-          <button class="">경영지원</button>
+      <div class="modal-content-wrapper">
+        <div class="modal-header">
+          <h2>제공 서비스</h2>
         </div>
-        <p>세부 카테고리</p>
-        <div class="second-category-list">
-
+        <div class="modal-body">
+          <p>대분류</p>
+          <div class="first-category-list">
+            <category-select-btn text="문서 및 글작성" />
+            <category-select-btn text="SW개발" />
+            <category-select-btn text="HW개발" />
+            <category-select-btn text="디자인" />
+            <category-select-btn text="마케팅" />
+            <category-select-btn text="경영지원" />
+            <category-select-btn text="문서 및 글작성" />
+          </div>
+          <p>세부 카테고리</p>
+          <div class="second-category-list">
+            <category-select-btn text="문서 및 글작성" />
+            <category-select-btn text="SW개발" />
+            <category-select-btn text="HW개발" />
+            <category-select-btn text="디자인" />
+            <category-select-btn text="마케팅" />
+            <category-select-btn text="경영지원" />
+            <category-select-btn text="문서 및 글작성" />
+          </div>
         </div>
       </div>
       <div class="modal-footer">
         <div class="button-wrapper">
-          <button class="">저장하기</button>
-          <button class="" @click="$emit('close')">취소</button>
+          <button class="button primary mid">저장하기</button>
+          <button class="button natural mid" @click="$emit('close')">취소</button>
+          <custom-button type="button" text="저장하기" size="mid" />
         </div>
       </div>
     </div>
@@ -32,8 +42,12 @@
 </template>
 
 <script>
+import CategorySelectBtn from "@/components/atoms/CategorySelectBtn.vue";
+import CustomButton from "@/components/atoms/CustomButton.vue";
+
 export default {
   name: "CategorySelect",
+  components: {CustomButton, CategorySelectBtn},
   props: {
     show: Boolean
   }
@@ -60,28 +74,65 @@ export default {
     border-radius: 15px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
     transition: all 0.3s ease;
-    .modal-header {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .modal-body {
-      .first-category-list {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    .modal-content-wrapper {
+      width: 100%;
+      .modal-header {
         display: flex;
         flex-direction: row;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
-        flex-wrap: wrap;
-        .category-item-btn {
+        margin-bottom: 20px;
+      }
+      .modal-body {
+        .first-category-list {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          flex-wrap: wrap;
           .category-item-btn {
-            
+            margin-bottom: 10px;
+            &:not(:last-child) {
+              margin-right: 10px;
+            }
+          }
+        }
+        .second-category-list {
+          display: flex;
+          flex-direction: row;
+          justify-content: flex-start;
+          align-items: center;
+          flex-wrap: wrap;
+          .category-item-btn {
+            margin-bottom: 10px;
+            &:not(:last-child) {
+              margin-right: 10px;
+            }
           }
         }
       }
-      .second-category-list {
+    }
 
+    .modal-footer {
+      .button-wrapper {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        .button {
+          width: 160px;
+          display: flex;
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+          &:first-child {
+            margin-right: 10px;
+          }
+        }
       }
     }
   }
