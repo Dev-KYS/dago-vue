@@ -1,42 +1,67 @@
 <template>
   <div class="information-container">
-    <div class="information-item-wrapper">
+    <div class="information-item-wrapper" v-for="item in infoData">
       <div class="item-icon-background">
-        <img src="/assets/icons/icon_doc.png">
+        <img :src="item.icon">
       </div>
       <div class="item-title">
-        <p>소중한 내 돈</p>
+        <p><b>{{item.title}}</b></p>
       </div>
       <div class="item-content">
-        <p>소중한 내 돈, 걱정되지 않나요 에스크로 결제 시스템으로 안전하게 보호해드려요!</p>
+        <p v-html="item.desc"></p>
       </div>
     </div>
+  </div>
 
-    <div class="information-item-wrapper">
-      <p>2</p>
-    </div>
-
-    <div class="information-item-wrapper">
-      <p>3</p>
-    </div>
-
-    <div class="information-item-wrapper">
-      <p>4</p>
-    </div>
-
-    <div class="information-item-wrapper">
-      <p>5</p>
-    </div>
-
-    <div class="information-item-wrapper">
-      <p>6</p>
+  <div class="information-link-container">
+    <div class="information-link-item-wrapper">
+      <p><b>소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게 보호해드려요! 소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게 보호해드려요!</b></p>
+      <a class="information-link-item-button">
+        <span>전문가에게 의뢰하기</span>
+      </a>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: "HomeInformationSide"
+  name: "HomeInformationSide",
+  data() {
+    return {
+      infoData: [
+        {
+          title: "소중한 내 돈",
+          desc: "소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게<br>보호해드려요!",
+          icon: "/assets/icons/icon_doc.png"
+        },
+        {
+          title: "소중한 내 돈",
+          desc: "소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게<br>보호해드려요!",
+          icon: "/assets/icons/icon_doc.png"
+        },
+        {
+          title: "소중한 내 돈",
+          desc: "소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게<br>보호해드려요!",
+          icon: "/assets/icons/icon_doc.png"
+        },
+        {
+          title: "소중한 내 돈",
+          desc: "소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게<br>보호해드려요!",
+          icon: "/assets/icons/icon_doc.png"
+        },
+        {
+          title: "소중한 내 돈",
+          desc: "소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게<br>보호해드려요!",
+          icon: "/assets/icons/icon_doc.png"
+        },
+        {
+          title: "소중한 내 돈",
+          desc: "소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게<br>보호해드려요!",
+          icon: "/assets/icons/icon_doc.png"
+        }
+      ]
+    }
+  }
 }
 </script>
 
@@ -50,7 +75,7 @@ export default {
     flex: 1 1 30%;
     display: flex;
     flex-direction: column;
-    margin: auto;
+    margin: 10px;
     .item-icon-background {
       display: flex;
       justify-content: center;
@@ -66,9 +91,50 @@ export default {
       }
     }
     .item-title {
+      margin: auto;
+      p {
+        font-size: 20px;
+        margin-bottom: 4px;
+        text-align: center;
+      }
     }
     .item-content {
-
+      margin: auto;
+      p {
+        font-size: 15px;
+        margin-top: 0;
+        color: #737B7D;
+        text-align: center;
+      }
+    }
+  }
+}
+.information-link-container {
+  background: #EEEEEE;
+  width: 100%;
+  height: 289px;
+  display: flex;
+  .information-link-item-wrapper {
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    p {
+      font-size: 18px;
+      color: #4B4B4B;
+      text-align: center;
+    }
+    .information-link-item-button {
+      background: #FF0099;
+      border-radius: 10px;
+      width: 30%;
+      padding: 10px;
+      margin: auto;
+      text-align: center;
+      span {
+        font-size: 18px;
+        color: #FFFFFF;
+      }
     }
   }
 }
