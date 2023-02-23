@@ -15,5 +15,5 @@ body {
 }
 </style>
 <script setup>
-import HeaderNav from "@/components/HeaderNav.vue";
+import HeaderNav from "@/components/organisms/HeaderNav.vue";
 </script>

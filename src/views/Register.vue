@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import CustomCheckbox from "@/components/CustomCheckbox.vue";
+import CustomCheckbox from "@/components/atoms/CustomCheckbox.vue";
 
 export default {
   name: "Register",
