@@ -4,9 +4,8 @@
 
 <script>
 export default {
-  name: "CustomInput",
+  name: "CustomTextarea",
   props: {
-    label: String,
     type: String
   }
 }

@@ -21,7 +21,9 @@
     </div>
   </div>
 
-  <input-group />
+  <div class="name-select-wrapper">
+    <input-group labelText="이름" />
+  </div>
 
   <div class="category-select-wrapper">
     <div class="title-wrapper">
@@ -69,10 +71,12 @@ import InputGroup from "@/components/molecules/InputGroup.vue";
 import CategorySelect from "@/components/modal/CategorySelect.vue";
 import CompanyInfoCreate from "@/components/modal/CompanyInfoCreate.vue";
 import TabItem from "@/components/atoms/TabItem.vue";
+import TextareaGroup from "@/components/molecules/textareaGroup.vue";
+import CustomInput from "@/components/atoms/CustomInput.vue";
 
 export default {
   name: "Profile",
-  components: {TabItem, CompanyInfoCreate, CategorySelect, InputGroup},
+  components: {CustomInput, TextareaGroup, TabItem, CompanyInfoCreate, CategorySelect, InputGroup},
   data() {
     return {
       businessYn: false,
@@ -171,7 +175,9 @@ export default {
       }
     }
   }
+  .name-select-wrapper {
 
+  }
   .category-select-wrapper {
     .category-wrapper {
       display: flex;
