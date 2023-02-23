@@ -5,22 +5,29 @@
     <div class="login-input-form">
       <div class="input-group">
         <span>이메일</span>
-        <input type="email" class="" v-model="email">
+        <input type="email" class="" v-model="email" placeholder="dareunkorea@email.com">
       </div>
       <div class="input-group">
         <span>비밀번호</span>
         <input type="password" class="" v-model="password">
       </div>
     </div>
-    <button class="button primary mid">이메일로 로그인</button>
-    <div class="">
-      <ul>
-        <li><router-link to="">비밀번호 찾기</router-link></li>
-        <li><router-link to="/auth/register">회원가입</router-link></li>
-      </ul>
+    <div class="button-wrapper">
+      <button class="button primary mid">이메일로 로그인</button>
     </div>
-    <div class="">
-
+    <div class="sign-in-wrapper">
+      <div class="sign-in-container">
+        <span><router-link to="">비밀번호 찾기</router-link></span>
+        <span><router-link to="/auth/register">회원가입</router-link></span>
+      </div>
+<!--      <ul>-->
+<!--        <li><router-link to="">비밀번호 찾기</router-link></li>-->
+<!--        <li><router-link to="/auth/register">회원가입</router-link></li>-->
+<!--      </ul>-->
+    </div>
+    <div class="sns-login-wrapper">
+      <img src="/assets/icons/kakao_login_button.png">
+      <img src="/assets/icons/naver_login_button.png">
     </div>
   </div>
 </div>
@@ -75,6 +82,49 @@ export default {
           padding: 11px 21px;
           box-sizing: border-box;
         }
+        input::placeholder {
+          color: #AEAEAE;
+        }
+      }
+    }
+
+    .button-wrapper {
+      margin: 50px 0 20px 0;
+    }
+    .sign-in-wrapper {
+      display: flex;
+      .sign-in-container {
+        margin: auto;
+        span:nth-child(n+2) {
+          position: relative;
+          margin-left: 20px;
+          padding-left: 20px;
+        }
+        span:nth-child(n+2)::after {
+          position:absolute;
+          left: 0;
+          top: 3px;
+          content: "";
+          width: 1px;
+          height: 15px;
+          background-color: #D2D2D2;
+        }
+        span{
+          a {
+            font-size: 14px;
+            color: #757575;
+          }
+        }
+      }
+    }
+    .sns-login-wrapper {
+      width: 100%;
+      margin: 70px 0;
+      img {
+        width: 100%;
+        align-self: center;
+        margin-top: 10px;
+        cursor: pointer;
       }
     }
   }
