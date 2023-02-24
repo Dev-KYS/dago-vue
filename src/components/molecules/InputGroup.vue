@@ -28,7 +28,7 @@ export default {
 .custom-input-group {
   display: flex;
   flex-direction: column;
-  width: 100px;
+  width: 100%;
   label {
     font-weight: bold;
     margin-bottom: 5px;
@@ -36,7 +36,7 @@ export default {
     font-size: 16px;
   }
   input {
-    border: 1px solid #6C6C6C;
+    border: 1px solid #F5F5F5;
     height: 45px;
     padding: 10px 20px;
     box-sizing: border-box;
