@@ -80,15 +80,23 @@
               <q-item clickable v-close-popup @click="onItemClick">
                 <q-item-section>
                   <q-item-label>
-                    <router-link to="">프로필 관리</router-link>
+                    <router-link to="/profile">프로필 관리</router-link>
                   </q-item-label>
                 </q-item-section>
               </q-item>
 
-              <q-item clickable v-close-popup @click="onItemClick">
+              <q-item clickable v-close-popup @click="onItemClick" v-if="proCheck === true">
                 <q-item-section>
                   <q-item-label>
                     <router-link to="">전문가 전환</router-link>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="onItemClick" v-if="proCheck === false">
+                <q-item-section>
+                  <q-item-label>
+                    <router-link to="">전문가 등록</router-link>
                   </q-item-label>
                 </q-item-section>
               </q-item>
@@ -136,7 +144,12 @@ export default {
   },
   computed: {
     loginCheck() {
-      return this.$store.state.isLogin
+      console.log(this.$store.getters.getUserLoginCheck)
+      return this.$store.getters.getUserLoginCheck
+    },
+    proCheck() {
+      console.log(this.$store.getters.getUserProCheck)
+      return this.$store.getters.getUserProCheck
     }
   }
 }

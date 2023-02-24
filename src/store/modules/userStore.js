@@ -1,25 +1,49 @@
 import router from '@/router'
+import axios from "axios";
 
 const userStore = {
     state: {
-        userEmail: '',
-        userName: '',
-        token: '',
+        userInfo: null,
+        isLogin: false
     },
     mutations: {
-        login: function (state, payload) {
-            state.userEmail = payload.email
-            state.userName = payload.name
-            state.token = payload.token
+        loginSuccess(state, payload) {
+            state.isLogin = true
+            state.userInfo = payload
         },
-        loginCheck: function (state) {
-            if (!state.token) {
-                router.push({
-                    name: 'Login'
-                }).catch(error => {
+        logout(state) {
+            state.isLogin = false
+            state.userInfo = null
+            localStorage.removeItem('access_token')
+        }
+    },
+    actions: {
+        getAccountInfo({ commit }) {
+            let token = localStorage.getItem('access_token')
+            axios.get('/auth/me', {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            })
+                .then((res) => {
+                    commit('loginSuccess', res.data)
+                })
+                .catch((error) => {
                     console.log(error)
                 })
-            }
+        },
+        logoutAccount({ commit }) {
+            commit('logout')
+        }
+    },
+    getters: {
+        getUserLoginCheck: function (state) {
+            return state.isLogin
+        },
+        getUserProCheck: function (state) {
+            return state.userInfo.data.is_pro
         }
     }
 }
+
+export default userStore
