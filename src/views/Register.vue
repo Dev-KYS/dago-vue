@@ -34,7 +34,7 @@
     </div>
 
     <div class="button-wrapper">
-      <button class="button primary mid" @click="registerCall">회원가입</button>
+      <button class="button primary mid" @click="registerSubmit()">회원가입</button>
     </div>
   </div>
 </div>
@@ -58,6 +58,24 @@ export default {
   methods: {
     registerCall() {
       console.log(this.name)
+    },
+    goToMain() {
+      this.$router.push({
+        name: 'Home'
+      })
+    },
+    registerSubmit() {
+      const formData = new FormData()
+      formData.append('name', this.name)
+      formData.append('email', this.email)
+      formData.append('password', this.password)
+      formData.append('password_confirmation', this.password_confirmation)
+      formData.append('phone', this.phone)
+      this.axios.post('/auth/register', formData).then(res => {
+        this.goToMain()
+      }).catch((err) => {
+        console.log(err)
+      })
     }
   }
 }

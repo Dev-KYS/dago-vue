@@ -13,7 +13,7 @@
       </div>
     </div>
     <div class="button-wrapper">
-      <button class="button primary mid">이메일로 로그인</button>
+      <button class="button primary mid" @click="loginSubmit()">이메일로 로그인</button>
     </div>
     <div class="sign-in-wrapper">
       <div class="sign-in-container">
@@ -40,6 +40,22 @@ export default {
     return {
       email: '',
       password: '',
+    }
+  },
+  methods: {
+    loginSubmit() {
+      const formData = new FormData()
+      formData.append('email', this.email)
+      formData.append('password', this.password)
+      this.axios.post('/auth/login', formData).then(res => {
+        console.log(res)
+        let token = res.data.authorisation.token
+        localStorage.setItem('access_token', token)
+        this.$store.dispatch('getAccountInfo')
+        this.$router.push({
+          name: 'Home'
+        })
+      })
     }
   }
 }

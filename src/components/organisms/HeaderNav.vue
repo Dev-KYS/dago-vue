@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="auth-wrapper">
-      <ul>
+      <ul v-if="loginCheck === false">
         <li>
           <router-link to="" class="">
             전문가 등록
@@ -46,6 +46,64 @@
           </router-link>
         </li>
       </ul>
+      <ul v-if="loginCheck === true">
+        <li>
+          <router-link to="" class="">
+            받은 견적
+          </router-link>
+        </li>
+        <li>
+          <router-link to="" class="">
+            채팅
+          </router-link>
+        </li>
+        <li>
+          <q-btn-dropdown
+              no-caps
+              unelevated
+              @click="onMainClick"
+          >
+            <template v-slot:label>
+              <div class="profile-menu-btn">
+                <img src="/assets/icons/default_avatar.png" />
+              </div>
+            </template>
+            <q-list>
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>
+                    <router-link to="">받은 견적</router-link>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>
+                    <router-link to="">프로필 관리</router-link>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="onItemClick">
+                <q-item-section>
+                  <q-item-label>
+                    <router-link to="">전문가 전환</router-link>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="logout">
+                <q-item-section>
+                  <q-item-label>
+                    로그아웃
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+            </q-list>
+          </q-btn-dropdown>
+        </li>
+      </ul>
     </div>
   </div>
 </div>
@@ -53,11 +111,48 @@
 
 <script>
 export default {
-  name: "HeaderNav"
+  name: "HeaderNav",
+  setup() {
+    return {
+      onMainClick () {
+        // console.log('Clicked on main button')
+      },
+
+      onItemClick () {
+        // console.log('Clicked on an Item')
+      }
+    }
+  },
+  methods: {
+    logout() {
+      this.axios.post('/auth/logout', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        this.$store.dispatch('logoutAccount')
+      })
+    }
+  },
+  computed: {
+    loginCheck() {
+      return this.$store.state.isLogin
+    }
+  }
 }
 </script>
 
 <style lang="scss">
+.q-menu {
+  width: 200px;
+  border-radius: 15px!important;
+  .q-item {
+    text-align: center;
+    a {
+      color: black;
+    }
+  }
+}
 .custom-nav {
   border-bottom: 1px solid #E2E5E6;
   display: flex;
@@ -143,6 +238,15 @@ export default {
             font-weight: bold;
             &.button {
               color: white;
+            }
+          }
+          .profile-menu-btn {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            img {
+              width: 32px;
             }
           }
         }
