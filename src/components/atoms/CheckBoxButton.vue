@@ -33,7 +33,6 @@ export default {
   &.active {
     color: #FF0099;
     border: 1px solid #FF0099;
-    font-weight: bold;
   }
 }
 </style>

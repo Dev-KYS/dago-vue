@@ -3,13 +3,13 @@
     <hr>
     <div class="footer-container">
       <div class="footer-cs-wrapper">
-        <p><b>고객센터</b></p>
+        <p class="footer-cs-phone-number">1544-0000</p>
         <p>10:30~18:00 (점심시간 13:00-14:00)</p>
         <p>주말, 공휴일 휴무</p>
       </div>
       <div class="footer-cs-site-map-wrapper">
         <div>
-          <h3>로고</h3>
+          <p>김대표 소개</p>
           <ul>
             <li>고객센터</li>
             <li>고객센터</li>
@@ -18,7 +18,7 @@
           </ul>
         </div>
         <div>
-          <h3>로고</h3>
+          <p>고객 안내</p>
           <ul>
             <li>고객센터</li>
             <li>고객센터</li>
@@ -27,7 +27,7 @@
           </ul>
         </div>
         <div>
-          <h3>로고</h3>
+          <p>전문가 안내</p>
           <ul>
             <li>고객센터</li>
             <li>고객센터</li>
@@ -36,7 +36,7 @@
           </ul>
         </div>
         <div>
-          <h3>로고</h3>
+          <p>고객센터</p>
           <ul>
             <li>고객센터</li>
             <li>고객센터</li>
@@ -81,9 +81,8 @@ export default {
   data() {
     return {
       companyInfoData: {
-        content: "(주)다른코리아 대전광역시 유성구 복욕남로 5-7 2층 대표 : 김진한 개인정보관리책임자 : 송준이 사업자등록번호 : 613-81-65278 사업자 정보확인통신판매업신고 : 2018-서울서초-2134 유료직업소개사업등록번호 : 제2021-3210195-14-5-00035호 고객센터 : 1544-6254help@kmong.com<br>" +
-            "(주)다른코리아는 통신판매중개자이며, 통신판매의 당사자가 아닙니다. 상품, 상품정보, 거래에 관한 의무와 책임은 판매회원에게 있습니다.<br>" +
-            "김대표 사이트의 상품/판매회원/중개 서비스/거래 정보, 콘텐츠, UI 등에 대한 무단복제, 전송, 배포, 스크래핑 등의 행위는 저작권법, 콘텐츠산업 진흥법 등 관련법령에 의하여 엄격히 금지됩니다. [안내 보기]",
+        content: "(주)김대표 대전 유성구 복용남로 5-7, 2층<br>" +
+            "대표 : 김진한 개인정보관리책임자 : 송준이 사업자등록번호 : 613-81-65278 사업자 정보확인통신판매업신고 : 2018-서울서초-2134 유료직업소개사업등록번호 : 제2021-3210195-14-5-00035호 고객센터 : 0000-0000",
         copyRight: "Copyright © 2023 DaruenKorea Inc. All rights reserved."
       },
       snsIconData: [
@@ -107,6 +106,13 @@ export default {
     justify-content: space-between;
     .footer-cs-wrapper {
       flex: 1;
+      .footer-cs-phone-number {
+        font-size: 20px;
+        font-weight: bold;
+      }
+      .footer-cs-info {
+        font-size: 16px;
+      }
     }
     .footer-cs-site-map-wrapper {
       flex: 1;
@@ -115,9 +121,13 @@ export default {
       flex-wrap: wrap;
       justify-content: space-between;
       div {
+        p {
+          font-weight: bold;
+          font-size: 20px;
+        }
         ul {
           list-style: none;
-          padding-left:0px;
+          padding-left:0;
           li {
             padding-bottom: 20px;
           }
@@ -140,7 +150,7 @@ export default {
       .footer-company-info-site-content-wrapper {
         p {
           font-size: 14px;
-          line-height: 200%;
+          line-height: 21px;
           color: #7F7F7F;
         }
       }
