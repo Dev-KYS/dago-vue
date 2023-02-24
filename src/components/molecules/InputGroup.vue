@@ -31,7 +31,6 @@ export default {
   width: 100%;
   label {
     font-weight: bold;
-    margin-bottom: 5px;
     color: #2C2C2C;
     font-size: 16px;
   }
