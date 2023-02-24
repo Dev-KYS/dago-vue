@@ -120,40 +120,40 @@
         <label>연락 가능 시간</label>
       </div>
     </div>
-    <div>
-      <div class="contact-time-select-wrapper">
-        <div class="q-pa-md" style="padding: 0 !important;">
-          <div class="q-gutter-sm row">
-            <q-input filled v-model="startTime" mask="time" :rules="['time']">
-              <template v-slot:append>
-                <q-icon name="access_time" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-time v-model="startTime">
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-time>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
+    <div class="contact-time-select-wrapper">
+      <div class="q-pa-md" style="padding: 0 !important;">
+        <div class="q-gutter-sm row">
+          <q-input filled v-model="startTime" mask="time" :rules="['time']">
+            <template v-slot:append>
+              <q-icon name="access_time" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-time v-model="startTime">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-time>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
 
-            <div><span>~</span></div>
-
-            <q-input filled v-model="endTime" mask="time" :rules="['time']">
-              <template v-slot:append>
-                <q-icon name="access_time" class="cursor-pointer">
-                  <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                    <q-time v-model="endTime">
-                      <div class="row items-center justify-end">
-                        <q-btn v-close-popup label="Close" color="primary" flat />
-                      </div>
-                    </q-time>
-                  </q-popup-proxy>
-                </q-icon>
-              </template>
-            </q-input>
+          <div class="contact-time-picker-division-wrapper">
+            <span class="contact-time-picker-division">~</span>
           </div>
+
+          <q-input filled v-model="endTime" mask="time" :rules="['time']">
+            <template v-slot:append>
+              <q-icon name="access_time" class="cursor-pointer">
+                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                  <q-time v-model="endTime">
+                    <div class="row items-center justify-end">
+                      <q-btn v-close-popup label="Close" color="primary" flat />
+                    </div>
+                  </q-time>
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
         </div>
       </div>
     </div>
@@ -493,6 +493,13 @@ export default {
       display: flex;
       flex-direction: row;
       margin-top: 10px;
+      .contact-time-picker-division-wrapper {
+        display: flex;
+        .contact-time-picker-division {
+          margin: auto;
+          text-align: center;
+        }
+      }
     }
   }
 
