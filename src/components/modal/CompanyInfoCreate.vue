@@ -4,19 +4,19 @@
     <div class="modal-container">
       <div class="modal-wrapper">
         <div class="modal-header">
-          <h2>사업자 등록증 입력</h2>
+          <label>사업자 등록증 입력</label>
         </div>
         <div class="modal-body">
           <div class="form-input-wrapper">
-            <input-group label-text="사업자 이름" type="text" width="133" />
+            <input-group label-text="사업자 이름" type="text" width="133" placeholder="홍길동"/>
             <input-group label-text="사업자 등록번호" type="text" width="210" />
             <input-group label-text="직원 수" type="number" width="133" />
           </div>
 
           <div class="bill-publish">
             <p>세금 계산서 발행 여부</p>
-            <check-box-button text="여" />
-            <check-box-button text="부" />
+            <check-box-button text="여" :active="isBillActive" @click="billCheckButtonClick(true)"/>
+            <check-box-button text="부" :active="!isBillActive" @click="billCheckButtonClick(false)"/>
           </div>
           <div class="attach-wrapper">
             <p>사업자 등록증 첨부</p>
@@ -49,7 +49,14 @@ export default {
     show: Boolean
   },
   data() {
-    isBillActive: false
+    return {
+      isBillActive: false
+    }
+  },
+  methods: {
+    billCheckButtonClick(bol) {
+      this.isBillActive = bol;
+    }
   }
 }
 </script>
@@ -86,6 +93,12 @@ export default {
         justify-content: center;
         align-items: center;
         margin-bottom: 20px;
+
+        label {
+          font-size: 26px;
+          font-weight: bold;
+          color: #1B1B1B;
+        }
       }
       .modal-body {
         .form-input-wrapper {
@@ -94,6 +107,24 @@ export default {
               margin-bottom: 23px;
             }
           }
+        }
+      }
+
+      .bill-publish {
+        margin-top: 23px;
+        p {
+          font-size: 16px;
+          font-weight: bold;
+          color: #2C2C2C;
+        }
+      }
+
+      .attach-wrapper {
+        margin-top: 23px;
+        p {
+          font-size: 16px;
+          font-weight: bold;
+          color: #2C2C2C;
         }
       }
     }

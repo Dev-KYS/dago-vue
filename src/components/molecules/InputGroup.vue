@@ -1,7 +1,7 @@
 <template>
 <div class="custom-input-group" :style="style">
   <label>{{ labelText }}</label>
-  <custom-input :type="type" />
+  <custom-input :type="type" :placeholder="placeholder"/>
 </div>
 </template>
 
@@ -14,6 +14,7 @@ export default {
   props: {
     type: String,
     labelText: String,
+    placeholder: String,
     width: 200
   },
   computed: {
