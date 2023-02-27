@@ -20,6 +20,10 @@ export default {
 .button {
   cursor: pointer;
   border: none;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   &.primary {
     background: #FF0099;
     color: white;
@@ -43,7 +47,7 @@ export default {
   &.mid {
     padding: 15px 20px;
     box-sizing: border-box;
-    border-radius: 15px;
+    border-radius: 12px;
     font-size: 20px;
     height: 48px;
     font-weight: bold;
