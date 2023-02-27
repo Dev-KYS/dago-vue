@@ -4,32 +4,23 @@
     <div class="modal-container">
       <div class="modal-content-wrapper">
         <div class="modal-header">
-          <h2>제공 서비스</h2>
+          <label>제공 서비스</label>
         </div>
         <div class="modal-body">
-          <p>대분류</p>
-          <div class="first-category-list">
-            <category-select-btn text="문서 및 글작성" />
-            <category-select-btn text="SW개발" />
-            <category-select-btn text="HW개발" />
-            <category-select-btn text="디자인" />
-            <category-select-btn text="마케팅" />
-            <category-select-btn text="경영지원" />
-            <category-select-btn text="문서 및 글작성" />
+          <div class="category-tooltip">
+            <span style="color: #FF0099">Tip.</span><span> 2가지 이상 제공 서비스가 가능합니다.</span>
           </div>
-          <p>세부 카테고리</p>
+          <p class="category-header">대분류</p>
+          <div class="first-category-list">
+            <category-select-btn v-for="item in items" :text="item.title" @click="firstCategoryChange(item.subItems)"/>
+          </div>
+          <p class="category-header">세부 카테고리</p>
           <div class="second-category-list">
-            <category-select-btn text="문서 및 글작성" />
-            <category-select-btn text="SW개발" />
-            <category-select-btn text="HW개발" />
-            <category-select-btn text="디자인" />
-            <category-select-btn text="마케팅" />
-            <category-select-btn text="경영지원" />
-            <category-select-btn text="문서 및 글작성" />
+            <category-select-btn v-for="sub in subs" :text="sub.title" />
           </div>
           <div class="select-category-list">
             <select-category-item srt="1" first-category="문서 및 글작성" second-category="사업계획서 작성" />
-            <select-category-item />
+            <select-category-item srt="2" first-category="디자인" second-category="웹디자인"/>
             <select-category-item />
             <select-category-item />
             <select-category-item />
@@ -58,6 +49,60 @@ export default {
   components: {SelectCategoryItem, CustomButton, CategorySelectBtn},
   props: {
     show: Boolean
+  },
+  data() {
+    return {
+      items: [
+        {
+          id: 1,
+          title: '문서 및 글작성',
+          subItems: [
+            { id: 1, itemId: 1, title: '사업계획서 작성' }
+          ]
+        },
+        {
+          id: 2,
+          title: 'SW개발',
+          subItems: [
+            { id: 1, itemId: 2, title: '모바일' }
+          ]
+        },
+        {
+          id: 3,
+          title: 'HW개발',
+          subItems: [
+            { id: 1, itemId: 3, title: '메이커' }
+          ]
+        },
+        {
+          id: 4,
+          title: '디자인',
+          subItems: [
+            { id: 1, itemId: 4, title: '캐릭터' }
+          ]
+        },
+        {
+          id: 5,
+          title: '마케팅',
+          subItems: [
+            { id: 1, itemId: 5, title: '광고' }
+          ]
+        },
+        {
+          id: 6,
+          title: '경영지원',
+          subItems: [
+            { id: 1, itemId: 6, title: '회계' }
+          ]
+        }
+      ],
+      subs: []
+    }
+  },
+  methods: {
+    firstCategoryChange(sub) {
+      this.subs = sub
+    }
   }
 }
 </script>
@@ -75,7 +120,7 @@ export default {
   transition: opacity 0.3s ease;
   .modal-container {
     width: 500px;
-    height: 830px;
+    height: 750px !important;
     margin: auto;
     padding: 20px 30px;
     background-color: #fff;
@@ -94,8 +139,26 @@ export default {
         justify-content: center;
         align-items: center;
         margin-bottom: 20px;
+        label {
+          font-size: 26px;
+          font-weight: bold;
+          color: #1B1B1B;
+        }
       }
       .modal-body {
+        .category-tooltip {
+          background: #FFEBF8;
+          border-radius: 10px;
+          padding: 10px 20px;
+          span {
+            font-size: 12px;
+          }
+        }
+        .category-header {
+          font-weight: bold;
+          font-size: 16px;
+          margin-top: 20px;
+        }
         .first-category-list {
           display: flex;
           flex-direction: row;
