@@ -47,8 +47,11 @@ export default {
     justify-content: flex-start;
     align-items: flex-end;
     h1 {
-      margin: 0 20px 0 0;
+      margin: 0;
       font-size: 32px;
+      font-weight: bold;
+      line-height: normal;
+      margin-right: 10px;
     }
     .request-tab {
       list-style: none;

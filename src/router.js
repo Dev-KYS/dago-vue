@@ -30,6 +30,11 @@ const routes = [
         path: "/request/received",
         name: "ReceivedRequest",
         component: () => import("@/views/ReceivedRequest.vue")
+    },
+    {
+        path: "/myrequest",
+        name: "MyRequest",
+        component: () => import("@/views/MyRequest.vue")
     }
 ];
 
