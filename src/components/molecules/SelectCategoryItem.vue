@@ -4,9 +4,9 @@
     <img src="/assets/icons/close_gray.png" />
   </button>
   <span class="srt-num">{{ srt }}</span>
-  <h3>{{ firstCategory }}</h3>
+  <label>{{ firstCategory }}</label>
   <img src="/assets/icons/arrow-right.png" />
-  <h3>{{ secondCategory }}</h3>
+  <label>{{ secondCategory }}</label>
 </div>
 </template>
 
@@ -35,6 +35,10 @@ export default {
   justify-content: space-between;
   align-items: center;
   position: relative;
+  label {
+    font-size: 16px;
+    font-weight: bold;
+  }
   .remove-btn {
     background: transparent;
     border: none;
