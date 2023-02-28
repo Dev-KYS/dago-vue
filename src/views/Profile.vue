@@ -83,7 +83,10 @@
     </div>
   </div>
 
-  <custom-file-input-group label="포트폴리오" :essential="true" />
+  <custom-file-input-group label="포트폴리오" :essential="true" type="portfolio" @file-add-modal-button-click="fileAddModalButtonClick"/>
+  <Teleport to="body">
+    <portfolio-select :show="showPortfolioModal" @close="showPortfolioModal = false" />
+  </Teleport>
 
   <div class="identity-verification-wrapper">
     <div class="title-wrapper">
@@ -93,9 +96,12 @@
       </div>
     </div>
     <div class="identity-verification-button-wrapper">
-      <button class="identity-verification-btn" type="button">인증하기</button>
+      <button class="identity-verification-btn" type="button" @click="showVerificationModal = true">인증하기</button>
     </div>
   </div>
+  <Teleport to="body">
+    <identity-verification :show="showVerificationModal" @close="showVerificationModal = false" />
+  </Teleport>
 
   <div class="area-select-wrapper">
     <div class="title-wrapper">
@@ -174,6 +180,9 @@
   </div>
 
   <profile-input-file-group label="자격증 및 기타서류"/>
+  <Teleport to="body">
+    <certificate-document :show="showCertificateDocumentModal" @close="showCertificateDocumentModal = false" />
+  </Teleport>
 
   <custom-file-input-group label="경력 사항" :essential="false" />
 
@@ -219,10 +228,16 @@ import CustomFileInputGroup from "@/components/atoms/CustomFileInputGroup.vue";
 import {ref} from "vue";
 import CheckBoxButton from "@/components/atoms/CheckBoxButton.vue";
 import ProfileInputFileGroup from "@/components/atoms/ProfileInputFileGroup.vue";
+import PortfolioSelect from "@/components/modal/PortfolioSelect.vue";
+import IdentityVerification from "@/components/modal/IdentityVerification.vue";
+import CertificateDocument from "@/components/modal/CertificateDocument.vue";
 
 export default {
   name: "Profile",
   components: {
+    CertificateDocument,
+    IdentityVerification,
+    PortfolioSelect,
     ProfileInputFileGroup,
     CheckBoxButton,
     CustomInput, TextareaGroup, TabItem,
@@ -241,6 +256,9 @@ export default {
       businessYn: false,
       showCategoryModal: false,
       showCompanyModal: false,
+      showPortfolioModal: false,
+      showVerificationModal: false,
+      showCertificateDocumentModal: false,
       currentTab: 0,
       categoryList: [
         {id: 1, text: '문서 및 글작성', contents: '1'},
@@ -269,6 +287,14 @@ export default {
         this.cardButtonState = !this.cardButtonState
       } else if (type === 'account') {
         this.accountButtonState = !this.accountButtonState
+      }
+    },
+    fileAddModalButtonClick(type) {
+      console.log(type)
+      if (type === 'portfolio') {
+        this.showPortfolioModal = true;
+      } else {
+        console.log('else');
       }
     }
   }

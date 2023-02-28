@@ -7,22 +7,34 @@
     </div>
     <div class="document-input-file-field">
       <div class="document-input-file-add">
-        <img src="/assets/icons/plus_icon.png">
+        <div class="document-input-img-wrapper">
+          <img src="/assets/icons/plus_icon.png">
+        </div>
       </div>
       <div class="document-input-file-empty">
-        <img src="/assets/icons/default_upload_img.png">
+        <div class="document-input-img-wrapper">
+          <img src="/assets/icons/default_upload_img.png">
+        </div>
       </div>
       <div class="document-input-file-empty">
-        <img src="/assets/icons/default_upload_img.png">
+        <div class="document-input-img-wrapper">
+          <img src="/assets/icons/default_upload_img.png">
+        </div>
       </div>
       <div class="document-input-file-empty">
-        <img src="/assets/icons/default_upload_img.png">
+        <div class="document-input-img-wrapper">
+          <img src="/assets/icons/default_upload_img.png">
+        </div>
       </div>
       <div class="document-input-file-empty">
-        <img src="/assets/icons/default_upload_img.png">
+        <div class="document-input-img-wrapper">
+          <img src="/assets/icons/default_upload_img.png">
+        </div>
       </div>
       <div class="document-input-file-empty">
-        <img src="/assets/icons/default_upload_img.png">
+        <div class="document-input-img-wrapper">
+          <img src="/assets/icons/default_upload_img.png">
+        </div>
       </div>
     </div>
   </div>
@@ -43,20 +55,30 @@ export default {
   .document-input-file-field {
     display: flex;
     flex-direction: row;
+    justify-content: space-between;
     .document-input-file-add {
-      width: 115px;
-      height: 115px;
+      flex: 1 1 16%;
       margin: 10px;
       background: #FFFFFF;
       border-radius: 10px;
       border: 1px solid #FF0099;
       color: #FF0099;
-      font-size: 60px;
-      display: flex;
-      img {
-        margin: auto;
-        width: 39px;
-        height: 39px;
+      position: relative;
+      &:after {
+        content: "";
+        display: block;
+        padding-bottom: 100%;
+      }
+      .document-input-img-wrapper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        img {
+          margin: auto;
+          width: 20%;
+          height: 20%;
+        }
       }
     }
     .document-input-file-empty {
@@ -67,10 +89,17 @@ export default {
       border: 0;
       background: #F9F9F9;
       display: flex;
-      img {
-        margin: auto;
-        width: 48px;
-        height: 48px;
+      position: relative;
+      .document-input-img-wrapper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        img {
+          margin: auto;
+          width: 45%;
+          height: 45%;
+        }
       }
     }
   }

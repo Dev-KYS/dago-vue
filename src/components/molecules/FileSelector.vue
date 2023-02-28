@@ -4,7 +4,7 @@
   <input type="file" hidden="hidden" id="document" @change="previewFiles"/>
   <div class="file-download-remove" v-for="item in selectFiles">
     <file-download-btn :file-name="item.name" />
-    <text-button text="삭제" />
+    <text-button text="삭제" @click="removeFile()"/>
   </div>
 </div>
 </template>
@@ -28,7 +28,10 @@ export default {
     },
     previewFiles(event) {
       this.selectFiles = event.target.files;
-      console.log(event.target.files);
+    },
+    removeFile() {
+      // 한개는 상관없는데 multiple 문제될 듯
+      this.selectFiles = []
     }
   }
 }

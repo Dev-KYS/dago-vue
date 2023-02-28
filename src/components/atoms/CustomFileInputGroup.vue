@@ -7,7 +7,7 @@
       </div>
     </div>
     <div class="portfolio-add-field">
-      <button class="portfolio-add-btn">
+      <button class="portfolio-add-btn" @click="$emit('fileAddModalButtonClick', type)">
         <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M15.335 10.627H10.085V15.877H8.58496V10.627H3.33496V9.12695H8.58496V3.87695H10.085V9.12695H15.335V10.627Z" fill="#FF0099"/>
         </svg>
@@ -22,8 +22,12 @@ export default {
   name: "CustomFileInputGroup",
   props: {
     label: String,
-    essential: Boolean
-  }
+    essential: Boolean,
+    type: String
+  },
+  emits: [
+      'fileAddModalButtonClick'
+  ]
 }
 </script>
 
