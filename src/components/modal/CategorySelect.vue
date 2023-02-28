@@ -12,7 +12,13 @@
           </div>
           <p class="category-header">대분류</p>
           <div class="first-category-list">
-            <category-select-btn v-for="item in items" :text="item.title" @click="firstCategoryChange(item.subItems)"/>
+<!--            <div class="radio-btn-group">-->
+<!--              <div class="radio">-->
+<!--                <input type="radio" name="radio" value="1" checked v-model="checked"><label>ㅅ</label>-->
+<!--                <input type="radio" name="radio" value="2" v-model="checked"><label>ㅅ</label>-->
+<!--              </div>-->
+<!--            </div>-->
+            <category-select-btn v-for="item in items" :text="item.title" :is-active="item.check" @click="firstCategoryChange(item.id)"/>
           </div>
           <p class="category-header">세부 카테고리</p>
           <div class="second-category-list">
@@ -21,10 +27,10 @@
           <div class="select-category-list">
             <select-category-item srt="1" first-category="문서 및 글작성" second-category="사업계획서 작성" />
             <select-category-item srt="2" first-category="디자인" second-category="웹디자인"/>
-            <select-category-item />
-            <select-category-item />
-            <select-category-item />
-            <select-category-item />
+<!--            <select-category-item />-->
+<!--            <select-category-item />-->
+<!--            <select-category-item />-->
+<!--            <select-category-item />-->
           </div>
         </div>
       </div>
@@ -48,7 +54,13 @@ export default {
   name: "CategorySelect",
   components: {SelectCategoryItem, CustomButton, CategorySelectBtn},
   props: {
-    show: Boolean
+    show: Boolean,
+    active: {
+      type: Boolean,
+      default() {
+        return false;
+      }
+    }
   },
   data() {
     return {
@@ -99,9 +111,36 @@ export default {
       subs: []
     }
   },
+  computed: {
+    checked: {
+      get() {
+        return this.active
+      },
+      set(value) {
+        this.$emit('update:active', value)
+      }
+    }
+  },
   methods: {
-    firstCategoryChange(sub) {
-      this.subs = sub
+    firstCategoryChange(itemId) {
+      const temp = this.items;
+      temp.forEach(item => {
+        if (item.id === itemId) {
+          item.check = true;
+          this.subs = item.subItems;
+        } else {
+          item.check = false;
+        }
+      })
+      this.items = temp
+      console.log(this.items)
+
+      // var item = this.items.filter(item => item.id === itemId)[0];
+      // this.items.filter(item => item.id !== itemId).forEach(item => {
+      //   item.check = false;
+      // });
+      // item.check = true;
+      // this.subs = item.subItems;
     }
   }
 }
@@ -171,6 +210,38 @@ export default {
               margin-right: 10px;
             }
           }
+          //.radio-btn-group {
+          //  display: flex;
+          //
+          //  .radio {
+          //    margin: 0 .25rem;
+          //
+          //    label {
+          //      background: #fff;
+          //      border: 1px solid #6C6C6C;
+          //      padding: .5rem 1.25rem;
+          //      border-radius: 8px;
+          //      box-sizing: border-box;
+          //      cursor: pointer;
+          //      color: #424242;
+          //      transition: box-shadow 400ms ease;
+          //
+          //      &:hover {
+          //        box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+          //      }
+          //    }
+          //
+          //    input[type="radio"] {
+          //      display: none;
+          //    }
+          //
+          //    input[type="radio"]:checked+label {
+          //      background: #FF0099;
+          //      color: #fff;
+          //      border-color: #FF0099;
+          //    }
+          //  }
+          //}
         }
         .second-category-list {
           display: flex;
