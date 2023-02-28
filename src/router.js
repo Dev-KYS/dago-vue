@@ -35,6 +35,16 @@ const routes = [
         path: "/myrequest",
         name: "MyRequest",
         component: () => import("@/views/MyRequest.vue")
+    },
+    {
+        path: "/myrequest/list",
+        name: "MyRequestEstimate",
+        component: () => import("@/views/MyRequestEstimate.vue")
+    },
+    {
+        path: "/question/create",
+        name: "QuestionCreate",
+        component: () => import("@/views/QuestionCreate.vue")
     }
 ];
 

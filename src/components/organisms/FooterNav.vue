@@ -97,6 +97,7 @@ export default {
 <style lang="scss">
 .footer-wrapper {
   width: 100%;
+  background: white;
   .footer-container {
     width: 1160px;
     margin: 0 auto;
