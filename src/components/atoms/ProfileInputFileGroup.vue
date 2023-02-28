@@ -7,7 +7,7 @@
     </div>
     <div class="document-input-file-field">
       <div class="document-input-file-add">
-        <div class="document-input-img-wrapper">
+        <div class="document-input-img-wrapper" @click="$emit('fileInputGroupListener', type)">
           <img src="/assets/icons/plus_icon.png">
         </div>
       </div>
@@ -44,14 +44,19 @@
 export default {
   name: "ProfileInputFileGroup",
   props: {
-    label: String
-  }
+    label: String,
+    type: String
+  },
+  emits: [
+      'fileInputGroupListener'
+  ]
 }
 </script>
 
 <style lang="scss">
 .document-input-wrapper {
   margin-top: 50px;
+  width: 100%;
   .document-input-file-field {
     display: flex;
     flex-direction: row;

@@ -7,6 +7,7 @@
           <label>자격증 및 기타서류</label>
         </div>
         <div class="modal-body">
+          <profile-input-file-group/>
         </div>
       </div>
       <div class="modal-footer">
@@ -22,10 +23,11 @@
 
 <script>
 import CustomButton from "@/components/atoms/CustomButton.vue";
+import ProfileInputFileGroup from "@/components/atoms/ProfileInputFileGroup.vue";
 
 export default {
   name: "CertificateDocument",
-  components: {CustomButton},
+  components: {ProfileInputFileGroup, CustomButton},
   props: {
     show: Boolean
   }

@@ -179,14 +179,14 @@
     </div>
   </div>
 
-  <profile-input-file-group label="자격증 및 기타서류"/>
+  <profile-input-file-group label="자격증 및 기타서류" type="cert" @file-input-group-listener="fileInputGroupListener"/>
   <Teleport to="body">
-    <certificate-document :show="showCertificateDocumentModal" @close="showCertificateDocumentModal = false" />
+    <certificate-document :show="showCertificateDocumentModal" @close="showCertificateDocumentModal = false"/>
   </Teleport>
 
-  <custom-file-input-group label="경력 사항" :essential="false" />
+  <custom-file-input-group label="경력 사항" :essential="false" type="career"/>
 
-  <custom-file-input-group label="학력 사항" :essential="false" />
+  <custom-file-input-group label="학력 사항" :essential="false" type="education"/>
 
   <profile-input-file-group label="사진 및 동영상"/>
 
@@ -293,6 +293,18 @@ export default {
       console.log(type)
       if (type === 'portfolio') {
         this.showPortfolioModal = true;
+      } else {
+        console.log('else');
+      }
+    },
+    fileInputGroupListener(type) {
+      if (type === 'cert') {
+        // 자격증
+        this.showCertificateDocumentModal = true;
+      } else if (type === 'career') {
+        // 경력
+      } else if (type === 'education') {
+        // 학력
       } else {
         console.log('else');
       }
