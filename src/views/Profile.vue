@@ -194,7 +194,10 @@
     <education-create :show="showEducationModal" @close="showEducationModal = false"/>
   </Teleport>
 
-  <profile-input-file-group label="사진 및 동영상"/>
+  <profile-input-file-group label="사진 및 동영상" type="pic" @file-input-group-listener="fileInputGroupListener"/>
+  <Teleport to="body">
+    <profile-picture-video :show="showPictureVideoModeal" @close="showPictureVideoModeal = false"/>
+  </Teleport>
 
   <div class="link-input-wrapper">
     <div class="title-wrapper">
@@ -239,10 +242,12 @@ import IdentityVerification from "@/components/modal/IdentityVerification.vue";
 import CertificateDocument from "@/components/modal/CertificateDocument.vue";
 import CareerCreate from "@/components/modal/CareerCreate.vue";
 import EducationCreate from "@/components/modal/EducationCreate.vue";
+import ProfilePictureVideo from "../components/modal/ProfilePictureVideo.vue";
 
 export default {
   name: "Profile",
   components: {
+    ProfilePictureVideo,
     CareerCreate, EducationCreate,
     CertificateDocument,
     IdentityVerification,
@@ -270,6 +275,7 @@ export default {
       showCertificateDocumentModal: false,
       showCareerModal: false,
       showEducationModal: false,
+      showPictureVideoModeal: false,
       currentTab: 0,
       categoryList: [
         {id: 1, text: '문서 및 글작성', contents: '1'},
@@ -319,6 +325,8 @@ export default {
       if (type === 'cert') {
         // 자격증
         this.showCertificateDocumentModal = true;
+      } else if (type === 'pic') {
+        this.showPictureVideoModeal = true;
       } else {
         console.log('else');
       }
