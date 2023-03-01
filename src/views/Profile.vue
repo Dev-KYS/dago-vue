@@ -184,9 +184,15 @@
     <certificate-document :show="showCertificateDocumentModal" @close="showCertificateDocumentModal = false"/>
   </Teleport>
 
-  <custom-file-input-group label="경력 사항" :essential="false" type="career"/>
+  <custom-file-input-group label="경력 사항" :essential="false" type="career" @file-add-modal-button-click="fileAddModalButtonClick"/>
+  <Teleport to="body">
+    <career-create :show="showCareerModal" @close="showCareerModal = false"/>
+  </Teleport>
 
-  <custom-file-input-group label="학력 사항" :essential="false" type="education"/>
+  <custom-file-input-group label="학력 사항" :essential="false" type="education" @file-add-modal-button-click="fileAddModalButtonClick"/>
+  <Teleport to="body">
+    <education-create :show="showEducationModal" @close="showEducationModal = false"/>
+  </Teleport>
 
   <profile-input-file-group label="사진 및 동영상"/>
 
@@ -231,10 +237,13 @@ import ProfileInputFileGroup from "@/components/atoms/ProfileInputFileGroup.vue"
 import PortfolioSelect from "@/components/modal/PortfolioSelect.vue";
 import IdentityVerification from "@/components/modal/IdentityVerification.vue";
 import CertificateDocument from "@/components/modal/CertificateDocument.vue";
+import CareerCreate from "@/components/modal/CareerCreate.vue";
+import EducationCreate from "@/components/modal/EducationCreate.vue";
 
 export default {
   name: "Profile",
   components: {
+    CareerCreate, EducationCreate,
     CertificateDocument,
     IdentityVerification,
     PortfolioSelect,
@@ -259,6 +268,8 @@ export default {
       showPortfolioModal: false,
       showVerificationModal: false,
       showCertificateDocumentModal: false,
+      showCareerModal: false,
+      showEducationModal: false,
       currentTab: 0,
       categoryList: [
         {id: 1, text: '문서 및 글작성', contents: '1'},
@@ -293,18 +304,21 @@ export default {
       console.log(type)
       if (type === 'portfolio') {
         this.showPortfolioModal = true;
+      } else if (type === 'career') {
+        // 경력
+        this.showCareerModal = true;
+      } else if (type === 'education') {
+        // 학력
+        this.showEducationModal = true;
       } else {
         console.log('else');
       }
     },
     fileInputGroupListener(type) {
+      console.log(type);
       if (type === 'cert') {
         // 자격증
         this.showCertificateDocumentModal = true;
-      } else if (type === 'career') {
-        // 경력
-      } else if (type === 'education') {
-        // 학력
       } else {
         console.log('else');
       }

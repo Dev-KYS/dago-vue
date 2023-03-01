@@ -196,9 +196,11 @@ export default {
             width: 130.97px;
             height: 32px;
             border: 1px solid #6C6C6C;
-            filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
             border-radius: 8px;
             background: transparent;
+            svg {
+              cursor: pointer;
+            }
           }
         }
       }

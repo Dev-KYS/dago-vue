@@ -1,23 +1,25 @@
 <template>
-  <input class="custom-input" :type="type" />
+  <textarea :rows="rows" :placeholder="placeholder"></textarea>
 </template>
 
 <script>
 export default {
   name: "CustomTextarea",
   props: {
-    type: String
+    rows: Number,
+    placeholder: String
   }
 }
 </script>
 
 <style lang="scss">
-.custom-input {
-  border: 1px solid #6C6C6C;
+textarea {
+  border: 1px solid #F5F5F5;
   background: white;
   border-radius: 5px;
-  height: 40px;
+  //height: 40px;
   box-sizing: border-box;
   padding: 5px 12px;
+  resize: none;
 }
 </style>
