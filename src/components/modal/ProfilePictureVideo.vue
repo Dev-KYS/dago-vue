@@ -1,12 +1,12 @@
 <template>
   <transition name="modal">
-    <div class="modal-mask" v-if="show">
-      <div class="modal-container">
-        <div class="modal-content-wrapper">
-          <div class="modal-header">
+    <div class="picture-modal-mask" v-if="show">
+      <div class="picture-modal-container">
+        <div class="picture-modal-content-wrapper">
+          <div class="picture-modal-header">
             <label>사진 및 동영상</label>
           </div>
-          <div class="modal-body">
+          <div class="picture-modal-body">
             <div class="title-group">
               <label>사진 업로드</label>
             </div>
@@ -49,7 +49,7 @@
             <input-group label-text="동영상 업로드" placeholder="유튜브 URL 입력" />
           </div>
         </div>
-        <div class="modal-footer">
+        <div class="picture-modal-footer">
           <div class="button-wrapper">
             <custom-button type="button" text="저장하기" button-class="primary mid" />
             <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
@@ -73,7 +73,7 @@ export default {
 </script>
 
 <style lang="scss">
-.modal-mask {
+.picture-modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -84,7 +84,7 @@ export default {
   display: flex;
   transition: opacity 0.3s ease;
 
-  .modal-container {
+  .picture-modal-container {
     width: 500px;
     height: 450px !important;
     margin: auto;
@@ -98,10 +98,10 @@ export default {
     justify-content: space-between;
     align-items: center;
 
-    .modal-content-wrapper {
+    .picture-modal-content-wrapper {
       width: 100%;
 
-      .modal-header {
+      .picture-modal-header {
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -115,7 +115,7 @@ export default {
         }
       }
 
-      .modal-body {
+      .picture-modal-body {
         .title-group {
           display: flex;
           flex-direction: column;
@@ -193,7 +193,7 @@ export default {
         }
       }
     }
-    .modal-footer {
+    .picture-modal-footer {
       .button-wrapper {
         display: flex;
         flex-direction: row;

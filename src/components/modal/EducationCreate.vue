@@ -41,26 +41,21 @@
               <label>학력 증빙자료</label>
             </div>
             <div class="attached-document-wrapper">
-              <div class="title-wrapper">
-                <div class="title-label-wrapper">
-                  <label>첨부자료</label><span style="font-size: 16px; color:#6C6C6C;">(서류형태 자료)</span>
-                </div>
-              </div>
               <button class="attached-document-add-btn" @click="$emit('fileAddModalButtonClick', type)">
                 <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M15.335 10.627H10.085V15.877H8.58496V10.627H3.33496V9.12695H8.58496V3.87695H10.085V9.12695H15.335V10.627Z" fill="#FF0099"/>
                 </svg>
                 학력추가
               </button>
-            </div>
 
-            <div class="attached-document-list-wrapper">
-              <button class="attached-document-list-item">
-                졸업증명서.pdf
-                <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M9.33511 9.7729L5.6228 6.06059L1.91049 9.7729L0.849832 8.71224L4.56214 4.99993L0.849832 1.28762L1.91049 0.226959L5.6228 3.93927L9.33511 0.226959L10.3958 1.28762L6.68346 4.99993L10.3958 8.71224L9.33511 9.7729Z" fill="#6C6C6C"/>
-                </svg>
-              </button>
+              <div class="attached-document-list-wrapper">
+                <button class="attached-document-list-item">
+                  졸업증명서.pdf
+                  <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9.33511 9.7729L5.6228 6.06059L1.91049 9.7729L0.849832 8.71224L4.56214 4.99993L0.849832 1.28762L1.91049 0.226959L5.6228 3.93927L9.33511 0.226959L10.3958 1.28762L6.68346 4.99993L10.3958 8.71224L9.33511 9.7729Z" fill="#6C6C6C"/>
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>

@@ -4,9 +4,12 @@
   <div class="profile-wrapper">
     <div class="profile-img-wrapper">
       <img class="profile-img" src="/assets/icons/default_user_icon.png" />
-      <button class="profile-edit-btn">
+      <button class="profile-edit-btn" @click="showProfileImgChangeModal = true">
         <img src="/assets/icons/edit.png" />
       </button>
+      <Teleport to="body">
+        <profile-img-change :show="showProfileImgChangeModal" @close="showProfileImgChangeModal = false"/>
+      </Teleport>
     </div>
   </div>
 
@@ -199,6 +202,10 @@
     <profile-picture-video :show="showPictureVideoModeal" @close="showPictureVideoModeal = false"/>
   </Teleport>
 
+  <Teleport to="body">
+    <profile-save-complete :show="showSaveCompleteModal" @close="showSaveCompleteModal = false"/>
+  </Teleport>
+
   <div class="link-input-wrapper">
     <div class="title-wrapper">
       <div class="title-label-wrapper">
@@ -218,7 +225,7 @@
 
   <div class="save-button-wrapper">
     <div class="save-button-field">
-      <button class="save-button" type="button">저장하기</button>
+      <button class="save-button" type="button" @click="showSaveCompleteModal = true">저장하기</button>
       <button class="cancel-button" type="button">취소</button>
     </div>
   </div>
@@ -242,13 +249,13 @@ import IdentityVerification from "@/components/modal/IdentityVerification.vue";
 import CertificateDocument from "@/components/modal/CertificateDocument.vue";
 import CareerCreate from "@/components/modal/CareerCreate.vue";
 import EducationCreate from "@/components/modal/EducationCreate.vue";
-import ProfilePictureVideo from "../components/modal/ProfilePictureVideo.vue";
+import ProfileImgChange from "@/components/modal/ProfileImgChange.vue";
+import ProfilePictureVideo from "@/components/modal/ProfilePictureVideo.vue";
+import ProfileSaveComplete from "@/components/modal/ProfileSaveComplete.vue";
 
 export default {
   name: "Profile",
   components: {
-    ProfilePictureVideo,
-    CareerCreate, EducationCreate,
     CertificateDocument,
     IdentityVerification,
     PortfolioSelect,
@@ -256,7 +263,11 @@ export default {
     CheckBoxButton,
     CustomInput, TextareaGroup, TabItem,
     CompanyInfoCreate, CategorySelect, InputGroup,
-    CustomTabInputGroup, CustomFileInputGroup
+    CustomTabInputGroup, CustomFileInputGroup,
+    ProfileSaveComplete,
+    ProfilePictureVideo,
+    ProfileImgChange,
+    CareerCreate, EducationCreate,
   },
   setup() {
     return {
@@ -276,6 +287,8 @@ export default {
       showCareerModal: false,
       showEducationModal: false,
       showPictureVideoModeal: false,
+      showSaveCompleteModal: false,
+      showProfileImgChangeModal: false,
       currentTab: 0,
       categoryList: [
         {id: 1, text: '문서 및 글작성', contents: '1'},

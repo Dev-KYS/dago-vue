@@ -1,12 +1,12 @@
 <template>
 <transition name="modal">
-  <div class="modal-mask" v-if="show">
-    <div class="modal-container">
-      <div class="modal-content-wrapper">
-        <div class="modal-header">
+  <div class="certificate-doc-modal-mask" v-if="show">
+    <div class="certificate-doc-modal-container">
+      <div class="certificate-doc-modal-content-wrapper">
+        <div class="certificate-doc-modal-header">
           <label>자격증 및 기타서류</label>
         </div>
-        <div class="modal-body">
+        <div class="certificate-doc-modal-body">
           <div class="portfolio-add-image-wrapper">
             <div class="portfolio-add-image-input-wrapper">
               <div class="title-wrapper">
@@ -88,7 +88,7 @@
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="certificate-doc-modal-footer">
         <div class="button-wrapper">
           <custom-button type="button" text="저장하기" button-class="primary mid" />
           <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
@@ -114,7 +114,7 @@ export default {
 </script>
 
 <style lang="scss">
-.modal-mask {
+.certificate-doc-modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -125,7 +125,7 @@ export default {
   display: flex;
   transition: opacity 0.3s ease;
 
-  .modal-container {
+  .certificate-doc-modal-container {
     width: 500px;
     height: 550px !important;
     margin: auto;
@@ -139,10 +139,10 @@ export default {
     justify-content: space-between;
     align-items: center;
 
-    .modal-content-wrapper {
+    .certificate-doc-modal-content-wrapper {
       width: 100%;
 
-      .modal-header {
+      .certificate-doc-modal-header {
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -156,11 +156,67 @@ export default {
         }
       }
 
-      .modal-body {
+      .certificate-doc-modal-body {
         .form-input-wrapper {
           .custom-input-group {
             &:not(:last-child) {
               margin-bottom: 23px;
+            }
+          }
+        }
+
+        .portfolio-add-file-field {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+          .portfolio-add-file-add {
+            flex: 1 1 16%;
+            margin: 5px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid #FF0099;
+            color: #FF0099;
+            font-size: 60px;
+            position: relative;
+            &:after {
+              content: "";
+              display: block;
+              padding-bottom: 100%;
+            }
+            .portfolio-img-wrapper {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              img {
+                margin: auto;
+                width: 20px;
+                height: 20px;
+              }
+            }
+          }
+          .portfolio-add-file-empty {
+            flex: 1 1 16%;
+            margin: 5px;
+            border-radius: 10px;
+            border: 0;
+            background: #F9F9F9;
+            position: relative;
+            &:after {
+              content: "";
+              display: block;
+              padding-bottom: 100%;
+            }
+            .portfolio-img-wrapper {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              display: flex;
+              img {
+                margin: auto;
+                width: 45%;
+                height: 45%;
+              }
             }
           }
         }
@@ -205,7 +261,7 @@ export default {
         }
       }
     }
-    .modal-footer {
+    .certificate-doc-modal-footer {
       .button-wrapper {
         display: flex;
         flex-direction: row;
