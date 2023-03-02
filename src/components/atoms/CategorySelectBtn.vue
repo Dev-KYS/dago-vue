@@ -1,5 +1,5 @@
 <template>
-  <button class="category-item-btn" :class="{'active': isActive === true}" @click="isActive = !isActive" @change="">{{ text }}</button>
+  <button class="category-item-btn" :id="id" :class="{'active': isActive === true}">{{ text }}</button>
 </template>
 
 <script>
@@ -10,12 +10,8 @@ export default {
   },
   data() {
     return {
+      id: Number,
       isActive: false
-    }
-  },
-  watch: {
-    isActive: (cur, prev) => {
-      console.log("prev: " + prev + " / cur: " + cur)
     }
   }
 }

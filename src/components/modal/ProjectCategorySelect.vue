@@ -1,32 +1,29 @@
 <template>
-<Transition name="modal">
-  <div class="modal-mask" v-if="show">
-    <div class="modal-container">
-      <div class="modal-content-wrapper">
-        <div class="modal-header">
+<transition name="modal">
+  <div class="category-modal-mask" v-if="show">
+    <div class="category-modal-container">
+      <div class="category-modal-content-wrapper">
+        <div class="category-modal-header">
           <label>제공 서비스</label>
         </div>
-        <div class="modal-body">
+        <div class="category-modal-body">
           <div class="category-tooltip">
             <span style="color: #FF0099">Tip.</span><span> 2가지 이상 제공 서비스가 가능합니다.</span>
           </div>
           <p class="category-header">대분류</p>
           <div class="first-category-list">
             <button class="category-item-btn" v-for="item in items" :class="{'active': selectedCategoryId === item.id}" @click="categorySelected(item.id)">{{item.title}}</button>
-<!--            <category-select-btn v-for="item in items" :text="item.title" :is-active="item.check" @click="firstCategoryChange(item.id)"/>-->
           </div>
           <p class="category-header">세부 카테고리</p>
           <div class="second-category-list">
             <button class="category-item-btn" v-for="item in subs" :class="{'active': selectedSubCategoryId === item.id}" @click="selectedSubCategoryId = item.id">{{item.title}}</button>
-<!--            <category-select-btn v-for="sub in subs" :text="sub.title" />-->
           </div>
-          <div class="select-category-list">
-            <select-category-item srt="1" first-category="문서 및 글작성" second-category="사업계획서 작성" />
-            <select-category-item srt="2" first-category="디자인" second-category="웹디자인"/>
+          <div class="category-description">
+            <textarea rows="3" placeholder="ex) 기타 카테고리 내용을 작성해주세요"/>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
+      <div class="category-modal-footer">
         <div class="button-wrapper">
           <custom-button type="button" text="저장하기" button-class="primary mid" />
           <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
@@ -34,25 +31,19 @@
       </div>
     </div>
   </div>
-</Transition>
+</transition>
 </template>
 
 <script>
-import CategorySelectBtn from "@/components/atoms/CategorySelectBtn.vue";
 import CustomButton from "@/components/atoms/CustomButton.vue";
 import SelectCategoryItem from "@/components/molecules/SelectCategoryItem.vue";
+import CategorySelectBtn from "@/components/atoms/CategorySelectBtn.vue";
 
 export default {
-  name: "CategorySelect",
-  components: {SelectCategoryItem, CustomButton, CategorySelectBtn},
+  name: "ProjectCategorySelect",
+  components: {CategorySelectBtn, SelectCategoryItem, CustomButton},
   props: {
-    show: Boolean,
-    active: {
-      type: Boolean,
-      default() {
-        return false;
-      }
-    }
+    show: Boolean
   },
   data() {
     return {
@@ -105,37 +96,7 @@ export default {
       subs: []
     }
   },
-  computed: {
-    checked: {
-      get() {
-        return this.active
-      },
-      set(value) {
-        this.$emit('update:active', value)
-      }
-    }
-  },
   methods: {
-    firstCategoryChange(itemId) {
-      const temp = this.items;
-      temp.forEach(item => {
-        if (item.id === itemId) {
-          item.check = true;
-          this.subs = item.subItems;
-        } else {
-          item.check = false;
-        }
-      })
-      this.items = temp
-      console.log(this.items)
-
-      // var item = this.items.filter(item => item.id === itemId)[0];
-      // this.items.filter(item => item.id !== itemId).forEach(item => {
-      //   item.check = false;
-      // });
-      // item.check = true;
-      // this.subs = item.subItems;
-    },
     categorySelected(id) {
       this.selectedSubCategoryId = 0;
       this.selectedCategoryId = id;
@@ -146,7 +107,7 @@ export default {
 </script>
 
 <style lang="scss">
-.modal-mask {
+.category-modal-mask {
   position: fixed;
   z-index: 9998;
   top: 0;
@@ -156,7 +117,7 @@ export default {
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   transition: opacity 0.3s ease;
-  .modal-container {
+  .category-modal-container {
     width: 500px;
     height: 750px !important;
     margin: auto;
@@ -169,9 +130,9 @@ export default {
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
-    .modal-content-wrapper {
+    .category-modal-content-wrapper {
       width: 100%;
-      .modal-header {
+      .category-modal-header {
         display: flex;
         flex-direction: row;
         justify-content: center;
@@ -183,7 +144,7 @@ export default {
           color: #1B1B1B;
         }
       }
-      .modal-body {
+      .category-modal-body {
         .category-tooltip {
           background: #FFEBF8;
           border-radius: 10px;
@@ -209,38 +170,6 @@ export default {
               margin-right: 10px;
             }
           }
-          //.radio-btn-group {
-          //  display: flex;
-          //
-          //  .radio {
-          //    margin: 0 .25rem;
-          //
-          //    label {
-          //      background: #fff;
-          //      border: 1px solid #6C6C6C;
-          //      padding: .5rem 1.25rem;
-          //      border-radius: 8px;
-          //      box-sizing: border-box;
-          //      cursor: pointer;
-          //      color: #424242;
-          //      transition: box-shadow 400ms ease;
-          //
-          //      &:hover {
-          //        box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
-          //      }
-          //    }
-          //
-          //    input[type="radio"] {
-          //      display: none;
-          //    }
-          //
-          //    input[type="radio"]:checked+label {
-          //      background: #FF0099;
-          //      color: #fff;
-          //      border-color: #FF0099;
-          //    }
-          //  }
-          //}
         }
         .second-category-list {
           display: flex;
@@ -276,10 +205,20 @@ export default {
             display: none;
           }
         }
+        .category-description {
+          margin-top: 10px;
+          textarea {
+            padding: 10px;
+            width: 100%;
+            resize: none;
+            border: 1px solid #EEEEEE;
+            border-radius: 8px;
+          }
+        }
       }
     }
 
-    .modal-footer {
+    .category-modal-footer {
       .button-wrapper {
         display: flex;
         flex-direction: row;

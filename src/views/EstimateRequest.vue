@@ -18,7 +18,10 @@
           <div class="step-wrapper step-01" v-show="step === 1">
             <h4 class="step-title">세부 카테고리<span class="required">(필수)</span></h4>
             <div class="category-select">
-              <button class="button natural mid">카테고리 선택</button>
+              <button class="button natural mid" @click="showCategoryModal = true">카테고리 선택</button>
+              <Teleport to="body">
+                <project-category-select :show="showCategoryModal" @close="showCategoryModal = false"/>
+              </Teleport>
             </div>
             <div class="button-wrapper">
               <button class="button primary mid next-btn" @click="step = 2">
@@ -199,11 +202,12 @@ import Datepicker from 'vue3-datepicker'
 import { ref, reactive } from 'vue'
 import { ko } from 'date-fns/locale'
 import DataSelector from "@/components/atoms/DataSelector.vue";
+import ProjectCategorySelect from "@/components/modal/ProjectCategorySelect.vue";
 
 
 export default {
   name: "EstimateRequest",
-  components: {DataSelector, CustomButton, Datepicker},
+  components: {ProjectCategorySelect, DataSelector, CustomButton, Datepicker},
   setup() {
     const picked = ref(new Date())
     const locale = reactive(ko)
@@ -225,6 +229,7 @@ export default {
       selectedData: '',
       selectedData2: '',
       processType: '',
+      showCategoryModal: false,
       files: [],
       selectCategory: null,
       contentText: null,
