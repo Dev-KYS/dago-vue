@@ -4,9 +4,12 @@
   <div class="profile-wrapper">
     <div class="profile-img-wrapper">
       <img class="profile-img" src="/assets/icons/default_user_icon.png" />
-      <button class="profile-edit-btn">
+      <button class="profile-edit-btn" @click="showProfileImgChangeModal = true">
         <img src="/assets/icons/edit.png" />
       </button>
+      <Teleport to="body">
+        <profile-img-change :show="showProfileImgChangeModal" @close="showProfileImgChangeModal = false"/>
+      </Teleport>
     </div>
   </div>
 
@@ -179,16 +182,29 @@
     </div>
   </div>
 
-  <profile-input-file-group label="자격증 및 기타서류"/>
+  <profile-input-file-group label="자격증 및 기타서류" type="cert" @file-input-group-listener="fileInputGroupListener"/>
   <Teleport to="body">
-    <certificate-document :show="showCertificateDocumentModal" @close="showCertificateDocumentModal = false" />
+    <certificate-document :show="showCertificateDocumentModal" @close="showCertificateDocumentModal = false"/>
   </Teleport>
 
-  <custom-file-input-group label="경력 사항" :essential="false" />
+  <custom-file-input-group label="경력 사항" :essential="false" type="career" @file-add-modal-button-click="fileAddModalButtonClick"/>
+  <Teleport to="body">
+    <career-create :show="showCareerModal" @close="showCareerModal = false"/>
+  </Teleport>
 
-  <custom-file-input-group label="학력 사항" :essential="false" />
+  <custom-file-input-group label="학력 사항" :essential="false" type="education" @file-add-modal-button-click="fileAddModalButtonClick"/>
+  <Teleport to="body">
+    <education-create :show="showEducationModal" @close="showEducationModal = false"/>
+  </Teleport>
 
-  <profile-input-file-group label="사진 및 동영상"/>
+  <profile-input-file-group label="사진 및 동영상" type="pic" @file-input-group-listener="fileInputGroupListener"/>
+  <Teleport to="body">
+    <profile-picture-video :show="showPictureVideoModeal" @close="showPictureVideoModeal = false"/>
+  </Teleport>
+
+  <Teleport to="body">
+    <profile-save-complete :show="showSaveCompleteModal" @close="showSaveCompleteModal = false"/>
+  </Teleport>
 
   <div class="link-input-wrapper">
     <div class="title-wrapper">
@@ -209,7 +225,7 @@
 
   <div class="save-button-wrapper">
     <div class="save-button-field">
-      <button class="save-button" type="button">저장하기</button>
+      <button class="save-button" type="button" @click="showSaveCompleteModal = true">저장하기</button>
       <button class="cancel-button" type="button">취소</button>
     </div>
   </div>
@@ -231,6 +247,11 @@ import ProfileInputFileGroup from "@/components/atoms/ProfileInputFileGroup.vue"
 import PortfolioSelect from "@/components/modal/PortfolioSelect.vue";
 import IdentityVerification from "@/components/modal/IdentityVerification.vue";
 import CertificateDocument from "@/components/modal/CertificateDocument.vue";
+import CareerCreate from "@/components/modal/CareerCreate.vue";
+import EducationCreate from "@/components/modal/EducationCreate.vue";
+import ProfileImgChange from "@/components/modal/ProfileImgChange.vue";
+import ProfilePictureVideo from "@/components/modal/ProfilePictureVideo.vue";
+import ProfileSaveComplete from "@/components/modal/ProfileSaveComplete.vue";
 
 export default {
   name: "Profile",
@@ -242,7 +263,11 @@ export default {
     CheckBoxButton,
     CustomInput, TextareaGroup, TabItem,
     CompanyInfoCreate, CategorySelect, InputGroup,
-    CustomTabInputGroup, CustomFileInputGroup
+    CustomTabInputGroup, CustomFileInputGroup,
+    ProfileSaveComplete,
+    ProfilePictureVideo,
+    ProfileImgChange,
+    CareerCreate, EducationCreate,
   },
   setup() {
     return {
@@ -259,6 +284,11 @@ export default {
       showPortfolioModal: false,
       showVerificationModal: false,
       showCertificateDocumentModal: false,
+      showCareerModal: false,
+      showEducationModal: false,
+      showPictureVideoModeal: false,
+      showSaveCompleteModal: false,
+      showProfileImgChangeModal: false,
       currentTab: 0,
       categoryList: [
         {id: 1, text: '문서 및 글작성', contents: '1'},
@@ -293,6 +323,23 @@ export default {
       console.log(type)
       if (type === 'portfolio') {
         this.showPortfolioModal = true;
+      } else if (type === 'career') {
+        // 경력
+        this.showCareerModal = true;
+      } else if (type === 'education') {
+        // 학력
+        this.showEducationModal = true;
+      } else {
+        console.log('else');
+      }
+    },
+    fileInputGroupListener(type) {
+      console.log(type);
+      if (type === 'cert') {
+        // 자격증
+        this.showCertificateDocumentModal = true;
+      } else if (type === 'pic') {
+        this.showPictureVideoModeal = true;
       } else {
         console.log('else');
       }
