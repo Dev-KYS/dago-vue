@@ -58,50 +58,7 @@ export default {
     return {
       selectedCategoryId: Number,
       selectedSubCategoryId: Number,
-      items: [
-        {
-          id: 1,
-          title: '문서 및 글작성',
-          subItems: [
-            { id: 1, itemId: 1, title: '사업계획서 작성' }
-          ]
-        },
-        {
-          id: 2,
-          title: 'SW개발',
-          subItems: [
-            { id: 1, itemId: 2, title: '모바일' }
-          ]
-        },
-        {
-          id: 3,
-          title: 'HW개발',
-          subItems: [
-            { id: 1, itemId: 3, title: '메이커' }
-          ]
-        },
-        {
-          id: 4,
-          title: '디자인',
-          subItems: [
-            { id: 1, itemId: 4, title: '캐릭터' }
-          ]
-        },
-        {
-          id: 5,
-          title: '마케팅',
-          subItems: [
-            { id: 1, itemId: 5, title: '광고' }
-          ]
-        },
-        {
-          id: 6,
-          title: '경영지원',
-          subItems: [
-            { id: 1, itemId: 6, title: '회계' }
-          ]
-        }
-      ],
+      items: [],
       subs: []
     }
   },
@@ -136,17 +93,11 @@ export default {
       // item.check = true;
       // this.subs = item.subItems;
     },
-<<<<<<< HEAD
     getFirstCategoryList() {
       this.axios.get('/category').then(res => {
+        this.items = res.data.data
         console.log(res.data.data)
       })
-=======
-    categorySelected(id) {
-      this.selectedSubCategoryId = 0;
-      this.selectedCategoryId = id;
-      this.subs = this.items.filter(data => data.id === id)[0].subItems
->>>>>>> min-work
     }
   },
   mounted() {
