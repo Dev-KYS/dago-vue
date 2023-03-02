@@ -106,7 +106,7 @@
           <div class="step-wrapper step-04" v-show="step === 4">
             <h4 class="step-title">의뢰내용<span class="required">(필수)</span></h4>
             <p>정확한 상담을 위해 의뢰 내용을 상세히 작성해주세요</p>
-            <textarea class="contents" placeholder="<프로젝트의 현재 상황>
+            <textarea class="contents" v-model="contentText" placeholder="<프로젝트의 현재 상황>
 예시) 프로젝트의 목적, 현재 준비 상황, 진행 계획 등
 
 <상세한 업무 내용>
@@ -226,6 +226,8 @@ export default {
       selectedData2: '',
       processType: '',
       files: [],
+      selectCategory: null,
+      contentText: null,
     }
   },
   methods: {
@@ -244,6 +246,15 @@ export default {
     },
     getSelectCity2(id) {
       this.selectedData2 = id
+    },
+    submitEstimate() {
+      const formData = new FormData()
+      formData.append('category_id')
+      this.axios.post('/', formData).then(res => {
+
+      }).catch(error => {
+
+      })
     }
   },
   mounted() {
