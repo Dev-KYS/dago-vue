@@ -59,29 +59,11 @@
           {{ tab.text }}
         </button>
       </div>
-      <div class="tab-contents" v-if="currentTab === 0">
-        <custom-tab-input-group label="제공 서비스 소개" desc="ex) 창업, 자금조달, 신규사업, 투자유피, 신년도 사업계획 등 사업내용을 정리합니다. 또 사업 실패요인을 분석한 후 발생할 시행착오를 최소화함으로써 시간과 비용을 절약해드립니다."/>
-        <custom-tab-input-group label="전문 분야" desc="ex) 소셜벤처 / 소상공인 / 프렌차이즈 / 기술 창업 등 (서술형)"/>
-        <custom-tab-input-group label="한줄 소개" desc="ex) 안녕하세요. 창업 전문 글작성가 김다른입니다. (서술형)"/>
-        <custom-tab-input-group label="상세 설명" desc="ex) 예비창업패키지 전문 멘토 및 심사위원으로 창업의 전반적인 컨설팅 및 업무가 가능합니다. (서술형)"/>
-      </div>
-      <div class="tab-contents" v-if="currentTab === 1">
-        <custom-tab-input-group label="제공 서비스 소개" desc="ex) 로고, 캐릭터 등 디자인 내용을 정리합니다."/>
-        <custom-tab-input-group label="전문 분야" desc="ex) 로고 / 캐릭터 등 (서술형)"/>
-        <custom-tab-input-group label="한줄 소개" desc="ex) 안녕하세요. 캐릭터 디자인 전문가 김다른입니다. (서술형)"/>
-        <custom-tab-input-group label="상세 설명" desc="ex) 예비창업패키지 전문 멘토 및 심사위원으로 창업의 전반적인 컨설팅 및 업무가 가능합니다. (서술형)"/>
-      </div>
-      <div class="tab-contents" v-if="currentTab === 2">
-        <custom-tab-input-group label="제공 서비스 소개" desc="ex) Backend, Frontend 등 개발가능 분야를 정리합니다."/>
-        <custom-tab-input-group label="전문 분야" desc="ex) Java, Kotlin, PHP, Python 등 전문분야 (서술형)"/>
-        <custom-tab-input-group label="한줄 소개" desc="ex) 안녕하세요. 서버 전문 개발자 김다른입니다. (서술형)"/>
-        <custom-tab-input-group label="상세 설명" desc="ex) 예비창업패키지 전문 멘토 및 심사위원으로 창업의 전반적인 컨설팅 및 업무가 가능합니다. (서술형)"/>
-      </div>
-      <div class="tab-contents" v-if="currentTab === 3">
-        <custom-tab-input-group label="제공 서비스 소개" desc="ex) PC 조립, 서버 세팅 등 사업내용을 정리합니다."/>
-        <custom-tab-input-group label="전문 분야" desc="ex) 워크스테이션, 일반 PC 등 (서술형)"/>
-        <custom-tab-input-group label="한줄 소개" desc="ex) 안녕하세요. PC 조립 전문가 김다른입니다. (서술형)"/>
-        <custom-tab-input-group label="상세 설명" desc="ex) 예비창업패키지 전문 멘토 및 심사위원으로 창업의 전반적인 컨설팅 및 업무가 가능합니다. (서술형)"/>
+      <div class="tab-contents" :class="{'active': currentTab === index}" v-for="(item, index) in categoryList" :key="index">
+        <custom-tab-input-group label="제공 서비스 소개" :text="item.intro" desc="ex) 창업, 자금조달, 신규사업, 투자유피, 신년도 사업계획 등 사업내용을 정리합니다. 또 사업 실패요인을 분석한 후 발생할 시행착오를 최소화함으로써 시간과 비용을 절약해드립니다."/>
+        <custom-tab-input-group label="전문 분야" :text="item.category" desc="ex) 소셜벤처 / 소상공인 / 프렌차이즈 / 기술 창업 등 (서술형)"/>
+        <custom-tab-input-group label="한줄 소개" :text="item.short_description" desc="ex) 안녕하세요. 창업 전문 글작성가 김다른입니다. (서술형)"/>
+        <custom-tab-input-group label="상세 설명" :text="item.description" desc="ex) 예비창업패키지 전문 멘토 및 심사위원으로 창업의 전반적인 컨설팅 및 업무가 가능합니다. (서술형)"/>
       </div>
     </div>
   </div>
@@ -113,13 +95,8 @@
       </div>
     </div>
     <div class="area-select-field">
-      <select>
-        <option>광역시/도</option>
-      </select>
-
-      <select>
-        <option>시/구</option>
-      </select>
+      <data-selector :list-data="cityData" @updateSelectedData="getSelectCity" />
+      <data-selector :list-data="cityData2" @updateSelectedData="getSelectCity2" />
     </div>
   </div>
 
@@ -130,41 +107,64 @@
       </div>
     </div>
     <div class="contact-time-select-wrapper">
-      <div class="q-pa-md" style="padding: 0 !important;">
-        <div class="q-gutter-sm row">
-          <q-input filled v-model="startTime" mask="time" :rules="['time']">
-            <template v-slot:append>
-              <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                  <q-time v-model="startTime">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-time>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-
-          <div class="contact-time-picker-division-wrapper">
-            <span class="contact-time-picker-division">~</span>
-          </div>
-
-          <q-input filled v-model="endTime" mask="time" :rules="['time']">
-            <template v-slot:append>
-              <q-icon name="access_time" class="cursor-pointer">
-                <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                  <q-time v-model="endTime">
-                    <div class="row items-center justify-end">
-                      <q-btn v-close-popup label="Close" color="primary" flat />
-                    </div>
-                  </q-time>
-                </q-popup-proxy>
-              </q-icon>
-            </template>
-          </q-input>
-        </div>
+      <select>
+        <option value="">시간선택</option>
+        <option value="am12">오전 12시</option>
+        <option value="am1">오전 1시</option>
+        <option value="am2">오전 2시</option>
+        <option value="am3">오전 3시</option>
+        <option value="am4">오전 4시</option>
+        <option value="am5">오전 5시</option>
+        <option value="am6">오전 6시</option>
+        <option value="am7">오전 7시</option>
+        <option value="am8">오전 8시</option>
+        <option value="am9">오전 9시</option>
+        <option value="am10">오전 10시</option>
+        <option value="am11">오전 11시</option>
+        <option value="pm12">오후 12시</option>
+        <option value="pm1">오후 1시</option>
+        <option value="pm2">오후 2시</option>
+        <option value="pm3">오후 3시</option>
+        <option value="pm4">오후 4시</option>
+        <option value="pm5">오후 5시</option>
+        <option value="pm6">오후 6시</option>
+        <option value="pm7">오후 7시</option>
+        <option value="pm8">오후 8시</option>
+        <option value="pm9">오후 9시</option>
+        <option value="pm10">오후 10시</option>
+        <option value="pm11">오후 11시</option>
+      </select>
+      <div class="contact-time-picker-division-wrapper">
+        <span class="contact-time-picker-division">~</span>
       </div>
+
+      <select>
+        <option>시간선택</option>
+        <option value="am12">오전 12시</option>
+        <option value="am1">오전 1시</option>
+        <option value="am2">오전 2시</option>
+        <option value="am3">오전 3시</option>
+        <option value="am4">오전 4시</option>
+        <option value="am5">오전 5시</option>
+        <option value="am6">오전 6시</option>
+        <option value="am7">오전 7시</option>
+        <option value="am8">오전 8시</option>
+        <option value="am9">오전 9시</option>
+        <option value="am10">오전 10시</option>
+        <option value="am11">오전 11시</option>
+        <option value="pm12">오후 12시</option>
+        <option value="pm1">오후 1시</option>
+        <option value="pm2">오후 2시</option>
+        <option value="pm3">오후 3시</option>
+        <option value="pm4">오후 4시</option>
+        <option value="pm5">오후 5시</option>
+        <option value="pm6">오후 6시</option>
+        <option value="pm7">오후 7시</option>
+        <option value="pm8">오후 8시</option>
+        <option value="pm9">오후 9시</option>
+        <option value="pm10">오후 10시</option>
+        <option value="pm11">오후 11시</option>
+      </select>
     </div>
   </div>
 
@@ -199,7 +199,7 @@
 
   <profile-input-file-group label="사진 및 동영상" type="pic" @file-input-group-listener="fileInputGroupListener"/>
   <Teleport to="body">
-    <profile-picture-video :show="showPictureVideoModeal" @close="showPictureVideoModeal = false"/>
+    <profile-picture-video :show="showPictureVideoModal" @close="showPictureVideoModal = false"/>
   </Teleport>
 
   <Teleport to="body">
@@ -252,10 +252,12 @@ import EducationCreate from "@/components/modal/EducationCreate.vue";
 import ProfileImgChange from "@/components/modal/ProfileImgChange.vue";
 import ProfilePictureVideo from "@/components/modal/ProfilePictureVideo.vue";
 import ProfileSaveComplete from "@/components/modal/ProfileSaveComplete.vue";
+import DataSelector from "@/components/atoms/DataSelector.vue";
 
 export default {
   name: "Profile",
   components: {
+    DataSelector,
     CertificateDocument,
     IdentityVerification,
     PortfolioSelect,
@@ -286,18 +288,22 @@ export default {
       showCertificateDocumentModal: false,
       showCareerModal: false,
       showEducationModal: false,
-      showPictureVideoModeal: false,
+      showPictureVideoModal: false,
       showSaveCompleteModal: false,
       showProfileImgChangeModal: false,
       currentTab: 0,
       categoryList: [
-        {id: 1, text: '문서 및 글작성', contents: '1'},
-        {id: 2, text: '디자인', contents: '2'},
-        {id: 3, text: 'SW개발', contents: '3'},
-        {id: 4, text: 'HW개발', contents: '4'},
+        {id: 1, text: '문서 및 글작성', intro: 'test', category: 'test', short_description: 'test', description: 'test'},
+        {id: 2, text: '디자인', intro: 'test', category: 'test', short_description: 'test', description: 'test'},
+        {id: 3, text: 'SW개발', intro: 'test', category: 'test', short_description: 'test', description: 'test'},
+        {id: 4, text: 'HW개발', intro: 'test', category: 'test', short_description: 'test', description: 'test'},
       ],
       cardButtonState: true,
-      accountButtonState: false
+      accountButtonState: false,
+      cityData: Array,
+      cityData2: Array,
+      selectedData: '',
+      selectedData2: '',
     }
   },
   computed: {
@@ -339,16 +345,44 @@ export default {
         // 자격증
         this.showCertificateDocumentModal = true;
       } else if (type === 'pic') {
-        this.showPictureVideoModeal = true;
+        this.showPictureVideoModal = true;
       } else {
         console.log('else');
       }
+    },
+    getCityData() {
+      this.axios('/city').then(res => {
+        this.cityData = res.data.data
+      })
+    },
+    getCityData2(id) {
+      this.axios('/city/'+id).then(res => {
+        this.cityData2 = res.data.data
+      })
+    },
+    getSelectCity(id) {
+      this.selectedData = id
+    },
+    getSelectCity2(id) {
+      this.selectedData2 = id
+    },
+  },
+  mounted() {
+    this.getCityData()
+  },
+  watch: {
+    selectedData(id) {
+      console.log(id)
+      this.getCityData2(id)
     }
   }
 }
 </script>
 
 <style lang="scss">
+#app {
+  background: white;
+}
 .profile-container {
   width: 760px;
   margin: 0 auto;
@@ -479,12 +513,16 @@ export default {
         }
       }
       .tab-contents {
+        display: none;
         border-top: 0;
         border-bottom: 1px solid #EEEEEE;
         border-left: 1px solid #EEEEEE;
         border-right: 1px solid #EEEEEE;
         border-radius: 0 0 10px 10px;
         box-shadow: 0px 12px 24px rgba(207, 215, 226, 0.54);
+        &.active {
+          display: block;
+        }
       }
       .category-list {
         display: flex;
@@ -566,6 +604,14 @@ export default {
       display: flex;
       flex-direction: row;
       margin-top: 10px;
+      select {
+        margin: 0 20px 0 0;
+        width: 110px;
+        height: 32px;
+        border: 1px solid #EEEEEE;
+        border-radius: 5px;
+        text-align: center;
+      }
       .contact-time-picker-division-wrapper {
         display: flex;
         .contact-time-picker-division {

@@ -141,7 +141,15 @@ export default {
       // });
       // item.check = true;
       // this.subs = item.subItems;
+    },
+    getFirstCategoryList() {
+      this.axios.get('/category').then(res => {
+        console.log(res.data.data)
+      })
     }
+  },
+  mounted() {
+    this.getFirstCategoryList()
   }
 }
 </script>

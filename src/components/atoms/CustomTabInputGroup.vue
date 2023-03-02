@@ -4,7 +4,7 @@
       <label>{{label}}</label>
       <p>필수</p>
     </div>
-    <textarea rows="5" :placeholder="desc"></textarea>
+    <textarea rows="5" :placeholder="desc">{{ text }}</textarea>
   </div>
 </template>
 
@@ -13,7 +13,8 @@ export default {
   name: "CustomTabInputGroup",
   props: {
     label: String,
-    desc: String
+    desc: String,
+    text: String
   }
 }
 </script>
