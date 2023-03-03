@@ -5,8 +5,14 @@
     <span>3시간 후 견적마감</span>
   </div>
   <div class="estimate-action-wrapper">
-    <button class="button natural small">내 요청서 보기</button>
-    <button class="button natural small">의뢰 마감하기</button>
+    <button class="button natural small" @click="showRequestModal = true">내 요청서 보기</button>
+    <Teleport to="body">
+      <my-request-contents :show="showRequestModal" @close="showRequestModal = false"/>
+    </Teleport>
+    <button class="button natural small" @click="showRequestClosingModal = true">의뢰 마감하기</button>
+    <Teleport to="body">
+      <my-request-closing :show="showRequestClosingModal" @close="showRequestClosingModal = false"/>
+    </Teleport>
   </div>
   <div class="estimate-list-container">
     <div class="estimate-list-wrapper">
@@ -56,9 +62,17 @@
 
 <script>
 import StarRating from 'vue-star-rating'
+import MyRequestContents from "@/components/modal/MyRequestContents.vue";
+import MyRequestClosing from "@/components/modal/MyRequestClosing.vue";
 export default {
   name: "MyRequestEstimate",
-  components: {StarRating}
+  components: {MyRequestClosing, MyRequestContents, StarRating},
+  data() {
+    return {
+      showRequestModal: false,
+      showRequestClosingModal: false
+    }
+  }
 }
 </script>
 
