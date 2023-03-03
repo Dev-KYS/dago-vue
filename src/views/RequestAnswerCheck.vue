@@ -44,7 +44,10 @@
         </div>
         <div class="submit-wrapper">
           <button class="button natural small">목록으로</button>
-          <button class="button primary small">상세견적 보내기</button>
+          <button class="button primary small" @click="showDetailedEstimateModal = true">상세견적 보내기</button>
+          <Teleport to="body">
+            <detailed-estimate :show="showDetailedEstimateModal" @close="showDetailedEstimateModal = false"/>
+          </Teleport>
         </div>
       </div>
     </div>
@@ -55,26 +58,19 @@
 import RequestComplete from "@/components/modal/RequestComplete.vue";
 import QuestionItem from "@/components/molecules/QuestionItem.vue";
 import AnswerItem from "@/components/molecules/AnswerItem.vue";
+import DetailedEstimate from "@/components/modal/DetailedEstimate.vue";
 
 export default {
   name: "RequestAnswerCheck",
-  components: {AnswerItem, RequestComplete, QuestionItem},
+  components: {DetailedEstimate, AnswerItem, RequestComplete, QuestionItem},
   data() {
     return {
       questionInputList: [
         {id: 1, title: '몇 장 작성을 원하시나요?', answer: '5페이지'},
         {id: 2, title: '아이템에 대해서 간단히 설명해주세요.', answer: '미생물을 활용한 음식물쓰레기 처리와 관련된 아이템입니다.'}
       ],
-      showSaveCompleteModal: false
-    }
-  },
-  methods: {
-    autoResize(event) {
-      event.target.style.height = "auto"
-      event.target.style.height = `${event.target.scrollHeight}px`
-    },
-    questionItemAdd() {
-      this.questionInputList.push(QuestionItem)
+      showSaveCompleteModal: false,
+      showDetailedEstimateModal: false
     }
   }
 }
