@@ -1,6 +1,6 @@
 <template>
 <div class="select-category-item">
-  <button class="remove-btn">
+  <button class="remove-btn" @click="removeItem">
     <img src="/assets/icons/close_gray.png" />
   </button>
   <span class="srt-num">{{ srt }}</span>
@@ -17,6 +17,11 @@ export default {
     srt: Number,
     firstCategory: String,
     secondCategory: String,
+  },
+  methods: {
+    removeItem() {
+      this.$el.parentNode.removeChild(this.$el)
+    }
   }
 }
 </script>
@@ -45,6 +50,7 @@ export default {
     position: absolute;
     right: 5px;
     top: 5px;
+    cursor: pointer;
     img {
       width: 12px;
     }

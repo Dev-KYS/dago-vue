@@ -12,17 +12,21 @@
           </div>
           <p class="category-header">대분류</p>
           <div class="first-category-list">
-            <button class="category-item-btn" v-for="item in items" :class="{'active': selectedCategoryId === item.id}" @click="categorySelected(item.id)">{{item.title}}</button>
+            <button class="category-item-btn" v-for="item in items" :class="{'active': selectedCategoryId === item.id}" @click="getSecondCategoryList(item.id, item.title)">{{item.title}}</button>
 <!--            <category-select-btn v-for="item in items" :text="item.title" :is-active="item.check" @click="firstCategoryChange(item.id)"/>-->
           </div>
           <p class="category-header">세부 카테고리</p>
           <div class="second-category-list">
-            <button class="category-item-btn" v-for="item in subs" :class="{'active': selectedSubCategoryId === item.id}" @click="selectedSubCategoryId = item.id">{{item.title}}</button>
+            <button class="category-item-btn" v-for="item in subs" :class="{'active': selectedSubCategoryId === item.id}" @click="selectCategory(item.id, item.title)">{{item.title}}</button>
 <!--            <category-select-btn v-for="sub in subs" :text="sub.title" />-->
           </div>
           <div class="select-category-list">
-            <select-category-item srt="1" first-category="문서 및 글작성" second-category="사업계획서 작성" />
-            <select-category-item srt="2" first-category="디자인" second-category="웹디자인"/>
+            <select-category-item
+                v-for="(item, index) in selectCategoryTextList"
+                :srt="++index"
+                :first-category="item.first"
+                :second-category="item.second"
+            />
           </div>
         </div>
       </div>
@@ -59,7 +63,11 @@ export default {
       selectedCategoryId: Number,
       selectedSubCategoryId: Number,
       items: [],
-      subs: []
+      subs: [],
+      selectCategoryList: [],
+      selectCategoryTextList: [],
+      selectFirstCategoryNm: String,
+      selectSecondCategoryNm: String
     }
   },
   computed: {
@@ -98,6 +106,24 @@ export default {
         this.items = res.data.data
         console.log(res.data.data)
       })
+    },
+    getSecondCategoryList(id, title) {
+      this.selectedCategoryId = id
+      this.selectFirstCategoryNm = title
+      this.axios.get(`/category/${id}`).then(res => {
+        console.log(res.data.data)
+        this.subs = res.data.data
+      })
+    },
+    selectCategory(id, title) {
+      this.selectSecondCategoryNm = title
+      this.selectedSubCategoryId = id
+      this.selectCategoryList.push(id)
+      const data = {}
+      data.first = this.selectFirstCategoryNm
+      data.second = this.selectSecondCategoryNm
+
+      this.selectCategoryTextList.push(data)
     }
   },
   mounted() {
