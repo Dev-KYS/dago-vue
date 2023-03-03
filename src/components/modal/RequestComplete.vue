@@ -16,7 +16,7 @@
                 </svg>
               </div>
               <div class="save-complete-msg">
-                <p>저장되었습니다!</p>
+                <p>{{msg}}</p>
               </div>
             </div>
           </div>
@@ -34,10 +34,11 @@
 <script>
 import CustomButton from "@/components/atoms/CustomButton.vue";
 export default {
-  name: "ProfileSaveComplete",
+  name: "RequestComplete",
   components: {CustomButton},
   props: {
     show: Boolean,
+    msg: String
   }
 }
 </script>

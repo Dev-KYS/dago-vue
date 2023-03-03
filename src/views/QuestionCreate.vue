@@ -49,7 +49,10 @@
           </div>
         </div>
         <div class="submit-wrapper">
-          <button class="button primary mid">질문보내기</button>
+          <button class="button primary mid" @click="showSaveCompleteModal = true">질문보내기</button>
+          <Teleport to="body">
+            <request-complete :show="showSaveCompleteModal" @close="showSaveCompleteModal = false" msg="질문을 고객에게 보냈습니다!"/>
+          </Teleport>
         </div>
       </div>
     </div>
@@ -58,13 +61,15 @@
 
 <script>
 import QuestionItem from "@/components/molecules/QuestionItem.vue";
+import RequestComplete from "@/components/modal/RequestComplete.vue";
 
 export default {
   name: "QuestionCreate",
-  components: {QuestionItem},
+  components: {RequestComplete, QuestionItem},
   data() {
     return {
-      questionInputList: []
+      questionInputList: [],
+      showSaveCompleteModal: false
     }
   },
   methods: {

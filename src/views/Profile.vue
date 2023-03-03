@@ -203,7 +203,7 @@
   </Teleport>
 
   <Teleport to="body">
-    <profile-save-complete :show="showSaveCompleteModal" @close="showSaveCompleteModal = false"/>
+    <request-complete :show="showSaveCompleteModal" @close="showSaveCompleteModal = false" msg="저장되었습니다!"/>
   </Teleport>
 
   <div class="link-input-wrapper">
@@ -251,7 +251,7 @@ import CareerCreate from "@/components/modal/CareerCreate.vue";
 import EducationCreate from "@/components/modal/EducationCreate.vue";
 import ProfileImgChange from "@/components/modal/ProfileImgChange.vue";
 import ProfilePictureVideo from "@/components/modal/ProfilePictureVideo.vue";
-import ProfileSaveComplete from "@/components/modal/ProfileSaveComplete.vue";
+import RequestComplete from "@/components/modal/RequestComplete.vue";
 
 export default {
   name: "Profile",
@@ -264,7 +264,7 @@ export default {
     CustomInput, TextareaGroup, TabItem,
     CompanyInfoCreate, CategorySelect, InputGroup,
     CustomTabInputGroup, CustomFileInputGroup,
-    ProfileSaveComplete,
+    RequestComplete,
     ProfilePictureVideo,
     ProfileImgChange,
     CareerCreate, EducationCreate,
