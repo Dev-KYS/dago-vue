@@ -42,9 +42,19 @@ const routes = [
         component: () => import("@/views/MyRequestEstimate.vue")
     },
     {
+        path: "/request/answer/:id",
+        name: "RequestAnswer",
+        component: () => import("@/views/RequestAnswer.vue")
+    },
+    {
         path: "/question/create",
         name: "QuestionCreate",
         component: () => import("@/views/QuestionCreate.vue")
+    },
+    {
+        path: "/question/answer",
+        name: "RequestAnswerCheck",
+        component: () => import("@/views/RequestAnswerCheck.vue")
     }
 ];
 

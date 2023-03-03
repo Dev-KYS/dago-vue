@@ -10,8 +10,7 @@
     </div>
     <div class="request-list-container">
       <div class="request-card-wrapper">
-        <request-card-item v-for="item in requestData" :name="item.name" :title="item.title" :contents="item.contents" :date="item.date" :end-time="item.endTime" />
-        <request-card-item v-for="item in requestData" :name="item.name" :title="item.title" :contents="item.contents" :date="item.date" :end-time="item.endTime" />
+        <request-card-item v-for="item in requestData" :state="item.state" :name="item.name" :title="item.title" :contents="item.contents" :date="item.date" :end-time="item.endTime" />
       </div>
     </div>
     <div class="more-btn-wrapper">
@@ -29,7 +28,30 @@ export default {
   data() {
     return {
       requestData: [
-        {name: 'test',  title: 'test', contents: 'test', date: '2023-03-02', endTime: 2}
+        {
+          state: '의뢰도착',
+          name: '김다른',
+          title: '사업계획서 작성',
+          contents: '현재 온라인 거래를 이용한 플랫폼을 구상하고 있습니다. 만나서 사업계획서를 구상부터 기획까지 회의를 통해 작성하길 원합니다.',
+          date: '2023-03-02',
+          endTime: 2
+        },
+        {
+          state: '의뢰진행중',
+          name: '김진한',
+          title: '사업계획서 작성',
+          contents: '현재 온라인 거래를 이용한 플랫폼을 구상하고 있습니다. 만나서 사업계획서를 구상부터 기획까지 회의를 통해 작성하길 원합니다.',
+          date: '2023-03-02',
+          endTime: 2
+        },
+        {
+          state: '답변완료',
+          name: '오정연',
+          title: '사업계획서 작성',
+          contents: '현재 온라인 거래를 이용한 플랫폼을 구상하고 있습니다. 만나서 사업계획서를 구상부터 기획까지 회의를 통해 작성하길 원합니다.',
+          date: '2023-03-02',
+          endTime: 2
+        }
       ]
     }
   }
