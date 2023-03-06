@@ -31,7 +31,7 @@
                 <label>견적금액</label>
               </div>
               <div class="detailed-estimate-item-content">
-                <input/>
+                <input v-model="price"/><span>원</span>
               </div>
             </div>
             <div class="detailed-estimate-item-wrapper">
@@ -39,7 +39,7 @@
                 <label>예상되는 최대 추가 금액</label>
               </div>
               <div class="detailed-estimate-item-content">
-                <input/>
+                <input v-model="addedPrice"/><span>원</span>
               </div>
             </div>
             <div class="detailed-estimate-item-wrapper">
@@ -73,12 +73,16 @@ export default {
   data() {
     return {
       selectCategory: '하',
-      price: String
+      price: '0',
+      addedPrice: '0'
     }
   },
   watch: {
+    addedPrice () {
+      this.addedPrice = String(this.addedPrice).replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    },
     price() {
-      this.price = this.price.toLocaleString();
+      this.price = String(this.price).replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
   }
 }
@@ -192,6 +196,14 @@ export default {
               }
             }
             input {
+              border: none;
+              border-bottom: 1px solid #6C6C6C;
+              text-align: right;
+              font-weight: bold;
+              font-size: 16px;
+              color: #2C2C2C;
+            }
+            span {
               border: none;
               border-bottom: 1px solid #6C6C6C;
               text-align: right;
