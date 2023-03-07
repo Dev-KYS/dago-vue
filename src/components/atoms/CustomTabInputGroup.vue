@@ -4,7 +4,7 @@
       <label>{{label}}</label>
       <p>필수</p>
     </div>
-    <textarea rows="5" :placeholder="desc" v-model="value">{{text}}</textarea>
+    <textarea rows="5" :placeholder="desc" v-model="value" @input="onDataChanged">{{text}}</textarea>
   </div>
 </template>
 
@@ -16,6 +16,9 @@ export default {
     desc: String,
     text: String
   },
+  mounted() {
+    this.value = this.text
+  },
   data() {
     return {
       value: ''
@@ -23,7 +26,7 @@ export default {
   },
   methods: {
     onDataChanged() {
-      this.$emit('input', this.value)
+      this.$emit('child-input', this.value)
     }
   }
 }

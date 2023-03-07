@@ -60,10 +60,10 @@
         </button>
       </div>
       <div class="tab-contents" :class="{'active': currentTab === index}" v-for="(item, index) in categoryList" :key="index">
-        <custom-tab-input-group label="제공 서비스 소개" @input="onChangedIntro" :text="item.intro" desc="ex) 창업, 자금조달, 신규사업, 투자유피, 신년도 사업계획 등 사업내용을 정리합니다. 또 사업 실패요인을 분석한 후 발생할 시행착오를 최소화함으로써 시간과 비용을 절약해드립니다."/>
-        <custom-tab-input-group label="전문 분야" :text="item.category_intro" desc="ex) 소셜벤처 / 소상공인 / 프렌차이즈 / 기술 창업 등 (서술형)"/>
-        <custom-tab-input-group label="한줄 소개" :text="item.short_description" desc="ex) 안녕하세요. 창업 전문 글작성가 김다른입니다. (서술형)"/>
-        <custom-tab-input-group label="상세 설명" :text="item.description" desc="ex) 예비창업패키지 전문 멘토 및 심사위원으로 창업의 전반적인 컨설팅 및 업무가 가능합니다. (서술형)"/>
+        <custom-tab-input-group label="제공 서비스 소개" @child-input="onChangedIntro" @input="inputText(item.id, 'intro')" :text="item.intro" desc="ex) 창업, 자금조달, 신규사업, 투자유피, 신년도 사업계획 등 사업내용을 정리합니다. 또 사업 실패요인을 분석한 후 발생할 시행착오를 최소화함으로써 시간과 비용을 절약해드립니다."/>
+        <custom-tab-input-group label="전문 분야" @child-input="onChangedIntro" @input="inputText(item.id, 'category_intro')" :text="item.category_intro" desc="ex) 소셜벤처 / 소상공인 / 프렌차이즈 / 기술 창업 등 (서술형)"/>
+        <custom-tab-input-group label="한줄 소개" @child-input="onChangedIntro" @input="inputText(item.id, 'short')" :text="item.short_description" desc="ex) 안녕하세요. 창업 전문 글작성가 김다른입니다. (서술형)"/>
+        <custom-tab-input-group label="상세 설명" @child-input="onChangedIntro" @input="inputText(item.id, 'description')" :text="item.description" desc="ex) 예비창업패키지 전문 멘토 및 심사위원으로 창업의 전반적인 컨설팅 및 업무가 가능합니다. (서술형)"/>
       </div>
     </div>
   </div>
@@ -107,63 +107,63 @@
       </div>
     </div>
     <div class="contact-time-select-wrapper">
-      <select>
+      <select v-model="communicate_start_time">
         <option value="">시간선택</option>
-        <option value="am12">오전 12시</option>
-        <option value="am1">오전 1시</option>
-        <option value="am2">오전 2시</option>
-        <option value="am3">오전 3시</option>
-        <option value="am4">오전 4시</option>
-        <option value="am5">오전 5시</option>
-        <option value="am6">오전 6시</option>
-        <option value="am7">오전 7시</option>
-        <option value="am8">오전 8시</option>
-        <option value="am9">오전 9시</option>
-        <option value="am10">오전 10시</option>
-        <option value="am11">오전 11시</option>
-        <option value="pm12">오후 12시</option>
-        <option value="pm1">오후 1시</option>
-        <option value="pm2">오후 2시</option>
-        <option value="pm3">오후 3시</option>
-        <option value="pm4">오후 4시</option>
-        <option value="pm5">오후 5시</option>
-        <option value="pm6">오후 6시</option>
-        <option value="pm7">오후 7시</option>
-        <option value="pm8">오후 8시</option>
-        <option value="pm9">오후 9시</option>
-        <option value="pm10">오후 10시</option>
-        <option value="pm11">오후 11시</option>
+        <option value="00:00">오전 12시</option>
+        <option value="01:00">오전 1시</option>
+        <option value="02:00">오전 2시</option>
+        <option value="03:00">오전 3시</option>
+        <option value="04:00">오전 4시</option>
+        <option value="05:00">오전 5시</option>
+        <option value="06:00">오전 6시</option>
+        <option value="07:00">오전 7시</option>
+        <option value="08:00">오전 8시</option>
+        <option value="09:00">오전 9시</option>
+        <option value="10:00">오전 10시</option>
+        <option value="11:00">오전 11시</option>
+        <option value="12:00">오후 12시</option>
+        <option value="13:00">오후 1시</option>
+        <option value="14:00">오후 2시</option>
+        <option value="15:00">오후 3시</option>
+        <option value="16:00">오후 4시</option>
+        <option value="17:00">오후 5시</option>
+        <option value="18:00">오후 6시</option>
+        <option value="19:00">오후 7시</option>
+        <option value="20:00">오후 8시</option>
+        <option value="21:00">오후 9시</option>
+        <option value="22:00">오후 10시</option>
+        <option value="23:00">오후 11시</option>
       </select>
       <div class="contact-time-picker-division-wrapper">
         <span class="contact-time-picker-division">~</span>
       </div>
 
-      <select>
+      <select v-model="communicate_end_time">
         <option>시간선택</option>
-        <option value="am12">오전 12시</option>
-        <option value="am1">오전 1시</option>
-        <option value="am2">오전 2시</option>
-        <option value="am3">오전 3시</option>
-        <option value="am4">오전 4시</option>
-        <option value="am5">오전 5시</option>
-        <option value="am6">오전 6시</option>
-        <option value="am7">오전 7시</option>
-        <option value="am8">오전 8시</option>
-        <option value="am9">오전 9시</option>
-        <option value="am10">오전 10시</option>
-        <option value="am11">오전 11시</option>
-        <option value="pm12">오후 12시</option>
-        <option value="pm1">오후 1시</option>
-        <option value="pm2">오후 2시</option>
-        <option value="pm3">오후 3시</option>
-        <option value="pm4">오후 4시</option>
-        <option value="pm5">오후 5시</option>
-        <option value="pm6">오후 6시</option>
-        <option value="pm7">오후 7시</option>
-        <option value="pm8">오후 8시</option>
-        <option value="pm9">오후 9시</option>
-        <option value="pm10">오후 10시</option>
-        <option value="pm11">오후 11시</option>
+        <option value="00:00">오전 12시</option>
+        <option value="01:00">오전 1시</option>
+        <option value="02:00">오전 2시</option>
+        <option value="03:00">오전 3시</option>
+        <option value="04:00">오전 4시</option>
+        <option value="05:00">오전 5시</option>
+        <option value="06:00">오전 6시</option>
+        <option value="07:00">오전 7시</option>
+        <option value="08:00">오전 8시</option>
+        <option value="09:00">오전 9시</option>
+        <option value="10:00">오전 10시</option>
+        <option value="11:00">오전 11시</option>
+        <option value="12:00">오후 12시</option>
+        <option value="13:00">오후 1시</option>
+        <option value="14:00">오후 2시</option>
+        <option value="15:00">오후 3시</option>
+        <option value="16:00">오후 4시</option>
+        <option value="17:00">오후 5시</option>
+        <option value="18:00">오후 6시</option>
+        <option value="19:00">오후 7시</option>
+        <option value="20:00">오후 8시</option>
+        <option value="21:00">오후 9시</option>
+        <option value="22:00">오후 10시</option>
+        <option value="23:00">오후 11시</option>
       </select>
     </div>
   </div>
@@ -225,7 +225,7 @@
 
   <div class="save-button-wrapper">
     <div class="save-button-field">
-      <button class="save-button" type="button" @click="showSaveCompleteModal = true">저장하기</button>
+      <button class="save-button" type="button" @click="submit">저장하기</button>
       <button class="cancel-button" type="button">취소</button>
     </div>
   </div>
@@ -271,13 +271,6 @@ export default {
     ProfileImgChange,
     CareerCreate, EducationCreate,
   },
-  setup() {
-    return {
-      startTime: ref('10:56'),
-      endTime: ref('10:56'),
-      val: ref(true)
-    }
-  },
   data() {
     return {
       businessYn: false,
@@ -297,9 +290,13 @@ export default {
       accountButtonState: false,
       cityData: Array,
       cityData2: Array,
-      selectedData: '',
-      selectedData2: '',
-      introText: ''
+      selectedCityData: '',
+      selectedCityData2: '',
+      serviceIntroContent: [],
+      childText: '',
+      communicate_start_time: '',
+      communicate_end_time: '',
+      certificate: false,
     }
   },
   computed: {
@@ -307,11 +304,12 @@ export default {
       return this.categoryList.find(el => el.id === this.currentId) || {}
     },
     categoryGet() {
+      this.serviceIntroContent = this.$store.getters.getCategoryFormList
       return this.$store.getters.getCategoryFormList
     }
   },
   watch: {
-    selectedData(id) {
+    selectedCityData(id) {
       console.log(id)
       this.getCityData2(id)
     },
@@ -320,8 +318,54 @@ export default {
     }
   },
   methods: {
+    submit() {
+      const formData = new FormData()
+      formData.append('start_time', this.communicate_start_time)
+      formData.append('end_time', this.communicate_end_time)
+      formData.append('category', JSON.stringify(this.serviceIntroContent))
+      formData.append('city', this.selectedCityData2)
+      formData.append('pay_card', this.cardButtonState)
+      formData.append('pay_bank', this.accountButtonState)
+      formData.append('certificate', this.certificate)
+      this.axios.post('/profile', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        console.log(res)
+        this.showSaveCompleteModal = true
+      }).catch(error => {
+
+      })
+    },
     onChangedIntro(newData) {
-      this.introText = newData
+      // console.log(newData)
+      this.childText = newData
+    },
+    inputText(id, type) {
+      const chk = this.serviceIntroContent.findIndex(v => v.id === id)
+      console.log('====')
+      console.log(chk)
+      this.serviceIntroContent.find((item, index) => {
+        if(chk !== -1) {
+          switch (type) {
+            case 'intro':
+              this.serviceIntroContent[chk].intro = this.childText
+              break
+            case 'category_intro':
+              this.serviceIntroContent[chk].category_intro = this.childText
+              break
+            case 'short':
+              this.serviceIntroContent[chk].short_description = this.childText
+              break
+            case 'description':
+              this.serviceIntroContent[chk].description = this.childText
+              break
+          }
+        }
+      })
+      console.log(id)
+      console.log(this.childText)
     },
     getMyCategory() {
       this.$store.dispatch('getCategoryFormList')
@@ -377,10 +421,11 @@ export default {
       })
     },
     getSelectCity(id) {
-      this.selectedData = id
+      this.selectedCityData = id
     },
     getSelectCity2(id) {
-      this.selectedData2 = id
+      this.selectedCityData2 = id
+      console.log(this.selectedCityData2)
     },
   },
   mounted() {
