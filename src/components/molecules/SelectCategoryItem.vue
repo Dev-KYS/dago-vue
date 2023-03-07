@@ -1,9 +1,8 @@
 <template>
 <div class="select-category-item">
-  <button class="remove-btn" @click="removeItem">
+  <button class="remove-btn" @click="removeItem(profile_category_id)">
     <img src="/assets/icons/close_gray.png" />
   </button>
-  <span class="srt-num">{{ srt }}</span>
   <label>{{ firstCategory }}</label>
   <img src="/assets/icons/arrow-right.png" />
   <label>{{ secondCategory }}</label>
@@ -14,13 +13,32 @@
 export default {
   name: "SelectCategoryItem",
   props: {
-    srt: Number,
+    id: Number,
     firstCategory: String,
     secondCategory: String,
+    is_old: false,
+    profile_category_id: Number,
   },
   methods: {
-    removeItem() {
-      this.$el.parentNode.removeChild(this.$el)
+    removeItem(id) {
+      console.log(id)
+      if(this.is_old === true) {
+        if(confirm('기존에 등록된 항목은 삭제시 복구가 불가능합니다\n삭제하시겠습니까?')) {
+          this.axios.delete(`/profile_category/${id}`, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            }
+          }).then(res => {
+            this.$store.dispatch('removeCategoryList', this.id)
+            this.$el.parentNode.removeChild(this.$el)
+          }).catch(error => {
+            console.log(error)
+          })
+        }
+      }else{
+        this.$store.dispatch('removeCategoryList', id)
+        this.$el.parentNode.removeChild(this.$el)
+      }
     }
   }
 }
@@ -33,7 +51,7 @@ export default {
   border-radius: 12px;
   background: white;
   box-shadow: 0 12px 24px 0 rgba(207, 215, 226, 0.54);
-  padding: 18px 50px 18px 15px;
+  padding: 18px 50px 18px 30px;
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -43,6 +61,7 @@ export default {
   label {
     font-size: 16px;
     font-weight: bold;
+    flex: 1;
   }
   .remove-btn {
     background: transparent;
@@ -55,25 +74,13 @@ export default {
       width: 12px;
     }
   }
-  .srt-num {
-    width: 24px;
-    height: 24px;
-    border: 2px solid #FF0099;
-    border-radius: 50%;
-    color: #FF0099;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-weight: bold;
-    font-size: 16px;
-  }
   .h3 {
     color: #2C2C2C;
     font-size: 16px;
   }
-  img {
+  & > img {
     width: 20px;
+    margin-right: 30px;
   }
 }
 </style>

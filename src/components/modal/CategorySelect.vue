@@ -8,7 +8,7 @@
         </div>
         <div class="modal-body">
           <div class="category-tooltip">
-            <span style="color: #FF0099">Tip.</span><span> 2가지 이상 제공 서비스가 가능합니다.</span>
+            <span style="color: #FF0099">Tip.</span><span> 2가지 이상 서비스 제공이 가능합니다.</span>
           </div>
           <p class="category-header">대분류</p>
           <div class="first-category-list">
@@ -22,17 +22,19 @@
           </div>
           <div class="select-category-list">
             <select-category-item
-                v-for="(item, index) in selectCategoryTextList"
-                :srt="++index"
+                v-for="(item, index) in this.$store.getters.getSelectCategoryTextList"
+                :id="item.id"
                 :first-category="item.first"
                 :second-category="item.second"
+                :is_old="item.is_old"
+                :profile_category_id="item.profile_category_id"
             />
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <div class="button-wrapper">
-          <custom-button type="button" text="저장하기" button-class="primary mid" />
+          <custom-button type="button" text="저장하기" button-class="primary mid" @click="submit" />
           <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
         </div>
       </div>
@@ -64,7 +66,7 @@ export default {
       selectedSubCategoryId: Number,
       items: [],
       subs: [],
-      selectCategoryList: [],
+      // selectCategoryList: [],
       selectCategoryTextList: [],
       selectFirstCategoryNm: String,
       selectSecondCategoryNm: String
@@ -93,20 +95,15 @@ export default {
       })
       this.items = temp
       console.log(this.items)
-
-      // var item = this.items.filter(item => item.id === itemId)[0];
-      // this.items.filter(item => item.id !== itemId).forEach(item => {
-      //   item.check = false;
-      // });
-      // item.check = true;
-      // this.subs = item.subItems;
     },
+    // 카테고리 대분류 조회
     getFirstCategoryList() {
       this.axios.get('/category').then(res => {
         this.items = res.data.data
         console.log(res.data.data)
       })
     },
+    // 세부 카테고리 조회
     getSecondCategoryList(id, title) {
       this.selectedCategoryId = id
       this.selectFirstCategoryNm = title
@@ -115,19 +112,69 @@ export default {
         this.subs = res.data.data
       })
     },
+    // 세부 카테고리 클릭시
     selectCategory(id, title) {
       this.selectSecondCategoryNm = title
       this.selectedSubCategoryId = id
-      this.selectCategoryList.push(id)
+      // this.selectCategoryList.push(id)
       const data = {}
+      data.id = id
       data.first = this.selectFirstCategoryNm
       data.second = this.selectSecondCategoryNm
+      data.is_old = false
+      this.$store.dispatch('setCategoryList', data)
+      // this.selectCategoryTextList.push(data)
+    },
+    getOldCategory() {
+      let el = this
+      this.axios.get('/profile_category', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        res.data.data.forEach(function (item) {
+          // item.id
+          // item.srt
+          // item.has_category.id
 
-      this.selectCategoryTextList.push(data)
+          const data = {}
+          data.id = item.has_category.id
+          data.first = item.has_category.has_upper.title
+          data.second = item.has_category.title
+          data.is_old = true
+          data.profile_category_id = item.id
+
+          el.$store.dispatch('setCategoryList', data)
+          console.log('store set')
+          // el.selectCategoryTextList.push(data)
+          // item.has_category.title
+          // item.has_category.has_upper.id
+          // item.has_category.has_upper.title
+          // console.log(item.has_category.has_upper.title)
+        })
+        // console.log(res)
+      }).catch(error => {
+
+      })
+    },
+    submit() {
+      this.axios.post('/profile_category', {
+        category: this.$store.getters.getSelectCategoryIds
+      }, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        this.$store.dispatch('getCategoryFormList')
+        this.$emit('close')
+      }).catch(error => {
+
+      })
     }
   },
   mounted() {
     this.getFirstCategoryList()
+    this.getOldCategory()
   }
 }
 </script>

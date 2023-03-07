@@ -56,12 +56,12 @@
           @click.prevent="currentTab = index"
           class="category-tab"
           :class="{'active': currentTab === index}">
-          {{ tab.text }}
+          {{ tab.has_category.title }}
         </button>
       </div>
       <div class="tab-contents" :class="{'active': currentTab === index}" v-for="(item, index) in categoryList" :key="index">
-        <custom-tab-input-group label="제공 서비스 소개" :text="item.intro" desc="ex) 창업, 자금조달, 신규사업, 투자유피, 신년도 사업계획 등 사업내용을 정리합니다. 또 사업 실패요인을 분석한 후 발생할 시행착오를 최소화함으로써 시간과 비용을 절약해드립니다."/>
-        <custom-tab-input-group label="전문 분야" :text="item.category" desc="ex) 소셜벤처 / 소상공인 / 프렌차이즈 / 기술 창업 등 (서술형)"/>
+        <custom-tab-input-group label="제공 서비스 소개" @input="onChangedIntro" :text="item.intro" desc="ex) 창업, 자금조달, 신규사업, 투자유피, 신년도 사업계획 등 사업내용을 정리합니다. 또 사업 실패요인을 분석한 후 발생할 시행착오를 최소화함으로써 시간과 비용을 절약해드립니다."/>
+        <custom-tab-input-group label="전문 분야" :text="item.category_intro" desc="ex) 소셜벤처 / 소상공인 / 프렌차이즈 / 기술 창업 등 (서술형)"/>
         <custom-tab-input-group label="한줄 소개" :text="item.short_description" desc="ex) 안녕하세요. 창업 전문 글작성가 김다른입니다. (서술형)"/>
         <custom-tab-input-group label="상세 설명" :text="item.description" desc="ex) 예비창업패키지 전문 멘토 및 심사위원으로 창업의 전반적인 컨설팅 및 업무가 가능합니다. (서술형)"/>
       </div>
@@ -252,7 +252,6 @@ import EducationCreate from "@/components/modal/EducationCreate.vue";
 import ProfileImgChange from "@/components/modal/ProfileImgChange.vue";
 import ProfilePictureVideo from "@/components/modal/ProfilePictureVideo.vue";
 import RequestComplete from "@/components/modal/RequestComplete.vue";
-import ProfileSaveComplete from "@/components/modal/ProfileSaveComplete.vue";
 import DataSelector from "@/components/atoms/DataSelector.vue";
 
 export default {
@@ -293,26 +292,42 @@ export default {
       showSaveCompleteModal: false,
       showProfileImgChangeModal: false,
       currentTab: 0,
-      categoryList: [
-        {id: 1, text: '문서 및 글작성', intro: 'test', category: 'test', short_description: 'test', description: 'test'},
-        {id: 2, text: '디자인', intro: 'test', category: 'test', short_description: 'test', description: 'test'},
-        {id: 3, text: 'SW개발', intro: 'test', category: 'test', short_description: 'test', description: 'test'},
-        {id: 4, text: 'HW개발', intro: 'test', category: 'test', short_description: 'test', description: 'test'},
-      ],
+      categoryList: [],
       cardButtonState: true,
       accountButtonState: false,
       cityData: Array,
       cityData2: Array,
       selectedData: '',
       selectedData2: '',
+      introText: ''
     }
   },
   computed: {
     current() {
       return this.categoryList.find(el => el.id === this.currentId) || {}
+    },
+    categoryGet() {
+      return this.$store.getters.getCategoryFormList
+    }
+  },
+  watch: {
+    selectedData(id) {
+      console.log(id)
+      this.getCityData2(id)
+    },
+    categoryGet(value) {
+      this.categoryList = value
     }
   },
   methods: {
+    onChangedIntro(newData) {
+      this.introText = newData
+    },
+    getMyCategory() {
+      this.$store.dispatch('getCategoryFormList')
+      console.log('dd')
+      this.categoryList = this.$store.getters.getCategoryFormList
+    },
     companyCreate(bol) {
       this.businessYn = bol
       if(this.businessYn === true) {
@@ -370,12 +385,7 @@ export default {
   },
   mounted() {
     this.getCityData()
-  },
-  watch: {
-    selectedData(id) {
-      console.log(id)
-      this.getCityData2(id)
-    }
+    this.getMyCategory()
   }
 }
 </script>

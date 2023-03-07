@@ -4,7 +4,7 @@
       <label>{{label}}</label>
       <p>필수</p>
     </div>
-    <textarea rows="5" :placeholder="desc">{{ text }}</textarea>
+    <textarea rows="5" :placeholder="desc" v-model="value">{{text}}</textarea>
   </div>
 </template>
 
@@ -15,6 +15,16 @@ export default {
     label: String,
     desc: String,
     text: String
+  },
+  data() {
+    return {
+      value: ''
+    }
+  },
+  methods: {
+    onDataChanged() {
+      this.$emit('input', this.value)
+    }
   }
 }
 </script>
