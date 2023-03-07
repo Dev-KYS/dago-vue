@@ -31,7 +31,7 @@
           </div>
           <div class="button-wrapper">
             <span class="badge complete">답변완료</span>
-            <button class="button natural small">질문보기</button>
+            <button class="button natural small" @click="$router.push('/request/answer/1')">질문보기</button>
           </div>
         </div>
 
