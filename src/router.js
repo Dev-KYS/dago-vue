@@ -55,6 +55,11 @@ const routes = [
         path: "/question/answer",
         name: "RequestAnswerCheck",
         component: () => import("@/views/RequestAnswerCheck.vue")
+    },
+    {
+        path: "/select/estimate",
+        name: "SelectEstimate",
+        component: () => import("@/views/SelectEstimate.vue")
     }
 ];
 
