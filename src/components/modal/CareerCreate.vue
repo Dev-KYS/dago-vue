@@ -7,18 +7,31 @@
         <label>경력사항</label>
       </div>
       <div class="modal-body">
-        <input-group label-text="회사명" type="text" placeholder="회사명"/>
-        <input-group label-text="직위/직책" type="text" placeholder="직위/직책"/>
+        <input-group label-text="회사명" type="text" :parent-value="companyName" @child-input="companyNmChanged" placeholder="회사명"/>
+        <input-group label-text="직위/직책" type="text" :parent-value="position" @child-input="positionChanged" placeholder="직위/직책"/>
         <div class="date-select-wrapper">
           <div class="title-group">
             <label>시작일</label>
           </div>
           <div class="date-select">
-            <select class="date-select-item">
-              <option value="년">년</option>
+            <select class="date-select-item" v-model="startDtYear">
+              <option value="">년</option>
+              <option v-for="item in yearList" :value="item">{{item}}년</option>
             </select>
-            <select class="date-select-item">
-              <option value="월">월</option>
+            <select class="date-select-item" v-model="startDtMonth">
+              <option value="">월</option>
+              <option value="01">1월</option>
+              <option value="02">2월</option>
+              <option value="03">3월</option>
+              <option value="04">4월</option>
+              <option value="05">5월</option>
+              <option value="06">6월</option>
+              <option value="07">7월</option>
+              <option value="08">8월</option>
+              <option value="09">9월</option>
+              <option value="10">10월</option>
+              <option value="11">11월</option>
+              <option value="12">12월</option>
             </select>
           </div>
         </div>
@@ -26,21 +39,37 @@
           <div class="title-group">
             <label>종료일</label>
           </div>
-          <div class="date-select">
-            <select class="date-select-item">
-              <option value="년">년</option>
+          <div>
+            <q-checkbox keep-color v-model="isAttending" label="재직중" color="red" />
+          </div>
+          <div class="date-select" v-if="isAttending === false">
+            <select class="date-select-item" v-model="endDtYear">
+              <option value="">년</option>
+              <option v-for="item in yearList" :value="item">{{item}}년</option>
             </select>
-            <select class="date-select-item">
-              <option value="월">월</option>
+            <select class="date-select-item" v-model="endDtMonth">
+              <option value="">월</option>
+              <option value="01">1월</option>
+              <option value="02">2월</option>
+              <option value="03">3월</option>
+              <option value="04">4월</option>
+              <option value="05">5월</option>
+              <option value="06">6월</option>
+              <option value="07">7월</option>
+              <option value="08">8월</option>
+              <option value="09">9월</option>
+              <option value="10">10월</option>
+              <option value="11">11월</option>
+              <option value="12">12월</option>
             </select>
           </div>
         </div>
-        <textarea-group label="상세 설명" rows="3" placeholder="경력에 대한 상세한 설명을 작성해 주세요"/>
+        <textarea-group label="상세 설명" rows="3" :parent-value="description" @child-input="descriptionChanged" placeholder="경력에 대한 상세한 설명을 작성해 주세요"/>
       </div>
     </div>
     <div class="modal-footer">
       <div class="button-wrapper">
-        <custom-button type="button" text="저장하기" button-class="primary mid" />
+        <custom-button type="button" text="저장하기" button-class="primary mid" @click="submit"/>
         <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
       </div>
     </div>
@@ -59,6 +88,62 @@ export default {
   components: {TextareaGroup, InputGroup, CustomButton},
   props: {
     show: Boolean
+  },
+  mounted() {
+    this.yearListInit()
+  },
+  data() {
+    return {
+      companyName: '',
+      position: '',
+      startDtYear: '',
+      startDtMonth: '',
+      endDtYear: '',
+      endDtMonth: '',
+      isAttending: false,
+      description: '',
+      yearList: [],
+    }
+  },
+  methods: {
+    submit() {
+      const formData = new FormData()
+      formData.append('company_nm', this.companyName)
+      formData.append('position', this.position)
+      formData.append('start_year', this.startDtYear+this.startDtMonth+'01')
+      if(this.isAttending === false) {
+        formData.append('end_year', this.endDtYear+this.endDtMonth+'01')
+      }
+      formData.append('is_attending', this.isAttending)
+      formData.append('description', this.description)
+
+      this.axios.post('/career', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        this.$store.dispatch('getCareerList')
+        this.$emit('close')
+      }).catch(error => {
+
+      })
+    },
+    companyNmChanged(newData) {
+      this.companyName = newData
+    },
+    positionChanged(newData) {
+      this.position = newData
+    },
+    descriptionChanged(newData) {
+      this.description = newData
+    },
+    yearListInit() {
+      const date = new Date()
+      const nowYear = date.getFullYear()
+      for(let i = 1980; i <= nowYear; i++) {
+        this.yearList.unshift(i)
+      }
+    },
   }
 }
 </script>

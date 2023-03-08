@@ -1,7 +1,7 @@
 <template>
 <div class="custom-input-group" :style="style">
   <label>{{ labelText }}</label>
-  <custom-input :type="type" :placeholder="placeholder"/>
+  <custom-input :type="type" :placeholder="placeholder" :parent-value="parentValue" @child-input="onDataChanged" v-model="value" @input="onDataChangedEmit"/>
 </div>
 </template>
 
@@ -15,11 +15,33 @@ export default {
     type: String,
     labelText: String,
     placeholder: String,
-    width: 200
+    width: 200,
+    parentValue: '',
+  },
+  data() {
+    return {
+      value: '',
+    }
+  },
+  mounted() {
+    this.value = this.parentValue
+  },
+  methods: {
+    onDataChanged(newData) {
+      this.value = newData
+    },
+    onDataChangedEmit() {
+      this.$emit('child-input', this.value)
+    }
   },
   computed: {
     style() {
       return 'width:' + this.width + 'px';
+    }
+  },
+  watch: {
+    parentValue(val) {
+      this.value = val
     }
   }
 }

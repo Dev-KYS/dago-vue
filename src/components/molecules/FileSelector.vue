@@ -2,8 +2,8 @@
 <div class="file-select-wrapper">
   <file-select-btn @click="chooseFile()" />
   <input type="file" hidden="hidden" id="document" @change="previewFiles"/>
-  <div class="file-download-remove" v-for="item in selectFiles">
-    <file-download-btn :file-name="item.name" />
+  <div class="file-download-remove" v-show="this.selectFiles">
+    <file-download-btn :file-name="this.selectFiles.name" />
     <text-button text="삭제" @click="removeFile()"/>
   </div>
 </div>
@@ -19,7 +19,7 @@ export default {
   components: {TextButton, FileDownloadBtn, FileSelectBtn},
   data() {
     return {
-      selectFiles: []
+      selectFiles: ''
     }
   },
   methods: {
@@ -27,11 +27,12 @@ export default {
       document.getElementById('document').click()
     },
     previewFiles(event) {
-      this.selectFiles = event.target.files;
+      this.selectFiles = event.target.files[0];
+      this.$emit('child-file', this.selectFiles)
     },
     removeFile() {
       // 한개는 상관없는데 multiple 문제될 듯
-      this.selectFiles = []
+      this.selectFiles = ''
     }
   }
 }

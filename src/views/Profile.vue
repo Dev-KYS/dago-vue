@@ -28,9 +28,9 @@
     </div>
   </div>
 
-  <div class="name-select-wrapper">
-    <input-group labelText="이름" />
-  </div>
+<!--  <div class="name-select-wrapper">-->
+<!--    <input-group labelText="이름" @child-input="onChangedCompanyName" />-->
+<!--  </div>-->
 
   <div class="category-select-wrapper">
     <div class="title-wrapper">
@@ -109,61 +109,61 @@
     <div class="contact-time-select-wrapper">
       <select v-model="communicate_start_time">
         <option value="">시간선택</option>
-        <option value="00:00">오전 12시</option>
-        <option value="01:00">오전 1시</option>
-        <option value="02:00">오전 2시</option>
-        <option value="03:00">오전 3시</option>
-        <option value="04:00">오전 4시</option>
-        <option value="05:00">오전 5시</option>
-        <option value="06:00">오전 6시</option>
-        <option value="07:00">오전 7시</option>
-        <option value="08:00">오전 8시</option>
-        <option value="09:00">오전 9시</option>
-        <option value="10:00">오전 10시</option>
-        <option value="11:00">오전 11시</option>
-        <option value="12:00">오후 12시</option>
-        <option value="13:00">오후 1시</option>
-        <option value="14:00">오후 2시</option>
-        <option value="15:00">오후 3시</option>
-        <option value="16:00">오후 4시</option>
-        <option value="17:00">오후 5시</option>
-        <option value="18:00">오후 6시</option>
-        <option value="19:00">오후 7시</option>
-        <option value="20:00">오후 8시</option>
-        <option value="21:00">오후 9시</option>
-        <option value="22:00">오후 10시</option>
-        <option value="23:00">오후 11시</option>
+        <option value="00:00:00">오전 12시</option>
+        <option value="01:00:00">오전 1시</option>
+        <option value="02:00:00">오전 2시</option>
+        <option value="03:00:00">오전 3시</option>
+        <option value="04:00:00">오전 4시</option>
+        <option value="05:00:00">오전 5시</option>
+        <option value="06:00:00">오전 6시</option>
+        <option value="07:00:00">오전 7시</option>
+        <option value="08:00:00">오전 8시</option>
+        <option value="09:00:00">오전 9시</option>
+        <option value="10:00:00">오전 10시</option>
+        <option value="11:00:00">오전 11시</option>
+        <option value="12:00:00">오후 12시</option>
+        <option value="13:00:00">오후 1시</option>
+        <option value="14:00:00">오후 2시</option>
+        <option value="15:00:00">오후 3시</option>
+        <option value="16:00:00">오후 4시</option>
+        <option value="17:00:00">오후 5시</option>
+        <option value="18:00:00">오후 6시</option>
+        <option value="19:00:00">오후 7시</option>
+        <option value="20:00:00">오후 8시</option>
+        <option value="21:00:00">오후 9시</option>
+        <option value="22:00:00">오후 10시</option>
+        <option value="23:00:00">오후 11시</option>
       </select>
       <div class="contact-time-picker-division-wrapper">
         <span class="contact-time-picker-division">~</span>
       </div>
 
       <select v-model="communicate_end_time">
-        <option>시간선택</option>
-        <option value="00:00">오전 12시</option>
-        <option value="01:00">오전 1시</option>
-        <option value="02:00">오전 2시</option>
-        <option value="03:00">오전 3시</option>
-        <option value="04:00">오전 4시</option>
-        <option value="05:00">오전 5시</option>
-        <option value="06:00">오전 6시</option>
-        <option value="07:00">오전 7시</option>
-        <option value="08:00">오전 8시</option>
-        <option value="09:00">오전 9시</option>
-        <option value="10:00">오전 10시</option>
-        <option value="11:00">오전 11시</option>
-        <option value="12:00">오후 12시</option>
-        <option value="13:00">오후 1시</option>
-        <option value="14:00">오후 2시</option>
-        <option value="15:00">오후 3시</option>
-        <option value="16:00">오후 4시</option>
-        <option value="17:00">오후 5시</option>
-        <option value="18:00">오후 6시</option>
-        <option value="19:00">오후 7시</option>
-        <option value="20:00">오후 8시</option>
-        <option value="21:00">오후 9시</option>
-        <option value="22:00">오후 10시</option>
-        <option value="23:00">오후 11시</option>
+        <option value="">시간선택</option>
+        <option value="00:00:00">오전 12시</option>
+        <option value="01:00:00">오전 1시</option>
+        <option value="02:00:00">오전 2시</option>
+        <option value="03:00:00">오전 3시</option>
+        <option value="04:00:00">오전 4시</option>
+        <option value="05:00:00">오전 5시</option>
+        <option value="06:00:00">오전 6시</option>
+        <option value="07:00:00">오전 7시</option>
+        <option value="08:00:00">오전 8시</option>
+        <option value="09:00:00">오전 9시</option>
+        <option value="10:00:00">오전 10시</option>
+        <option value="11:00:00">오전 11시</option>
+        <option value="12:00:00">오후 12시</option>
+        <option value="13:00:00">오후 1시</option>
+        <option value="14:00:00">오후 2시</option>
+        <option value="15:00:00">오후 3시</option>
+        <option value="16:00:00">오후 4시</option>
+        <option value="17:00:00">오후 5시</option>
+        <option value="18:00:00">오후 6시</option>
+        <option value="19:00:00">오후 7시</option>
+        <option value="20:00:00">오후 8시</option>
+        <option value="21:00:00">오후 9시</option>
+        <option value="22:00:00">오후 10시</option>
+        <option value="23:00:00">오후 11시</option>
       </select>
     </div>
   </div>
@@ -188,6 +188,33 @@
   </Teleport>
 
   <custom-file-input-group label="경력 사항" :essential="false" type="career" @file-add-modal-button-click="fileAddModalButtonClick"/>
+  <div class="career-list-wrapper" v-if="careerList !== ''">
+    <div class="career-item" v-for="(item, index) in careerList">
+      <table>
+        <tr>
+          <th>회사명</th>
+          <td>{{item.company_nm}}</td>
+        </tr>
+        <tr>
+          <th>직위 / 직책</th>
+          <td>{{item.position}}</td>
+        </tr>
+        <tr>
+          <th>입사일</th>
+          <td>{{ yearMonth(item.start_year) }}</td>
+        </tr>
+        <tr>
+          <th>퇴사일</th>
+          <td v-if="item.is_attending === false">{{yearMonth(item.end_year)}}</td>
+          <td v-if="item.is_attending === true">재직중</td>
+        </tr>
+        <tr>
+          <th>상세설명</th>
+          <td>{{item.description}}</td>
+        </tr>
+      </table>
+    </div>
+  </div>
   <Teleport to="body">
     <career-create :show="showCareerModal" @close="showCareerModal = false"/>
   </Teleport>
@@ -241,7 +268,7 @@ import TextareaGroup from "@/components/molecules/textareaGroup.vue";
 import CustomInput from "@/components/atoms/CustomInput.vue";
 import CustomTabInputGroup from "@/components/atoms/CustomTabInputGroup.vue";
 import CustomFileInputGroup from "@/components/atoms/CustomFileInputGroup.vue";
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import CheckBoxButton from "@/components/atoms/CheckBoxButton.vue";
 import ProfileInputFileGroup from "@/components/atoms/ProfileInputFileGroup.vue";
 import PortfolioSelect from "@/components/modal/PortfolioSelect.vue";
@@ -253,6 +280,7 @@ import ProfileImgChange from "@/components/modal/ProfileImgChange.vue";
 import ProfilePictureVideo from "@/components/modal/ProfilePictureVideo.vue";
 import RequestComplete from "@/components/modal/RequestComplete.vue";
 import DataSelector from "@/components/atoms/DataSelector.vue";
+import {useStore} from "vuex";
 
 export default {
   name: "Profile",
@@ -297,7 +325,14 @@ export default {
       communicate_start_time: '',
       communicate_end_time: '',
       certificate: false,
+      company_name: '',
+      careerList: []
     }
+  },
+  setup() {
+    const {dispatch} = useStore()
+    dispatch('getProfileAction')
+    dispatch('getCareerList')
   },
   computed: {
     current() {
@@ -306,6 +341,33 @@ export default {
     categoryGet() {
       this.serviceIntroContent = this.$store.getters.getCategoryFormList
       return this.$store.getters.getCategoryFormList
+    },
+    changedProfile() {
+      return this.$store.getters.getProfileData
+    },
+    careerGet() {
+      this.careerList = this.$store.getters.getCareerList
+      return this.$store.getters.getCareerList
+    },
+    yearMonth() {
+      return (value) => {
+        // 들어오는 value 값이 공백이면 그냥 공백으로 돌려줌
+        if(value === '') return '';
+
+        // 현재 Date 혹은 DateTime 데이터를 javaScript date 타입화
+        var js_date = new Date(value);
+
+        // 연도, 월, 일 추출
+        var year = js_date.getFullYear();
+        var month = js_date.getMonth() + 1;
+
+        // 월, 일의 경우 한자리 수 값이 있기 때문에 공백에 0 처리
+        if(month < 10){
+          month = '0' + month;
+        }
+        // 최종 포맷 (ex - '2021-10')
+        return year + '-' + month;
+      }
     }
   },
   watch: {
@@ -315,9 +377,21 @@ export default {
     },
     categoryGet(value) {
       this.categoryList = value
+    },
+    changedProfile(val) {
+      this.communicate_start_time = val.com_start_time
+      this.communicate_end_time = val.com_end_time
+      this.cardButtonState = val.pay_card
+      this.accountButtonState = val.pay_bank
+    },
+    careerGet(val) {
+      this.careerList = val
     }
   },
   methods: {
+    getInitData() {
+      this.$store.dispatch('getProfileAction')
+    },
     submit() {
       const formData = new FormData()
       formData.append('start_time', this.communicate_start_time)
@@ -341,6 +415,9 @@ export default {
     onChangedIntro(newData) {
       // console.log(newData)
       this.childText = newData
+    },
+    onChangedCompanyName(newData){
+      this.company_name = newData
     },
     inputText(id, type) {
       const chk = this.serviceIntroContent.findIndex(v => v.id === id)
@@ -431,6 +508,7 @@ export default {
   mounted() {
     this.getCityData()
     this.getMyCategory()
+    this.getInitData()
   }
 }
 </script>
@@ -684,6 +762,39 @@ export default {
       margin-top: 10px;
       .check-btn {
         margin-right: 10px;
+      }
+    }
+  }
+
+  .career-list-wrapper {
+    display: flex;
+    flex-direction: column;
+    &:not(:last-child) {
+      .career-item {
+        margin-bottom: 10px;
+      }
+    }
+    .career-item {
+      border: 1px solid #EEEEEE;
+      padding: 30px 45px;
+      box-sizing: border-box;
+      table {
+        width: 100%;
+        table-layout: fixed;
+        tr {
+          th {
+            height: 40px;
+            font-size: 14px;
+            color: #424242;
+            width: 100px;
+            text-align: left;
+          }
+          td {
+            overflow-wrap: break-word;
+            color: #424242;
+            font-size: 14px;
+          }
+        }
       }
     }
   }

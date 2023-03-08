@@ -1,5 +1,5 @@
 <template>
-  <textarea :rows="rows" :placeholder="placeholder"></textarea>
+  <textarea :rows="rows" v-model="value" :placeholder="placeholder" @input="onDateChanged">{{parentValue}}</textarea>
 </template>
 
 <script>
@@ -7,7 +7,21 @@ export default {
   name: "CustomTextarea",
   props: {
     rows: Number,
-    placeholder: String
+    placeholder: String,
+    parentValue: '',
+  },
+  mounted() {
+    this.value = this.parentValue
+  },
+  data() {
+    return {
+      value: ''
+    }
+  },
+  methods: {
+    onDateChanged() {
+      this.$emit('child-input', this.value)
+    }
   }
 }
 </script>

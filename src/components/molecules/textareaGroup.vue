@@ -1,7 +1,7 @@
 <template>
 <div class="custom-input-group">
   <label>{{ label }}</label>
-  <custom-textarea :rows="rows" :placeholder="placeholder"/>
+  <custom-textarea :rows="rows" :placeholder="placeholder" v-model="value" :parent-value="parentValue" @child-input="onDataChanged" @input="onChangedEmit"/>
 </div>
 </template>
 
@@ -16,7 +16,29 @@ export default {
     label: String,
     rows: Number,
     placeholder: String,
-    width: 200
+    width: 200,
+    parentValue: '',
+  },
+  data() {
+    return {
+      value: ''
+    }
+  },
+  mounted() {
+    this.value = this.parentValue
+  },
+  methods: {
+    onDataChanged(newData) {
+      this.value = newData
+    },
+    onChangedEmit() {
+      this.$emit('child-input', this.value)
+    }
+  },
+  watch: {
+    parentValue(val) {
+      this.value = val
+    }
   }
 }
 </script>

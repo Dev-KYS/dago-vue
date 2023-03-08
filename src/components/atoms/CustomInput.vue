@@ -1,5 +1,5 @@
 <template>
-  <input class="custom-input" :type="type" :placeholder="placeholder"/>
+  <input class="custom-input" :type="type" :placeholder="placeholder" v-model="value" :value="parentValue"/>
 </template>
 
 <script>
@@ -8,7 +8,26 @@ export default {
   props: {
     label: String,
     type: String,
-    placeholder: String
+    placeholder: String,
+    parentValue: '',
+  },
+  mounted() {
+    this.value = this.parentValue
+  },
+  data() {
+    return {
+      value: '',
+    }
+  },
+  methods: {
+    onDataChanged() {
+      this.$emit('child-input', this.value)
+    }
+  },
+  watch: {
+    parentValue(val) {
+      this.value = val
+    }
   }
 }
 </script>

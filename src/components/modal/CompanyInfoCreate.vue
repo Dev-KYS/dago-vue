@@ -8,9 +8,9 @@
         </div>
         <div class="modal-body">
           <div class="form-input-wrapper">
-            <input-group label-text="사업자 이름" type="text" width="133" placeholder="홍길동"/>
-            <input-group label-text="사업자 등록번호" type="text" width="210" />
-            <input-group label-text="직원 수" type="number" width="133" />
+            <input-group label-text="사업자 이름" :parent-value="name" type="text" width="133" placeholder="홍길동" @child-input="nameTextChanged"/>
+            <input-group label-text="사업자 등록번호" :parent-value="regNo" type="text" width="210" @child-input="regNoChanged" />
+            <input-group label-text="직원 수" :parent-value="employeeCnt" type="number" width="133" @child-input="employeeChanged" />
           </div>
 
           <div class="bill-publish">
@@ -20,13 +20,13 @@
           </div>
           <div class="attach-wrapper">
             <p>사업자 등록증 첨부</p>
-            <file-selector />
+            <file-selector @child-file="fileChanged" />
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <div class="button-wrapper">
-          <custom-button text="저장하기" button-class="primary mid" />
+          <custom-button text="저장하기" button-class="primary mid" @click="submit"/>
           <custom-button text="취소" button-class="natural mid" @click="$emit('close')" />
         </div>
       </div>
@@ -50,13 +50,68 @@ export default {
   },
   data() {
     return {
-      isBillActive: false
+      isBillActive: false,
+      name: '',
+      regNo: '',
+      employeeCnt: '',
+      file: ''
     }
   },
   methods: {
+    submit() {
+      const formData = new FormData()
+      formData.append('name', this.name)
+      formData.append('reg_no', this.regNo)
+      formData.append('employee_cnt', this.employeeCnt)
+      formData.append('tax_bill', this.isBillActive)
+      formData.append('files', this.file)
+
+      this.axios.post('/profile_biz', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          "Content-Type": "multipart/form-data",
+        }
+      }).then(res => {
+        console.log(res)
+        if(res.status === 'success') {
+          this.$emit('close')
+        }
+      }).catch(error => {
+
+      })
+    },
     billCheckButtonClick(bol) {
       this.isBillActive = bol;
+    },
+    nameTextChanged(newData) {
+      this.name = newData
+    },
+    regNoChanged(newData) {
+      this.regNo = newData
+    },
+    employeeChanged(newData) {
+      this.employeeCnt = newData
+    },
+    fileChanged(newData) {
+      this.file = newData
+    },
+    getCompanyInfo() {
+      this.axios.get('/profile_biz', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        this.name = res.data.data.company_name
+        this.regNo = res.data.data.business_reg_no
+        this.employeeCnt = res.data.data.employee_cnt
+        this.isBillActive = res.data.data.tax_bill
+      }).catch(error => {
+
+      })
     }
+  },
+  mounted() {
+    this.getCompanyInfo()
   }
 }
 </script>
