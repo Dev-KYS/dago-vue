@@ -3,7 +3,8 @@
   <label class="profile-title">전문가 소개</label>
   <div class="profile-wrapper">
     <div class="profile-img-wrapper">
-      <img class="profile-img" src="/assets/icons/default_user_icon.png" />
+      <img class="profile-img" src="/assets/icons/default_user_icon.png" v-if="avatar === ''" />
+      <img class="profile-img" :src="'http://localhost:8000/avatars/' + avatar" v-if="avatar !== ''" />
       <button class="profile-edit-btn" @click="showProfileImgChangeModal = true">
         <img src="/assets/icons/edit.png" />
       </button>
@@ -230,7 +231,7 @@
   </Teleport>
 
   <Teleport to="body">
-    <request-complete :show="showSaveCompleteModal" @close="showSaveCompleteModal = false" msg="저장되었습니다!"/>
+    <request-complete :show="showSaveCompleteModal" @close="avatarModalClose" msg="저장되었습니다!"/>
   </Teleport>
 
   <div class="link-input-wrapper">
@@ -326,13 +327,19 @@ export default {
       communicate_end_time: '',
       certificate: false,
       company_name: '',
-      careerList: []
+      careerList: [],
+      picVideoList: {},
+      avatar: '',
     }
   },
+  created() {
+    this.$store.dispatch("getCareerList")
+    this.$store.dispatch('getAvatar')
+  },
   setup() {
-    const {dispatch} = useStore()
-    dispatch('getProfileAction')
-    dispatch('getCareerList')
+    // const {dispatch} = useStore()
+    // dispatch('getCareerList')
+    // dispatch('getAvatar')
   },
   computed: {
     current() {
@@ -348,6 +355,9 @@ export default {
     careerGet() {
       this.careerList = this.$store.getters.getCareerList
       return this.$store.getters.getCareerList
+    },
+    avatarInit() {
+      return this.$store.getters.getAvatar
     },
     yearMonth() {
       return (value) => {
@@ -372,7 +382,6 @@ export default {
   },
   watch: {
     selectedCityData(id) {
-      console.log(id)
       this.getCityData2(id)
     },
     categoryGet(value) {
@@ -386,12 +395,12 @@ export default {
     },
     careerGet(val) {
       this.careerList = val
+    },
+    avatarInit(val) {
+      this.avatar = val
     }
   },
   methods: {
-    getInitData() {
-      this.$store.dispatch('getProfileAction')
-    },
     submit() {
       const formData = new FormData()
       formData.append('start_time', this.communicate_start_time)
@@ -406,11 +415,14 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       }).then(res => {
-        console.log(res)
         this.showSaveCompleteModal = true
       }).catch(error => {
 
       })
+    },
+    avatarModalClose() {
+      this.avatar = this.$store.getters.getAvatar
+      this.showSaveCompleteModal = false
     },
     onChangedIntro(newData) {
       // console.log(newData)
@@ -422,7 +434,6 @@ export default {
     inputText(id, type) {
       const chk = this.serviceIntroContent.findIndex(v => v.id === id)
       console.log('====')
-      console.log(chk)
       this.serviceIntroContent.find((item, index) => {
         if(chk !== -1) {
           switch (type) {
@@ -441,7 +452,6 @@ export default {
           }
         }
       })
-      console.log(id)
       console.log(this.childText)
     },
     getMyCategory() {
@@ -508,7 +518,6 @@ export default {
   mounted() {
     this.getCityData()
     this.getMyCategory()
-    this.getInitData()
   }
 }
 </script>

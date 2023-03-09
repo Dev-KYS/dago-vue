@@ -22,7 +22,7 @@ const categoryStore = {
             }
         },
         categoryFormListAdd(state, payload) {
-            console.log(payload)
+            // console.log(payload)
             state.categoryFormList = payload
         }
     },

@@ -16,7 +16,7 @@ const careerStore = {
                     Authorization: `Bearer ${localStorage.getItem('access_token')}`
                 }
             }).then(res => {
-                console.log(res)
+                // console.log(res)
                 commit('addCareerList', res.data.data)
             }).catch(error => {
 

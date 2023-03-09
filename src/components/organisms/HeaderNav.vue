@@ -144,11 +144,11 @@ export default {
   },
   computed: {
     loginCheck() {
-      console.log(this.$store.getters.getUserLoginCheck)
+      // console.log(this.$store.getters.getUserLoginCheck)
       return this.$store.getters.getUserLoginCheck
     },
     proCheck() {
-      console.log(this.$store.getters.getUserProCheck)
+      // console.log(this.$store.getters.getUserProCheck)
       return this.$store.getters.getUserProCheck
     }
   }

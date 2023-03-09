@@ -13,27 +13,32 @@
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.image_1.path === ''">
+          <img :src="'http://localhost:8000/storage/' + picVideoList.image_1.path" v-if="picVideoList.image_1.path !== ''">
         </div>
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.image_2.path === ''">
+          <img :src="'http://localhost:8000/storage/' + picVideoList.image_2.path" v-if="picVideoList.image_2.path !== ''">
         </div>
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.image_3.path === ''">
+          <img :src="'http://localhost:8000/storage/' + picVideoList.image_3.path" v-if="picVideoList.image_3.path !== ''">
         </div>
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.image_4.path === ''">
+          <img :src="'http://localhost:8000/storage/' + picVideoList.image_4.path" v-if="picVideoList.image_4.path !== ''">
         </div>
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.image_5.path === ''">
+          <img :src="'http://localhost:8000/storage/' + picVideoList.image_5.path" v-if="picVideoList.image_5.path !== ''">
         </div>
       </div>
     </div>
@@ -41,15 +46,57 @@
 </template>
 
 <script>
+import {onMounted, reactive} from "vue";
+import {useStore} from "vuex";
+
 export default {
   name: "ProfileInputFileGroup",
   props: {
     label: String,
-    type: String
+    type: String,
+  },
+  created() {
+    this.picVideoList = this.$store.getters.getProfilePic
+  },
+  setup() {
+    const {dispatch} = useStore()
+    dispatch('getProfilePicAction')
+  },
+  computed: {
+    getInitData() {
+      // console.log(this.$store.getters.getProfilePic)
+      // this.image_1 = this.$store.getters.getProfilePic.image_1
+      // this.image_2 = this.$store.getters.getProfilePic.image_2
+      // this.image_3 = this.$store.getters.getProfilePic.image_3
+      // this.image_4 = this.$store.getters.getProfilePic.image_4
+      // this.image_5 = this.$store.getters.getProfilePic.image_5
+      // this.picVideoList.image_1 = this.image_1
+
+      return this.picVideoList = this.$store.getters.getProfilePic
+    }
+  },
+  mounted() {
+
+  },
+  watch: {
+    // imageList(val) {
+    //   console.log(this.imageList.image_1.path)
+    //   this.picVideoList = val
+    // },
+  },
+  methods: {
+    picVideoList(val) {
+      // console.log(this.picVideoList.image_1.path)
+    }
+  },
+  data() {
+    return {
+      picVideoList: Object
+    }
   },
   emits: [
       'fileInputGroupListener'
-  ]
+  ],
 }
 </script>
 

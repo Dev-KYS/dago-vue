@@ -4,7 +4,8 @@ import axios from "axios";
 const userStore = {
     state: {
         userInfo: null,
-        isLogin: false
+        isLogin: false,
+        avatar: null,
     },
     mutations: {
         loginSuccess(state, payload) {
@@ -15,7 +16,7 @@ const userStore = {
             state.isLogin = false
             state.userInfo = null
             localStorage.removeItem('access_token')
-        }
+        },
     },
     actions: {
         getAccountInfo({ commit }) {
@@ -34,7 +35,7 @@ const userStore = {
         },
         logoutAccount({ commit }) {
             commit('logout')
-        }
+        },
     },
     getters: {
         getUserLoginCheck: function (state) {
@@ -42,7 +43,8 @@ const userStore = {
         },
         getUserProCheck: function (state) {
             return state.userInfo.data.is_pro
-        }
+        },
+
     }
 }
 

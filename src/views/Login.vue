@@ -48,7 +48,6 @@ export default {
       formData.append('email', this.email)
       formData.append('password', this.password)
       this.axios.post('/auth/login', formData).then(res => {
-        console.log(res)
         let token = res.data.authorisation.token
         localStorage.setItem('access_token', token)
         this.$store.dispatch('getAccountInfo')

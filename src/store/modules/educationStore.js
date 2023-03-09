@@ -28,7 +28,7 @@ const educationStore = {
                 state.graduatedYear = graduateDate.getFullYear()
                 state.graduatedMonth = graduatedMonth
             }
-            console.log(state.joinMonth)
+            // console.log(state.joinMonth)
             state.isAttending = payload.is_attending
         }
     },
@@ -39,8 +39,7 @@ const educationStore = {
                     Authorization: `Bearer ${localStorage.getItem('access_token')}`
                 }
             }).then(res => {
-                console.log('edu')
-                console.log(res)
+                // console.log(res)
                 commit('getEducation', res.data.data)
             }).catch(error => {
 

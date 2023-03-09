@@ -7,13 +7,16 @@
             <label>프로필 사진 등록</label>
           </div>
           <div class="img-change-modal-body">
-            <custom-button type="button" text="사진 등록하기" button-class="primary mid" @click="$emit('close')"/>
-            <custom-button type="button" text="기본 이미지로 변경" button-class="natural mid" @click="$emit('close')"/>
+            <label>
+              <input type="file" ref="file" @change="onChangedFile" accept="image/png, image/jpeg" />
+              <custom-button type="button" text="사진 등록하기" button-class="primary mid" @click="onFileClick"/>
+            </label>
+            <custom-button type="button" text="기본 이미지로 변경" button-class="natural mid"/>
           </div>
         </div>
         <div class="img-change-modal-footer">
           <div class="button-wrapper">
-            <custom-button type="button" text="저장" button-class="natural mid" @click="$emit('close')"/>
+            <custom-button type="button" text="저장" button-class="natural mid" @click="submit"/>
             <custom-button type="button" text="닫기" button-class="natural mid" @click="$emit('close')"/>
           </div>
         </div>
@@ -29,6 +32,34 @@ export default {
   components: {CustomButton},
   props: {
     show: Boolean,
+  },
+  data() {
+    return {
+      file: '',
+    }
+  },
+  methods: {
+    submit() {
+      const formData = new FormData()
+      formData.append('avatar', this.file)
+      this.axios.post('/auth/avatar', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        console.log(res)
+        this.$store.dispatch('getAvatar')
+        this.$emit('close')
+      }).catch(error => {
+
+      })
+    },
+    onFileClick() {
+      this.$refs.file.click()
+    },
+    onChangedFile(event) {
+      this.file = event.target.files[0]
+    }
   }
 }
 </script>
@@ -78,6 +109,9 @@ export default {
 
       .img-change-modal-body {
         margin-top: 50px;
+        input[type=file] {
+          display: none;
+        }
         button {
           margin: 10px 0;
         }

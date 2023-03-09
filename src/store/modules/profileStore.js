@@ -8,6 +8,7 @@ const profileStore = {
         com_end_time: '',
         pay_card: false,
         pay_bank: false,
+        avatar: '',
     },
     mutations: {
         getProfile(state, payload) {
@@ -17,6 +18,9 @@ const profileStore = {
             state.com_end_time = payload.end_communicate_time
             state.pay_card = payload.pay_card
             state.pay_bank = payload.pay_bank
+        },
+        setAvatar(state, payload) {
+            state.avatar = payload
         }
     },
     actions: {
@@ -26,8 +30,20 @@ const profileStore = {
                     Authorization: `Bearer ${localStorage.getItem('access_token')}`
                 }
             }).then(res => {
-                console.log(res)
+                // console.log(res)
                 commit('getProfile', res.data.data)
+            }).catch(error => {
+
+            })
+        },
+        getAvatar({ commit }) {
+            axios.get('/auth/avatar', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                }
+            }).then(res => {
+                console.log(res.data.data)
+                commit("setAvatar", res.data.data)
             }).catch(error => {
 
             })
@@ -44,6 +60,9 @@ const profileStore = {
             data.pay_bank = state.pay_bank
 
             return data
+        },
+        getAvatar(state) {
+            return state.avatar
         }
     }
 }

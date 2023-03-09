@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     removeItem(id) {
-      console.log(id)
+      // console.log(id)
       if(this.is_old === true) {
         if(confirm('기존에 등록된 항목은 삭제시 복구가 불가능합니다\n삭제하시겠습니까?')) {
           this.axios.delete(`/profile_category/${id}`, {

@@ -94,13 +94,13 @@ export default {
         }
       })
       this.items = temp
-      console.log(this.items)
+      // console.log(this.items)
     },
     // 카테고리 대분류 조회
     getFirstCategoryList() {
       this.axios.get('/category').then(res => {
         this.items = res.data.data
-        console.log(res.data.data)
+        // console.log(res.data.data)
       })
     },
     // 세부 카테고리 조회
@@ -108,7 +108,7 @@ export default {
       this.selectedCategoryId = id
       this.selectFirstCategoryNm = title
       this.axios.get(`/category/${id}`).then(res => {
-        console.log(res.data.data)
+        // console.log(res.data.data)
         this.subs = res.data.data
       })
     },
@@ -145,7 +145,7 @@ export default {
           data.profile_category_id = item.id
 
           el.$store.dispatch('setCategoryList', data)
-          console.log('store set')
+          // console.log('store set')
           // el.selectCategoryTextList.push(data)
           // item.has_category.title
           // item.has_category.has_upper.id

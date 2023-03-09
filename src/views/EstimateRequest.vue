@@ -267,7 +267,6 @@ export default {
   },
   watch: {
     selectedData(id) {
-      console.log(id)
       this.getCityData2(id)
     }
   }

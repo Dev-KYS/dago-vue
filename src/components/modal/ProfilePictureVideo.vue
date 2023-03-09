@@ -17,41 +17,29 @@
               <!-- 이미지 추가 필드 -->
               <div class="picture-add-file-add">
                 <div class="picture-img-wrapper">
-                  <img src="/assets/icons/plus_icon.png">
+                  <label>
+                    <img src="/assets/icons/plus_icon.png">
+                    <input type="file" ref="file" accept="image/png, image/jpeg" @change="onFileChanged"/>
+                  </label>
                 </div>
               </div>
-              <div class="picture-add-file-empty">
+              <div class="picture-add-file-empty" v-for="item in filePreview" v-if="filePreview !== ''">
                 <div class="picture-img-wrapper">
-                  <img src="/assets/icons/default_upload_img.png">
+                  <img :src="item">
                 </div>
               </div>
-              <div class="picture-add-file-empty">
+              <div class="picture-add-file-empty" v-for="item in 5 - filePreview.length">
                 <div class="picture-img-wrapper">
-                  <img src="/assets/icons/default_upload_img.png">
-                </div>
-              </div>
-              <div class="picture-add-file-empty">
-                <div class="picture-img-wrapper">
-                  <img src="/assets/icons/default_upload_img.png">
-                </div>
-              </div>
-              <div class="picture-add-file-empty">
-                <div class="picture-img-wrapper">
-                  <img src="/assets/icons/default_upload_img.png">
-                </div>
-              </div>
-              <div class="picture-add-file-empty">
-                <div class="picture-img-wrapper">
-                  <img src="/assets/icons/default_upload_img.png">
+                  <img src="/assets/icons/default_upload_img.png" />
                 </div>
               </div>
             </div>
-            <input-group label-text="동영상 업로드" placeholder="유튜브 URL 입력" />
+            <input-group label-text="동영상 업로드" :parent-value="link" @child-input="linkChanged" placeholder="유튜브 URL 입력" />
           </div>
         </div>
         <div class="picture-modal-footer">
           <div class="button-wrapper">
-            <custom-button type="button" text="저장하기" button-class="primary mid" />
+            <custom-button type="button" text="저장하기" button-class="primary mid" @click="submit" />
             <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
           </div>
         </div>
@@ -68,6 +56,65 @@ export default {
   components: {InputGroup, CustomButton},
   props: {
     show: Boolean
+  },
+  data() {
+    return {
+      filePreview: [],
+      files: [],
+      link: '',
+      oldFiles: []
+    }
+  },
+  created() {
+    this.oldFiles = this.$store.getters.getProfilePic
+  },
+  mounted() {
+    // this.getData()
+  },
+  methods: {
+
+    submit() {
+      let formData = new FormData()
+      // for(let i = 0; i < this.files.length; i++) {
+      //   formData.append('image_files[]', this.files[i])
+      // }
+      // console.log(formData)
+      // formData.append('image_files[]', this.files)
+      this.files.forEach((file) => {
+        formData.append('image_files[]', file)
+      })
+      formData.append('link', this.link)
+      this.axios.post('/pic_video', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          "Content-Type": "multipart/form-data",
+          'Accept' : 'application/json',
+        }
+      }).then(res => {
+        console.log(res)
+      }).catch(error => {
+
+      })
+    },
+    onFileChanged(event) {
+      if(this.files.length === 5) {
+        alert('이미지는 최대 5개까지 등륵이 가능합니다.')
+        return
+      }
+      const input = event.target
+      if(input.files && input.files[0]) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          console.log(e.target)
+          this.filePreview.push(e.target.result)
+          this.files.push(input.files[0])
+        }
+        reader.readAsDataURL(input.files[0])
+      }
+    },
+    linkChanged(newData) {
+      this.link = newData
+    }
   }
 }
 </script>
@@ -159,10 +206,21 @@ export default {
               width: 100%;
               height: 100%;
               display: flex;
-              img {
-                margin: auto;
-                width: 20px;
-                height: 20px;
+              label {
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                height: 100%;
+                img {
+                  margin: auto;
+                  width: 20px;
+                  height: 20px;
+                }
+                input[type=file] {
+                  display: none;
+                }
               }
             }
           }
