@@ -60,6 +60,11 @@ const routes = [
         path: "/select/estimate",
         name: "SelectEstimate",
         component: () => import("@/views/SelectEstimate.vue")
+    },
+    {
+        path: "/request/contract",
+        name: "ElectronicContract",
+        component: () => import("@/views/ElectronicContract.vue")
     }
 ];
 

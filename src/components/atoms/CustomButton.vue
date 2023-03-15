@@ -34,6 +34,12 @@ export default {
     border: 1px solid #424242;
   }
 
+  &.primary-natural {
+    background: transparent;
+    color: #FF0099;
+    border: 1px solid #FF0099;
+  }
+
   &.small {
     //width: 75px;
     padding: 6px 11.5px;

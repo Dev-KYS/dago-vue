@@ -1,18 +1,13 @@
 <template>
-  <button class="category-item-btn" :id="id" :class="{'active': isActive === true}">{{ text }}</button>
+  <button class="category-item-btn" :class="{'active': isActive === true}">{{ text }}</button>
 </template>
 
 <script>
 export default {
   name: "CategorySelectBtn",
   props: {
-    text: String
-  },
-  data() {
-    return {
-      id: Number,
-      isActive: false
-    }
+    text: String,
+    isActive: Boolean
   }
 }
 </script>
