@@ -17,11 +17,18 @@
         <div class="content-backdrop">
           <div class="step-wrapper step-01" v-show="step === 1">
             <h4 class="step-title">세부 카테고리<span class="required">(필수)</span></h4>
-            <div class="category-select">
+            <div class="category-select" v-show="selectedCategory === 0">
               <button class="button natural mid" @click="showCategoryModal = true">카테고리 선택</button>
               <Teleport to="body">
-                <project-category-select :show="showCategoryModal" @close="showCategoryModal = false"/>
+                <project-category-select :show="showCategoryModal" @close="showCategoryModal = false" @selected-category="selectedModalCategory"/>
               </Teleport>
+            </div>
+            <div class="category-select" v-show="selectedCategory > 0">
+              <div class="selected-category-wrapper">
+                <div class="selected-category-title">
+                  <span>{{selectedCategoryTitle}}</span><span>></span><span>{{selectedSubCategoryTitle}}</span>
+                </div>
+              </div>
             </div>
             <div class="button-wrapper">
               <button class="button primary mid next-btn" @click="step = 2">
@@ -185,7 +192,7 @@
                 </svg>
                 이전
               </button>
-              <button class="button primary mid next-btn">
+              <button class="button primary mid next-btn" @click="submitEstimate">
                 의뢰요청하기
               </button>
             </div>
@@ -228,6 +235,11 @@ export default {
       cityData2: Array,
       selectedData: '',
       selectedData2: '',
+      selectedCategory: 0,
+      selectedCategoryTitle: '',
+      selectedSubCategory: 0,
+      selectedSubCategoryTitle: '',
+      categoryDescription: '',
       processType: '',
       showCategoryModal: false,
       files: [],
@@ -252,11 +264,30 @@ export default {
     getSelectCity2(id) {
       this.selectedData2 = id
     },
+    selectedModalCategory(category) {
+      if (category['categoryId'] !== 0 && category['subId'] !== 0) {
+        this.showCategoryModal = false;
+        this.selectedCategory = category['categoryId'];
+        this.selectedCategoryTitle = category['categoryTitle'];
+        this.selectedSubCategory = category['subId'];
+        this.selectedSubCategoryTitle = category['subTitle'];
+        this.categoryDescription = category['desc'];
+      } else {
+        alert('카테고리 선택은 필수입니다!');
+      }
+    },
     submitEstimate() {
-      const formData = new FormData()
-      formData.append('category_id')
-      this.axios.post('/', formData).then(res => {
-
+      const formData = new FormData();
+      formData.append('category_id', this.selectedSubCategory);
+      formData.append('city_id', this.selectedData2);
+      formData.append('content', this.contentText);
+      formData.append('end_date', this.picked);
+      this.axios.post('/estimate', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        console.log(res)
       }).catch(error => {
 
       })
@@ -324,11 +355,28 @@ body {
       .step-wrapper {
         &.step-01 {
           .category-select {
-            margin: 50px 0 0;
+            margin: 20px 0 0;
             .button {
               width: 132px;
               font-size: 14px;
               font-weight: normal;
+            }
+            .selected-category-wrapper {
+              border: 1px solid #6C6C6C;
+              border-radius: 20px;
+              width: 388px;
+              height: 80px;
+              display: flex;
+              justify-content: space-around;
+              .selected-category-title {
+                font-size: 16px;
+                font-weight: bold;
+                color: #2C2C2C;
+                margin: auto;
+                span {
+                  margin: 10px;
+                }
+              }
             }
           }
         }

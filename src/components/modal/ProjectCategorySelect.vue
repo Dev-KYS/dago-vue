@@ -12,20 +12,21 @@
           </div>
           <p class="category-header">대분류</p>
           <div class="first-category-list">
-            <button class="category-item-btn" v-for="item in items" :class="{'active': selectedCategoryId === item.id}" @click="categorySelected(item.id)">{{item.title}}</button>
+            <button class="category-item-btn" v-for="item in items" :class="{'active': selectedCategoryId === item.id}" @click="categorySelected(item)">{{item.title}}</button>
           </div>
           <p class="category-header">세부 카테고리</p>
           <div class="second-category-list">
-            <button class="category-item-btn" v-for="item in subs" :class="{'active': selectedSubCategoryId === item.id}" @click="selectedSubCategoryId = item.id">{{item.title}}</button>
+            <button class="category-item-btn" v-for="item in subs" :class="{'active': selectedSubCategoryId === item.id}" @click="subCategorySelected(item)">{{item.title}}</button>
           </div>
-          <div class="category-description">
-            <textarea rows="3" placeholder="ex) 기타 카테고리 내용을 작성해주세요"/>
-          </div>
+<!--          <div class="category-description">-->
+<!--            <textarea rows="3" placeholder="ex) 기타 카테고리 내용을 작성해주세요" v-model="desc"/>-->
+<!--          </div>-->
         </div>
       </div>
       <div class="category-modal-footer">
         <div class="button-wrapper">
-          <custom-button type="button" text="저장하기" button-class="primary mid" />
+<!--          <custom-button type="button" text="저장하기" button-class="primary mid" @click="$emit('selected-category', selectedCategoryId, selectedSubCategoryId, desc)"/>-->
+          <custom-button type="button" text="저장하기" button-class="primary mid" @click="$emit('selected-category', { 'categoryId':selectedCategoryId, 'categoryTitle': selectedCategoryTitle, 'subId':selectedSubCategoryId, 'subTitle': selectedSubCategoryTitle, 'desc':desc })"/>
           <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
         </div>
       </div>
@@ -38,6 +39,7 @@
 import CustomButton from "@/components/atoms/CustomButton.vue";
 import SelectCategoryItem from "@/components/molecules/SelectCategoryItem.vue";
 import CategorySelectBtn from "@/components/atoms/CategorySelectBtn.vue";
+import axios from "axios";
 
 export default {
   name: "ProjectCategorySelect",
@@ -47,61 +49,41 @@ export default {
   },
   data() {
     return {
-      selectedCategoryId: Number,
-      selectedSubCategoryId: Number,
-      items: [
-        {
-          id: 1,
-          title: '문서 및 글작성',
-          subItems: [
-            { id: 1, itemId: 1, title: '사업계획서 작성' }
-          ]
-        },
-        {
-          id: 2,
-          title: 'SW개발',
-          subItems: [
-            { id: 1, itemId: 2, title: '모바일' }
-          ]
-        },
-        {
-          id: 3,
-          title: 'HW개발',
-          subItems: [
-            { id: 1, itemId: 3, title: '메이커' }
-          ]
-        },
-        {
-          id: 4,
-          title: '디자인',
-          subItems: [
-            { id: 1, itemId: 4, title: '캐릭터' }
-          ]
-        },
-        {
-          id: 5,
-          title: '마케팅',
-          subItems: [
-            { id: 1, itemId: 5, title: '광고' }
-          ]
-        },
-        {
-          id: 6,
-          title: '경영지원',
-          subItems: [
-            { id: 1, itemId: 6, title: '회계' }
-          ]
-        }
-      ],
-      subs: []
+      selectedCategoryId: 0,
+      selectedCategoryTitle: '',
+      selectedSubCategoryId: 0,
+      selectedSubCategoryTitle: '',
+      desc: '',
+      items: Array,
+      subs: Array
     }
   },
   methods: {
-    categorySelected(id) {
+    categorySelected(item) {
       this.selectedSubCategoryId = 0;
-      this.selectedCategoryId = id;
-      this.subs = this.items.filter(data => data.id === id)[0].subItems
+      this.selectedSubCategoryTitle = '';
+      this.selectedCategoryId = item.id;
+      this.selectedCategoryTitle = item.title;
+      axios.get("/category/" + item.id).then(response => {
+        if (response.status === 200) {
+          this.subs = response.data.data
+        }
+      })
+      // this.subs = this.items.filter(data => data.id === id)[0].subItems
+    },
+    subCategorySelected(item) {
+      this.selectedSubCategoryId = item.id
+      this.selectedSubCategoryTitle = item.title
     }
+  },
+  mounted() {
+    axios.get("/category").then(response => {
+      if (response.status === 200) {
+        this.items = response.data.data
+      }
+    }).catch(e => {
+
+    })
   }
 }
 </script>
