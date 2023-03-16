@@ -47,6 +47,7 @@
               <Datepicker
                   v-model="picked"
                   :locale="locale"
+                  :ref="inputs.date"
                   :week-starts-on="0"
                   :input-format="inputFormat"
                   class="date-input"
@@ -210,20 +211,26 @@ import { ref, reactive } from 'vue'
 import { ko } from 'date-fns/locale'
 import DataSelector from "@/components/atoms/DataSelector.vue";
 import ProjectCategorySelect from "@/components/modal/ProjectCategorySelect.vue";
+import dayjs from "dayjs";
 
 
 export default {
   name: "EstimateRequest",
-  components: {ProjectCategorySelect, DataSelector, CustomButton, Datepicker},
+  components: { ProjectCategorySelect, DataSelector, CustomButton, Datepicker },
   setup() {
     const picked = ref(new Date())
     const locale = reactive(ko)
     const inputFormat = ref('yyyy-MM-dd')
 
+    const inputs = {
+      date: ref()
+    }
+
     return {
       picked,
       locale,
       inputFormat,
+      inputs
     }
   },
   data() {
@@ -280,17 +287,20 @@ export default {
       const formData = new FormData();
       formData.append('category_id', this.selectedSubCategory);
       formData.append('city_id', this.selectedData2);
-      formData.append('content', this.contentText);
-      formData.append('end_date', this.picked);
+      formData.append('contents', this.contentText);
+      formData.append('end_time', this.endTime + '시간');
+      formData.append('end_date', this.inputs['date']?.value.input);
       this.axios.post('/estimate', formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       }).then(res => {
-        console.log(res)
+        if (res.status === 200) {
+          alert('의뢰를 요청하였습니다!');
+        }
       }).catch(error => {
 
-      })
+      });
     }
   },
   mounted() {
