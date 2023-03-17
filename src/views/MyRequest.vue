@@ -3,7 +3,7 @@
   <div class="title-wrapper">
     <h1>요청목록</h1>
     <ul class="request-tab">
-      <li>전체(00)</li>
+      <li>전체({{requests.length}})</li>
       <li>의뢰진행중(00)</li>
       <li>견적마감(00)</li>
     </ul>
@@ -56,8 +56,33 @@
 </template>
 
 <script>
+import {ref} from "vue";
+
 export default {
-  name: "MyRequest"
+  name: "MyRequest",
+  data() {
+    return {
+      requests: ref([])
+    }
+  },
+  methods: {
+    getMyRequests() {
+      this.axios.get('/estimate', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.status === 200) {
+          this.requests = res.data.data
+        }
+      }).catch(e => {
+
+      });
+    }
+  },
+  mounted() {
+    this.getMyRequests()
+  }
 }
 </script>
 

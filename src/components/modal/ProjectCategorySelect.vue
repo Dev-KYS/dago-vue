@@ -26,7 +26,7 @@
       <div class="category-modal-footer">
         <div class="button-wrapper">
 <!--          <custom-button type="button" text="저장하기" button-class="primary mid" @click="$emit('selected-category', selectedCategoryId, selectedSubCategoryId, desc)"/>-->
-          <custom-button type="button" text="저장하기" button-class="primary mid" @click="$emit('selected-category', { 'categoryId':selectedCategoryId, 'categoryTitle': selectedCategoryTitle, 'subId':selectedSubCategoryId, 'subTitle': selectedSubCategoryTitle, 'desc':desc })"/>
+          <custom-button type="button" text="저장하기" button-class="primary mid" @click="categorySave"/>
           <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
         </div>
       </div>
@@ -74,6 +74,15 @@ export default {
     subCategorySelected(item) {
       this.selectedSubCategoryId = item.id
       this.selectedSubCategoryTitle = item.title
+    },
+    categorySave() {
+      this.$emit('selected-category', { 'categoryId':this.selectedCategoryId, 'categoryTitle': this.selectedCategoryTitle, 'subId':this.selectedSubCategoryId, 'subTitle': this.selectedSubCategoryTitle, 'desc':this.desc })
+      this.selectedCategoryId = 0;
+      this.selectedCategoryTitle = '';
+      this.selectedSubCategoryId = 0;
+      this.selectedSubCategoryTitle = '';
+      this.desc = '';
+      this.subs = [];
     }
   },
   mounted() {

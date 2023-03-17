@@ -25,13 +25,18 @@
             </div>
             <div class="category-select" v-show="selectedCategory > 0">
               <div class="selected-category-wrapper">
-                <div class="selected-category-title">
-                  <span>{{selectedCategoryTitle}}</span><span>></span><span>{{selectedSubCategoryTitle}}</span>
+                <div class="selected-category-set">
+                  <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg" @click="selectedCategory = 0">
+                    <path d="M9.3754 9.88545L5.66309 6.17314L1.95078 9.88545L0.890115 8.82479L4.60243 5.11248L0.890115 1.40017L1.95078 0.339508L5.66309 4.05182L9.3754 0.339508L10.4361 1.40017L6.72375 5.11248L10.4361 8.82479L9.3754 9.88545Z" fill="#6C6C6C"/>
+                  </svg>
+                  <div class="selected-category-title">
+                    <span>{{selectedCategoryTitle}}</span><span>></span><span>{{selectedSubCategoryTitle}}</span>
+                  </div>
                 </div>
               </div>
             </div>
             <div class="button-wrapper">
-              <button class="button primary mid next-btn" @click="step = 2">
+              <button class="button primary mid next-btn" @click="changeStep(2)">
                 다음
                 <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12.6281 8H0.201172" stroke="white" stroke-width="2.2"/>
@@ -59,7 +64,7 @@
                 <button :class="{'active': endTime === 6}" @click="endTime = 6">6시간 뒤</button>
                 <button :class="{'active': endTime === 12}" @click="endTime = 12">12시간 뒤</button>
                 <button :class="{'active': endTime === 24}" @click="endTime = 24">24시간 뒤</button>
-                <button :class="{'active': endTime === 48}" @click="endTime = 48">48시간 뒤</button>
+<!--                <button :class="{'active': endTime === 48}" @click="endTime = 48">48시간 뒤</button>-->
               </div>
             </div>
             <div class="button-wrapper">
@@ -105,7 +110,7 @@
                 </svg>
                 이전
               </button>
-              <button class="button primary mid next-btn" @click="step = 4">
+              <button class="button primary mid next-btn" @click="changeStep(4)">
                 다음
                 <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12.6281 8H0.201172" stroke="white" stroke-width="2.2"/>
@@ -133,7 +138,7 @@
                 </svg>
                 이전
               </button>
-              <button class="button primary mid next-btn" @click="step = 5">
+              <button class="button primary mid next-btn" @click="changeStep(5)">
                 다음
                 <svg width="15" height="16" viewBox="0 0 15 16" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M12.6281 8H0.201172" stroke="white" stroke-width="2.2"/>
@@ -148,17 +153,18 @@
             <div class="file-select-wrapper">
               <label class="file-selector">
                 <span>+ 내 파일에서 찾아보기</span>
-                <input type="file" ref="select_file" id="file" />
+                <input type="file" id="file" @change="fileSelect"/>
               </label>
               <div class="select-file-list">
-                <div class="select-file-item">
-                  <p>예비창업패키지 사업계호기서.hwp</p>
-                  <button class="file-remove-btn">삭제</button>
+                <div class="select-file-item" v-for="(file, index) in files">
+<!--                  <p>예비창업패키지 사업계호기서.hwp</p>-->
+                  <p>{{file.name}}</p>
+                  <button class="file-remove-btn" @click="fileRemove(index)">삭제</button>
                 </div>
-                <div class="select-file-item">
-                  <p>예비창업패키지 사업계호기서.hwp</p>
-                  <button class="file-remove-btn">삭제</button>
-                </div>
+<!--                <div class="select-file-item">-->
+<!--                  <p>예비창업패키지 사업계호기서.hwp</p>-->
+<!--                  <button class="file-remove-btn">삭제</button>-->
+<!--                </div>-->
               </div>
             </div>
             <div class="button-wrapper">
@@ -196,6 +202,9 @@
               <button class="button primary mid next-btn" @click="submitEstimate">
                 의뢰요청하기
               </button>
+              <Teleport to="body">
+                <request-complete :show="showCompleteModal" @close="showCompleteModal = false" msg="의뢰요청이 완료되었습니다!" @complete-request="completeRequest"/>
+              </Teleport>
             </div>
           </div>
         </div>
@@ -211,12 +220,11 @@ import { ref, reactive } from 'vue'
 import { ko } from 'date-fns/locale'
 import DataSelector from "@/components/atoms/DataSelector.vue";
 import ProjectCategorySelect from "@/components/modal/ProjectCategorySelect.vue";
-import dayjs from "dayjs";
-
+import RequestComplete from "@/components/modal/RequestComplete.vue";
 
 export default {
   name: "EstimateRequest",
-  components: { ProjectCategorySelect, DataSelector, CustomButton, Datepicker },
+  components: { ProjectCategorySelect, DataSelector, CustomButton, Datepicker, RequestComplete },
   setup() {
     const picked = ref(new Date())
     const locale = reactive(ko)
@@ -249,9 +257,10 @@ export default {
       categoryDescription: '',
       processType: '',
       showCategoryModal: false,
-      files: [],
+      files: ref([]),
       selectCategory: null,
       contentText: null,
+      showCompleteModal: false
     }
   },
   methods: {
@@ -296,11 +305,81 @@ export default {
         }
       }).then(res => {
         if (res.status === 200) {
-          alert('의뢰를 요청하였습니다!');
+          const estimateId = res.data.data.id
+          if (this.files.length > 0) {
+            // File upload
+            const attachFormData = new FormData();
+            for (var i = 0; i < this.files.length; i++) {
+              attachFormData.append('files[]', this.files[i]);
+            }
+            attachFormData.append('estimate_id', estimateId);
+            this.axios.post('/estimate_attach', attachFormData, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`
+              }
+            }).then(res => {
+              if (res.status === 200) {
+                this.showCompleteModal = true;
+              }
+            }).catch(e => {
+
+            });
+          } else {
+            this.showCompleteModal = true;
+          }
         }
       }).catch(error => {
 
       });
+    },
+    changeStep(step) {
+      switch (step) {
+        case 2:
+          if (this.selectedCategory === 0) {
+            alert('카테고리 선택은 필수입니다!');
+            return;
+          }
+          break;
+        case 3:
+          break;
+        case 4:
+          console.log(this.selectedData2);
+          if (this.selectedData2 === '') {
+            alert('지역 선택은 필수입니다!');
+            return;
+          }
+          if (this.processType === '') {
+            alert('진행 방식을 선택해주세요!');
+            return;
+          }
+          break;
+        case 5:
+          if (this.contentText === null) {
+            alert('의뢰내용은 필수입니다!');
+            return;
+          }
+          if (this.contentText.length < 10) {
+            alert('의뢰내용은 10글자 이상 상세히 작성해주세요!');
+            return;
+          }
+          break;
+        default:
+      }
+      this.step = step;
+    },
+    fileSelect(e) {
+      if (this.files === null) {
+        this.files = [];
+      }
+      this.files.push(e.target.files[0])
+      console.log(this.files.length)
+    },
+    fileRemove(index) {
+      this.files.splice(index, 1)
+    },
+    completeRequest() {
+      // 요청목록 이동
+      this.$router.push('/myrequest')
     }
   },
   mounted() {
@@ -372,19 +451,29 @@ body {
               font-weight: normal;
             }
             .selected-category-wrapper {
-              border: 1px solid #6C6C6C;
-              border-radius: 20px;
-              width: 388px;
-              height: 80px;
-              display: flex;
-              justify-content: space-around;
-              .selected-category-title {
-                font-size: 16px;
-                font-weight: bold;
-                color: #2C2C2C;
-                margin: auto;
-                span {
-                  margin: 10px;
+              position: relative;
+              .selected-category-set {
+                position: absolute;
+                border: 1px solid #6C6C6C;
+                border-radius: 20px;
+                width: 388px;
+                height: 80px;
+                display: flex;
+                justify-content: space-around;
+                svg {
+                  position: absolute;
+                  top: 10px;
+                  right: 8px;
+                  cursor: pointer;
+                }
+                .selected-category-title {
+                  font-size: 16px;
+                  font-weight: bold;
+                  color: #2C2C2C;
+                  margin: auto;
+                  span {
+                    margin: 10px;
+                  }
                 }
               }
             }

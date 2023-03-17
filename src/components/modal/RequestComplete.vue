@@ -23,7 +23,7 @@
         </div>
         <div class="save-modal-footer">
           <div class="button-wrapper">
-            <custom-button type="button" text="닫기" button-class="natural mid" @click="$emit('close')"/>
+            <custom-button type="button" text="닫기" button-class="natural mid" @click="close"/>
           </div>
         </div>
       </div>
@@ -39,6 +39,12 @@ export default {
   props: {
     show: Boolean,
     msg: String
+  },
+  methods: {
+    close() {
+      this.$emit('complete-request')
+      this.$emit('close')
+    }
   }
 }
 </script>
