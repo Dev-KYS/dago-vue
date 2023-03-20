@@ -73,7 +73,7 @@ export default {
         }
       }).then(res => {
         // console.log(res)
-        if(res.status === 'success') {
+        if(res.data.status === 'success') {
           this.$emit('close')
         }
       }).catch(error => {

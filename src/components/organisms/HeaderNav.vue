@@ -58,12 +58,8 @@
           </router-link>
         </li>
         <li>
-          <button type="button" class="button pink small" v-if="proCheck === false" @click="changePro">
-            전문가로 전환
-          </button>
-          <button type="button" class="button primary small" v-if="proCheck === true" @click="changePro">
-            고객으로 전환
-          </button>
+          <custom-button type="button" class="button pink small" v-if="proCheck === false" text="전문가로 전환" @click="changePro"/>
+          <custom-button type="button" class="button primary small" v-if="proCheck === true" text="고객으로 전환" @click="changePro"/>
         </li>
         <li>
           <q-btn-dropdown
@@ -126,8 +122,13 @@
 </template>
 
 <script>
+import CustomButton from "@/components/atoms/CustomButton.vue";
+
 export default {
   name: "HeaderNav",
+  components: {
+    CustomButton
+  },
   setup() {
     return {
       onMainClick () {
@@ -150,18 +151,9 @@ export default {
       }).catch(e => {
         this.$store.dispatch('logoutAccount')
       });
-    }
-  },
-  computed: {
-    loginCheck() {
-      // console.log(this.$store.getters.getUserLoginCheck)
-      return this.$store.getters.getUserLoginCheck
-    },
-    proCheck() {
-      // console.log(this.$store.getters.getUserProCheck)
-      return this.$store.getters.getUserProCheck
     },
     changePro() {
+      console.log(this.proCheck)
       if (this.proCheck) {
         this.$store.dispatch('changePro', false)
       } else {
@@ -177,6 +169,16 @@ export default {
 
         })
       }
+    }
+  },
+  computed: {
+    loginCheck() {
+      // console.log(this.$store.getters.getUserLoginCheck)
+      return this.$store.getters.getUserLoginCheck
+    },
+    proCheck() {
+      // console.log(this.$store.getters.getUserProCheck)
+      return this.$store.getters.getUserProCheck
     }
   }
 }

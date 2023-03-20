@@ -20,7 +20,6 @@ const userStore = {
             localStorage.removeItem('access_token')
         },
         proState(state, payload) {
-            console.log(payload)
             state.isPro = payload
         }
     },
