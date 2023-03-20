@@ -514,10 +514,14 @@ export default {
       this.selectedCityData2 = id
       console.log(this.selectedCityData2)
     },
+    getAvatar() {
+      this.avatar = this.$store.getters.getAvatar
+    },
   },
   mounted() {
     this.getCityData()
     this.getMyCategory()
+    this.getAvatar()
   }
 }
 </script>

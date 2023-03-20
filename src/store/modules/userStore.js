@@ -52,7 +52,9 @@ const userStore = {
         getUserProCheck: function (state) {
             return state.isPro
         },
-
+        getAvatar: function (state) {
+            return state.userInfo.data.avatar
+        }
     }
 }
 
