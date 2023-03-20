@@ -6,17 +6,23 @@ const userStore = {
         userInfo: null,
         isLogin: false,
         avatar: null,
+        isPro: false
     },
     mutations: {
         loginSuccess(state, payload) {
             state.isLogin = true
             state.userInfo = payload
+            state.isPro = payload.data.is_pro
         },
         logout(state) {
             state.isLogin = false
             state.userInfo = null
             localStorage.removeItem('access_token')
         },
+        proState(state, payload) {
+            console.log(payload)
+            state.isPro = payload
+        }
     },
     actions: {
         getAccountInfo({ commit }) {
@@ -36,13 +42,16 @@ const userStore = {
         logoutAccount({ commit }) {
             commit('logout')
         },
+        changePro({commit}, state) {
+            commit('proState', state)
+        }
     },
     getters: {
         getUserLoginCheck: function (state) {
             return state.isLogin
         },
         getUserProCheck: function (state) {
-            return state.userInfo.data.is_pro
+            return state.isPro
         },
 
     }

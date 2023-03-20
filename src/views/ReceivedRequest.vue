@@ -54,6 +54,14 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    getLists() {
+
+    }
+  },
+  mounted() {
+
   }
 }
 </script>

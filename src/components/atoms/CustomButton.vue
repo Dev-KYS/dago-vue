@@ -40,6 +40,12 @@ export default {
     border: 1px solid #FF0099;
   }
 
+  &.pink {
+    background: #FFEBF7;
+    border-radius: 12px;
+    color: #FF0099 !important;
+  }
+
   &.small {
     //width: 75px;
     padding: 6px 11.5px;

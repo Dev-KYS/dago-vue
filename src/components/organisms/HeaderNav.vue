@@ -48,7 +48,7 @@
       </ul>
       <ul v-if="loginCheck === true">
         <li>
-          <router-link to="" class="">
+          <router-link to="" class="" v-if="proCheck === true">
             받은 견적
           </router-link>
         </li>
@@ -56,6 +56,14 @@
           <router-link to="" class="">
             채팅
           </router-link>
+        </li>
+        <li>
+          <button type="button" class="button pink small" v-if="proCheck === false" @click="changePro">
+            전문가로 전환
+          </button>
+          <button type="button" class="button primary small" v-if="proCheck === true" @click="changePro">
+            고객으로 전환
+          </button>
         </li>
         <li>
           <q-btn-dropdown
@@ -69,7 +77,7 @@
               </div>
             </template>
             <q-list>
-              <q-item clickable v-close-popup @click="onItemClick">
+              <q-item clickable v-close-popup @click="onItemClick" v-if="proCheck === true">
                 <q-item-section>
                   <q-item-label>
                     <router-link to="">받은 견적</router-link>
@@ -139,7 +147,9 @@ export default {
         }
       }).then(res => {
         this.$store.dispatch('logoutAccount')
-      })
+      }).catch(e => {
+        this.$store.dispatch('logoutAccount')
+      });
     }
   },
   computed: {
@@ -150,6 +160,23 @@ export default {
     proCheck() {
       // console.log(this.$store.getters.getUserProCheck)
       return this.$store.getters.getUserProCheck
+    },
+    changePro() {
+      if (this.proCheck) {
+        this.$store.dispatch('changePro', false)
+      } else {
+        this.axios.get('/user-info/change-pro', {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          }
+        }).then(res => {
+          if (res.status === 200) {
+            this.$store.dispatch('changePro', true)
+          }
+        }).catch(res => {
+
+        })
+      }
     }
   }
 }
