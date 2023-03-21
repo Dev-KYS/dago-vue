@@ -168,7 +168,6 @@ export default {
           }
         }).then(res => {
           if (res.data.status === 'success') {
-            alert('저장되었습니다!');
             this.$emit('close');
           }
         }).catch(error => {
