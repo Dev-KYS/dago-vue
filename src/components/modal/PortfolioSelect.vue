@@ -8,7 +8,7 @@
         </div>
         <div class="modal-body">
           <div class="form-input-wrapper">
-            <input-group label-text="포트폴리오 제목" type="text" placeholder="내용을 입력하세요"/>
+            <input-group label-text="포트폴리오 제목" type="text" placeholder="내용을 입력하세요" :parent-value="title" @child-input="onChangeTitleInput"/>
           </div>
 
           <div class="portfolio-add-image-wrapper">
@@ -22,33 +22,42 @@
               <div class="portfolio-add-file-field">
                 <!-- 이미지 추가 필드 -->
                 <div class="portfolio-add-file-add">
-                  <div class="portfolio-img-wrapper">
+<!--                  <div class="portfolio-img-wrapper">-->
+<!--                    <img src="/assets/icons/plus_icon.png">-->
+<!--                  </div>-->
+                  <label class="portfolio-img-wrapper">
                     <img src="/assets/icons/plus_icon.png">
+                    <input type="file" ref="file" accept="image/png, image/jpeg" @change="onFileChanged"/>
+                  </label>
+                </div>
+                <div class="portfolio-add-file-empty">
+                  <div class="portfolio-img-wrapper">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 1">
+                    <img :src="filePreview[0]" v-if="filePreview.length > 0">
                   </div>
                 </div>
                 <div class="portfolio-add-file-empty">
                   <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 2">
+                    <img :src="filePreview[1]" v-if="filePreview.length > 1">
                   </div>
                 </div>
                 <div class="portfolio-add-file-empty">
                   <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 3">
+                    <img :src="filePreview[2]" v-if="filePreview.length > 2">
                   </div>
                 </div>
                 <div class="portfolio-add-file-empty">
                   <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 4">
+                    <img :src="filePreview[3]" v-if="filePreview.length > 3">
                   </div>
                 </div>
                 <div class="portfolio-add-file-empty">
                   <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
-                  </div>
-                </div>
-                <div class="portfolio-add-file-empty">
-                  <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 5">
+                    <img :src="filePreview[4]" v-if="filePreview.length > 4">
                   </div>
                 </div>
               </div>
@@ -61,8 +70,8 @@
                 <label>작업기간</label>
               </div>
               <div class="work-dt-input-wrapper">
-                <input placeholder="소요기간(숫자만 입력)">
-                <input placeholder="기간">
+                <input type="number" placeholder="소요기간(숫자만 입력)" v-model="period">
+                <input placeholder="기간" v-model="period_unit">
               </div>
             </div>
           </div>
@@ -73,7 +82,7 @@
                 <label>금액</label>
               </div>
               <div class="work-price-input-wrapper">
-                <input placeholder="견적 금액을 입력해주세요">
+                <input placeholder="견적 금액을 입력해주세요" v-model="price">
                 <span>원</span>
               </div>
             </div>
@@ -85,14 +94,14 @@
               <div class="title-label-wrapper">
                 <label>작업내용</label>
               </div>
-              <textarea rows="5" placeholder="제공 서비스 상세 설명을 해주세요. EX. 제공받은 자료 / 작업 과정 등"></textarea>
+              <textarea rows="5" placeholder="제공 서비스 상세 설명을 해주세요. EX. 제공받은 자료 / 작업 과정 등" v-model="contents"></textarea>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
         <div class="button-wrapper">
-          <custom-button type="button" text="저장하기" button-class="primary mid" />
+          <custom-button type="button" text="저장하기" button-class="primary mid" @click="submit"/>
           <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
         </div>
       </div>
@@ -112,6 +121,59 @@ export default {
   components: {CustomTabInputGroup, CustomButton, InputGroup, ProfileInputFileGroup},
   props: {
     show: Boolean,
+  },
+  data() {
+    return {
+      filePreview: [],
+      files: [],
+      title: '',
+      period: '',
+      period_unit: '',
+      price: '',
+      contents: ''
+    }
+  },
+  methods: {
+    onFileChanged(event) {
+      if(this.files.length === 5) {
+        alert('이미지는 최대 5개까지 등륵이 가능합니다.')
+        return
+      }
+      const input = event.target
+      if(input.files && input.files[0]) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.filePreview.push(e.target.result)
+          this.files.push(input.files[0])
+        }
+        reader.readAsDataURL(input.files[0])
+      }
+    },
+    onChangeTitleInput(title) {
+      this.title = title
+    },
+    submit() {
+      var formdata = new FormData();
+      for (var i = 0; i < this.files.length; i++) {
+        formdata.append('files[]', this.files[i]);
+      }
+      formdata.append('title', this.title);
+      formdata.append('period', this.period);
+      formdata.append('period_unit', this.period_unit);
+      formdata.append('price', this.price);
+      formdata.append('contents', this.contents);
+      this.axios.post('/portfolios', formdata, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          "Content-Type": "multipart/form-data",
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          alert('저장되었습니다.');
+          this.$emit('close');
+        }
+      });
+    }
   }
 }
 </script>
@@ -216,6 +278,9 @@ export default {
                     margin: auto;
                     width: 20px;
                     height: 20px;
+                  }
+                  input[type=file] {
+                    display: none;
                   }
                 }
               }
