@@ -17,33 +17,39 @@
               <div class="portfolio-add-file-field">
                 <!-- 이미지 추가 필드 -->
                 <div class="portfolio-add-file-add">
-                  <div class="portfolio-img-wrapper">
+                  <label class="portfolio-img-wrapper">
                     <img src="/assets/icons/plus_icon.png">
+                    <input type="file" ref="file" accept="image/png, image/jpeg" @change="onFileChanged"/>
+                  </label>
+                </div>
+                <div class="portfolio-add-file-empty">
+                  <div class="portfolio-img-wrapper">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 1">
+                    <img :src="filePreview[0]" v-if="filePreview.length > 0">
                   </div>
                 </div>
                 <div class="portfolio-add-file-empty">
                   <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 2">
+                    <img :src="filePreview[1]" v-if="filePreview.length > 1">
                   </div>
                 </div>
                 <div class="portfolio-add-file-empty">
                   <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 3">
+                    <img :src="filePreview[2]" v-if="filePreview.length > 2">
                   </div>
                 </div>
                 <div class="portfolio-add-file-empty">
                   <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 4">
+                    <img :src="filePreview[3]" v-if="filePreview.length > 3">
                   </div>
                 </div>
                 <div class="portfolio-add-file-empty">
                   <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
-                  </div>
-                </div>
-                <div class="portfolio-add-file-empty">
-                  <div class="portfolio-img-wrapper">
-                    <img src="/assets/icons/default_upload_img.png">
+                    <img src="/assets/icons/default_upload_img.png" v-if="filePreview.length < 5">
+                    <img :src="filePreview[4]" v-if="filePreview.length > 4">
                   </div>
                 </div>
               </div>
@@ -56,41 +62,42 @@
                 <label>첨부자료</label><span style="font-size: 16px; color:#6C6C6C;">(서류형태 자료)</span>
               </div>
             </div>
-            <button class="attached-document-add-btn" @click="$emit('fileAddModalButtonClick', type)">
+            <label class="attached-document-add-btn">
               <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15.335 10.627H10.085V15.877H8.58496V10.627H3.33496V9.12695H8.58496V3.87695H10.085V9.12695H15.335V10.627Z" fill="#FF0099"/>
               </svg>
               자격증추가
-            </button>
+              <input type="file" ref="file" @change="onDocumentFileChanged"/>
+            </label>
+<!--            <button class="attached-document-add-btn" @click="$emit('fileAddModalButtonClick', type)">-->
+<!--              <svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--                <path d="M15.335 10.627H10.085V15.877H8.58496V10.627H3.33496V9.12695H8.58496V3.87695H10.085V9.12695H15.335V10.627Z" fill="#FF0099"/>-->
+<!--              </svg>-->
+<!--              자격증추가-->
+<!--            </button>-->
           </div>
 
           <div class="attached-document-list-wrapper">
-            <button class="attached-document-list-item">
-              사업계획서.pdf
-              <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <button class="attached-document-list-item" v-for="(file, index) in docFiles">
+              {{file.name}}
+              <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg" @click="onDocumentFileRemove(index)">
                 <path d="M9.33511 9.7729L5.6228 6.06059L1.91049 9.7729L0.849832 8.71224L4.56214 4.99993L0.849832 1.28762L1.91049 0.226959L5.6228 3.93927L9.33511 0.226959L10.3958 1.28762L6.68346 4.99993L10.3958 8.71224L9.33511 9.7729Z" fill="#6C6C6C"/>
               </svg>
             </button>
 
-            <button class="attached-document-list-item">
-              사업계획서.pdf
-              <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9.33511 9.7729L5.6228 6.06059L1.91049 9.7729L0.849832 8.71224L4.56214 4.99993L0.849832 1.28762L1.91049 0.226959L5.6228 3.93927L9.33511 0.226959L10.3958 1.28762L6.68346 4.99993L10.3958 8.71224L9.33511 9.7729Z" fill="#6C6C6C"/>
-              </svg>
-            </button>
+<!--            <button class="attached-document-list-item">-->
+<!--              사업계획서.pdf-->
+<!--              <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">-->
+<!--                <path d="M9.33511 9.7729L5.6228 6.06059L1.91049 9.7729L0.849832 8.71224L4.56214 4.99993L0.849832 1.28762L1.91049 0.226959L5.6228 3.93927L9.33511 0.226959L10.3958 1.28762L6.68346 4.99993L10.3958 8.71224L9.33511 9.7729Z" fill="#6C6C6C"/>-->
+<!--              </svg>-->
+<!--            </button>-->
 
-            <button class="attached-document-list-item">
-              사업계획서.pdf
-              <svg width="11" height="10" viewBox="0 0 11 10" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M9.33511 9.7729L5.6228 6.06059L1.91049 9.7729L0.849832 8.71224L4.56214 4.99993L0.849832 1.28762L1.91049 0.226959L5.6228 3.93927L9.33511 0.226959L10.3958 1.28762L6.68346 4.99993L10.3958 8.71224L9.33511 9.7729Z" fill="#6C6C6C"/>
-              </svg>
-            </button>
           </div>
         </div>
       </div>
       <div class="certificate-doc-modal-footer">
         <div class="button-wrapper">
-          <custom-button type="button" text="저장하기" button-class="primary mid" />
+          <custom-button type="button" text="저장하기" button-class="primary mid" @click="submit"/>
           <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
         </div>
       </div>
@@ -109,6 +116,68 @@ export default {
   components: {ProfileInputFileGroup, CustomFileInputGroup, CustomButton},
   props: {
     show: Boolean
+  },
+  data() {
+    return {
+      filePreview: [],
+      files: [],
+      docFiles: []
+    }
+  },
+  methods: {
+    onFileChanged(event) {
+      if(this.files.length === 5) {
+        alert('이미지는 최대 5개까지 등륵이 가능합니다.')
+        return
+      }
+      const input = event.target
+      if(input.files && input.files[0]) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.filePreview.push(e.target.result)
+          this.files.push(input.files[0])
+        }
+        reader.readAsDataURL(input.files[0])
+      }
+    },
+    onDocumentFileChanged(event) {
+      const input = event.target
+      if(input.files && input.files[0]) {
+        const reader = new FileReader()
+        reader.onload = (e) => {
+          this.docFiles.push(input.files[0])
+        }
+        reader.readAsDataURL(input.files[0])
+      }
+    },
+    onDocumentFileRemove(index) {
+      this.docFiles.splice(index, 1);
+    },
+    submit() {
+      if (this.files.length !== 0) {
+        const formData = new FormData()
+        for (var j = 0; j < this.files.length; j++) {
+          formData.append('files[]', this.files[j])
+        }
+        for (var i = 0; i < this.docFiles.length; i++) {
+          formData.append('files[]', this.docFiles[i])
+        }
+        this.axios.post('/certificate', formData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          }
+        }).then(res => {
+          if (res.data.status === 'success') {
+            alert('저장되었습니다!');
+            this.$emit('close');
+          }
+        }).catch(error => {
+
+        })
+      } else {
+        alert('자격증 이미지 첨부는 필수입니다!');
+      }
+    }
   }
 }
 </script>
@@ -193,6 +262,9 @@ export default {
                 width: 20px;
                 height: 20px;
               }
+              input[type=file] {
+                display: none;
+              }
             }
           }
           .portfolio-add-file-empty {
@@ -240,17 +312,25 @@ export default {
             svg {
               margin-right: 8px;
             }
+            input[type=file] {
+              display: none;
+            }
           }
         }
 
         .attached-document-list-wrapper {
           margin-top: 20px;
           display: flex;
+          flex-wrap: wrap;
           flex-direction: row;
-          justify-content: space-between;
+          justify-content: flex-start;
           .attached-document-list-item {
-            width: 130.97px;
-            height: 32px;
+            //width: 130.97px;
+            //height: 32px;
+            width: 30%;
+            //min-width: 130.97px;
+            min-height: 32px;
+            margin: 0 5px 5px 0;
             border: 1px solid #6C6C6C;
             border-radius: 8px;
             background: transparent;
