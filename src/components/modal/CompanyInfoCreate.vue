@@ -101,7 +101,7 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       }).then(res => {
-        this.name = res.data.data.company_name
+        this.name = res.data.data.company_nm
         this.regNo = res.data.data.business_reg_no
         this.employeeCnt = res.data.data.employee_cnt
         this.isBillActive = res.data.data.tax_bill

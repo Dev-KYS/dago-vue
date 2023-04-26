@@ -10,15 +10,55 @@
           <div class="request-modal-body">
             <div class="request-contents-item-wrapper">
               <ol type="1">
-                <li v-for="item in items">{{item.title}}
+                <li>세부 카테고리
                   <ul>
-                    <li v-for="content in item.contents">
-                      <span v-show="item.id !== 5">{{content}}</span>
-                      <router-link to="" v-show="item.id === 5">{{content}}</router-link>
+                    <li>
+                      <span>{{items.has_category.title}}</span>
+                    </li>
+                  </ul>
+                </li>
+                <li>프로젝트 희망 마감일정
+                  <ul>
+                    <li>
+                      <span>{{items.end_date}}</span>
+                    </li>
+                  </ul>
+                </li>
+                <li>지역 및 진행방식
+                  <ul>
+                    <li>
+                      <span>{{items.has_city.fullname}}</span>
+                    </li>
+                    <li>
+                      <span>{{items.has_proceed.title}}</span>
+                    </li>
+                  </ul>
+                </li>
+                <li>의뢰내용
+                  <ul>
+                    <li v-for="content in items.contents.split('\r\n')">
+                      <span>{{content}}</span>
+                    </li>
+                  </ul>
+                </li>
+                <li>참고자료
+                  <ul>
+                    <li v-for="file in items.has_attach">
+                      <span>{{file.has_file.origin_name}}</span>
                     </li>
                   </ul>
                 </li>
               </ol>
+<!--              <ol type="1">-->
+<!--                <li v-for="item in items">{{item.title}}-->
+<!--                  <ul>-->
+<!--                    <li v-for="content in item.contents">-->
+<!--                      <span v-show="item.id !== 5">{{content}}</span>-->
+<!--                      <router-link to="" v-show="item.id === 5">{{content}}</router-link>-->
+<!--                    </li>-->
+<!--                  </ul>-->
+<!--                </li>-->
+<!--              </ol>-->
             </div>
           </div>
         </div>
@@ -40,18 +80,41 @@ export default {
   name: "MyRequestContents",
   components: {CustomButton},
   props: {
-    show: Boolean
+    show: Boolean,
+    estimateId: String
   },
   data() {
     return {
-      items: [
-        {id: 1, title: '세부 카테고리', type:"text", contents: ["사업계획서 작성"]},
-        {id: 2, title: '프로젝트 희망 마감일정', type:"text", contents: ["2023년 2월 3일"]},
-        {id: 3, title: '지역 및 진행방식', type:"text", contents: ["대전광역시 유성구", "제가 있는 곳으로 와주세요"]},
-        {id: 4, title: '의뢰내용', type:"text", contents: ["예비창업패키지 지원 희망합니다"]},
-        {id: 5, title: '참고자료', type: "file", contents: ["사업계획서 초안.hwp"]}
-      ]
+      items: {
+        "has_attach": [{
+          "has_file": {}
+        }],
+        "has_detail": [],
+        "has_question": [],
+        "has_user": {},
+        "has_category": {},
+        "has_proceed": {},
+        "has_city": {}
+      }
     }
+  },
+  methods: {
+    getEstimate() {
+      this.axios.get('/estimate/' + this.estimateId, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          this.items = res.data.data
+        }
+      }).catch(e => {
+
+      })
+    }
+  },
+  mounted() {
+    this.getEstimate()
   }
 }
 </script>

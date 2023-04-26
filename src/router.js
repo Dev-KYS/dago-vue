@@ -42,7 +42,7 @@ const routes = [
         component: () => import("@/views/MyRequestEstimate.vue")
     },
     {
-        path: "/request/answer/:id",
+        path: "/request/answer",
         name: "RequestAnswer",
         component: () => import("@/views/RequestAnswer.vue")
     },
@@ -52,7 +52,7 @@ const routes = [
         component: () => import("@/views/QuestionCreate.vue")
     },
     {
-        path: "/question/answer",
+        path: "/question/answer/:id",
         name: "RequestAnswerCheck",
         component: () => import("@/views/RequestAnswerCheck.vue")
     },
@@ -65,6 +65,16 @@ const routes = [
         path: "/request/contract",
         name: "ElectronicContract",
         component: () => import("@/views/ElectronicContract.vue")
+    },
+    {
+        path: "/chat-list",
+        name: "ChatList",
+        component: () => import("@/views/ChatList.vue")
+    },
+    {
+        path: "/chat-room/:id",
+        name: "ChatRoom",
+        component: () => import("@/views/ChatRoom.vue")
     }
 ];
 

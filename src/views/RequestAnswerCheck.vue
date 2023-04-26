@@ -5,48 +5,51 @@
       <div class="customer-profile">
         <img src="/assets/icons/default_avatar.png" />
         <div>
-          <p>김다른</p>
+          <p>{{estimate.has_user.name}}</p>
           <span>고객님 요청서</span>
         </div>
       </div>
       <div class="request-contents-wrapper">
         <div class="contents-item">
           <span class="title">1. 세부 카테고리</span>
-          <p class="contents">- 사업계획서 작성</p>
+          <p class="contents">- {{estimate.has_category.title}}</p>
         </div>
         <div class="contents-item">
           <span class="title">2. 프로젝트 희망 마감일정</span>
-          <p class="contents">- 2023년 2월 3일</p>
+          <p class="contents">- {{estimate.end_date}}</p>
         </div>
         <div class="contents-item">
           <span class="title">3. 지역 및 진행방식</span>
-          <p class="contents">- 대전광역시 유성구</p>
-          <p class="contents">- 제가 있는 곳으로 와주세요</p>
+          <p class="contents">- {{estimate.has_city.fullname}}</p>
+          <p class="contents">- {{estimate.has_proceed.title}}</p>
         </div>
         <div class="contents-item">
           <span class="title">4. 의뢰내용</span>
-          <p class="contents">- 예비창업패키지 지원 희망합니다</p>
+          <p class="contents" v-for="content in estimate.contents.split('\r\n')">- {{content}}</p>
         </div>
         <div class="contents-item">
           <span class="title">5. 참고자료</span>
-          <p class="contents">- 사업계획서 초안.hwp</p>
+          <p class="contents" v-for="file in estimate.has_attach">- {{file.has_file.origin_name}}</p>
         </div>
       </div>
     </div>
     <div class="question-answer-wrapper">
       <div class="question-form-wrapper">
         <div class="answer-item-title-wrapper">
-          <h2>김진한 전문가의 질문</h2>
+          <h2>{{estimate.has_user.name}} 고객의 답변</h2>
           <span><b>TIP</b>. 상세 견적 금액을 보내고 고객님과 거래를 진행해 보세요.</span>
           <div class="question-list-wrapper">
-            <answer-item v-for="(item, index) in questionInputList" :index="++index" :question="item.title" :answer="item.answer" :read-only="true"/>
+            <answer-item v-for="(item, index) in questionInputList" :index="++index" :question="item.question" :answer="item.answer" :read-only="true"/>
           </div>
         </div>
         <div class="submit-wrapper">
           <button class="button natural small">목록으로</button>
           <button class="button primary small" @click="showDetailedEstimateModal = true">상세견적 보내기</button>
           <Teleport to="body">
-            <detailed-estimate :show="showDetailedEstimateModal" @close="showDetailedEstimateModal = false"/>
+            <detailed-estimate :show="showDetailedEstimateModal" :c-user-name="estimate.has_user.name" @save-price="closeDetailEstimate" @close="showDetailedEstimateModal = false"/>
+          </Teleport>
+          <Teleport to="body">
+            <request-complete :show="showSaveCompleteModal" msg="견적을 고객에게 보냈습니다!" @complete-request="completeRequest"/>
           </Teleport>
         </div>
       </div>
@@ -65,13 +68,83 @@ export default {
   components: {DetailedEstimate, AnswerItem, RequestComplete, QuestionItem},
   data() {
     return {
-      questionInputList: [
-        {id: 1, title: '몇 장 작성을 원하시나요?', answer: '5페이지'},
-        {id: 2, title: '아이템에 대해서 간단히 설명해주세요.', answer: '미생물을 활용한 음식물쓰레기 처리와 관련된 아이템입니다.'}
-      ],
+      questionInputList: [],
+      estimate: {
+        "contents": '',
+        "has_attach":[{
+          "has_file": {}
+        }],
+        "has_category": {},
+        "has_city": {},
+        "has_proceed": {},
+        "has_user": {}
+      },
       showSaveCompleteModal: false,
       showDetailedEstimateModal: false
     }
+  },
+  methods: {
+    getReceiveEstimate() {
+      const receiveId = this.$route.params.id
+      this.axios.get('/receive_estimate/' + receiveId, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          console.log(res.data.data)
+          this.getQuestions(res.data.data.estimate_id)
+        }
+      }).catch(e => {
+
+      })
+    },
+    getQuestions(estimateId) {
+      this.axios.get('/estimate_question/questions?estimate_id=' + estimateId + '&user_id=0', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          console.log(res.data.data)
+          this.estimate = res.data.data.estimate
+          this.questionInputList = res.data.data.questions
+        }
+      }).catch(e => {
+
+      })
+    },
+    closeDetailEstimate(value) {
+      const formData = new FormData
+      formData.append('receive_id', this.$route.params.id)
+      formData.append('estimate_id', this.estimate.id)
+      formData.append('difficulty', value.selectCategory)
+      formData.append('amount', value.price.replace(',', ''))
+      formData.append('amount_reason', value.reason)
+      formData.append('add_amount', value.addedPrice.replace(',', ''))
+      formData.append('difficulty_reason', value.difficultyReason)
+      this.axios.post('/estimate_detail', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        console.log(res)
+        if (res.data.status === 'success') {
+          this.showDetailedEstimateModal = false
+          this.showSaveCompleteModal = true
+        }
+      }).catch(e => {
+
+      })
+    },
+    completeRequest() {
+      this.showSaveCompleteModal = false
+      // 완료후 이동
+      this.$router.push('/request/received')
+    }
+  },
+  mounted() {
+    this.getReceiveEstimate()
   }
 }
 </script>

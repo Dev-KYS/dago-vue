@@ -8,11 +8,12 @@
       <div class="estimate-list-wrapper">
         <p class="tip-text"><b>TIP</b>. 상세한 답변으로 프로젝트 완성도를 높여보세요</p>
         <div class="estimate-list">
-          <div class="estimate-item">
+          <div class="estimate-item" v-for="item in users">
             <div class="profile-wrapper">
-              <img src="" class="profile-img" />
-              <p class="name">김진한 전문가</p>
+              <img :src="'http://localhost:8000/avatars/' + item.has_user.avatar" class="profile-img" />
+              <p class="name">{{item.has_user.name}} 전문가</p>
               <div>
+<!--                <star-rating :rating="3.8" :read-only="true" :increment="0.01" :show-rating="false" :star-size="15"></star-rating>-->
                 <q-rating
                     v-model="ratingModel"
                     size="1em"
@@ -22,11 +23,11 @@
               </div>
             </div>
             <div class="contents-wrapper">
-              <span class="category">최종견적 금액 : 50,000원</span>
+              <span class="category">최종견적 금액 : {{String(item.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}}원</span>
             </div>
             <div class="difficulty-wrapper">
               <div class="difficulty-item">
-                <span>상</span>
+                <span>{{item.difficulty}}</span>
                 <div class="difficulty-item-tooltip">
                   <svg id="difficulty-item-tooltip-clip" width="21" height="21" viewBox="0 0 21 21" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M20.1299 10.8457C20.1299 16.3686 15.6527 20.8457 10.1299 20.8457C4.60704 20.8457 0.129883 16.3686 0.129883 10.8457C0.129883 5.32286 4.60704 0.845703 10.1299 0.845703C15.6527 0.845703 20.1299 5.32286 20.1299 10.8457Z" fill="#D9D9D9"/>
@@ -46,11 +47,11 @@
             <div class="button-wrapper">
               <button class="button natural small" @click="showEstimationBasis = true">견적 산출 근거</button>
               <Teleport to="body">
-                <estimation-basis :show="showEstimationBasis" @close="showEstimationBasis = false"/>
+                <estimation-basis :show="showEstimationBasis" @close="showEstimationBasis = false" :estimate-id="item.estimate_id" :user-id="item.has_user.id"/>
               </Teleport>
               <button class="button primary small" @click="showConfirmedRequest = true">의뢰하기</button>
               <Teleport to="body">
-                <confirmed-request :show="showConfirmedRequest" name="김진한" @close="showConfirmedRequest = false" />
+                <confirmed-request :show="showConfirmedRequest" :name="item.has_user.name" :detail-id="item.id" @close="showConfirmedRequest = false" />
               </Teleport>
             </div>
           </div>
@@ -59,7 +60,7 @@
       </div>
     </div>
     <div class="more-btn-wrapper">
-      <button class="button natural mid">더보기</button>
+      <button class="button natural mid" @click="getQuestionUserList(perPage + 3)" v-if="perPage <= total">더보기</button>
     </div>
   </div>
 </template>
@@ -76,8 +77,53 @@ export default {
     return {
       ratingModel: 4,
       showEstimationBasis: false,
-      showConfirmedRequest: false
+      showConfirmedRequest: false,
+      pageCount: 1,
+      perPage: 3,
+      total: 0,
+      users: [{
+        "has_user": {}
+      }],
     }
+  },
+  methods: {
+    getQuestionUserList(size) {
+      if (!size) {
+        size = 3
+      }
+      const id = this.$route.query.id
+      this.axios.get('/estimate_detail/estimate?estimate_id=' + id + '&size=' + size, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        console.log(res.data.data)
+        this.users = res.data.data.data
+        // this.estimate = res.data.estimate
+        this.total = res.data.data.total
+        this.perPage = res.data.data.per_page
+      }).catch(e => {
+
+      })
+      // this.axios.get('estimate/users/' + id + '?size=' + size, {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      //   }
+      // }).then(res => {
+      //   if (res.data.status === 'success') {
+      //     console.log(res.data.data)
+      //     this.users = res.data.data.data
+      //     // this.estimate = res.data.estimate
+      //     this.total = res.data.data.total
+      //     this.perPage = res.data.data.per_page
+      //   }
+      // }).catch(e => {
+      //
+      // })
+    }
+  },
+  mounted() {
+    this.getQuestionUserList()
   }
 }
 </script>

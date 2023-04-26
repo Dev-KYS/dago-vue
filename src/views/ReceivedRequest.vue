@@ -3,65 +3,75 @@
     <div class="title-wrapper">
       <h1>받은 의뢰</h1>
       <ul class="request-tab">
-        <li>전체(00)</li>
+        <li>전체({{ totalCount }})</li>
         <li>지정의뢰(00)</li>
-        <li>관심의뢰(00)</li>
+        <li>관심의뢰({{favoriteCount}})</li>
       </ul>
     </div>
     <div class="request-list-container">
       <div class="request-card-wrapper">
-        <request-card-item v-for="item in requestData" :state="item.state" :name="item.name" :title="item.title" :contents="item.contents" :date="item.date" :end-time="item.endTime" />
+        <request-card-item v-for="item in requestData"
+                           :item-id="item.id"
+                           :avatar="item.has_estimate.has_user.avatar"
+                           :state="item.has_status.title"
+                           :name="item.has_estimate.has_user.name"
+                           :title="item.has_estimate.has_category.title"
+                           :contents="item.has_estimate.contents"
+                           :date="item.date"
+                           :is-favorite="item.is_favorite"
+                           :end-time="item.endTime"
+                           @favorite-count="changeCount"
+        />
       </div>
     </div>
     <div class="more-btn-wrapper">
-      <button class="button natural mid">더보기</button>
+      <button class="button natural mid" @click="getLists(perPage + 3)" v-if="totalCount > perPage">더보기</button>
     </div>
   </div>
 </template>
 
 <script>
 import RequestCardItem from "@/components/RequestCardItem.vue";
+import {ref} from "vue";
 
 export default {
   name: "ReceivedRequest",
   components: {RequestCardItem},
   data() {
     return {
-      requestData: [
-        {
-          state: '의뢰도착',
-          name: '김다른',
-          title: '사업계획서 작성',
-          contents: '현재 온라인 거래를 이용한 플랫폼을 구상하고 있습니다. 만나서 사업계획서를 구상부터 기획까지 회의를 통해 작성하길 원합니다.',
-          date: '2023-03-02',
-          endTime: 2
-        },
-        {
-          state: '의뢰진행중',
-          name: '김진한',
-          title: '사업계획서 작성',
-          contents: '현재 온라인 거래를 이용한 플랫폼을 구상하고 있습니다. 만나서 사업계획서를 구상부터 기획까지 회의를 통해 작성하길 원합니다.',
-          date: '2023-03-02',
-          endTime: 2
-        },
-        {
-          state: '답변완료',
-          name: '오정연',
-          title: '사업계획서 작성',
-          contents: '현재 온라인 거래를 이용한 플랫폼을 구상하고 있습니다. 만나서 사업계획서를 구상부터 기획까지 회의를 통해 작성하길 원합니다.',
-          date: '2023-03-02',
-          endTime: 2
-        }
-      ]
+      requestData: ref([]),
+      totalCount: 0,
+      favoriteCount: 0,
+      perPage: 3
     }
   },
   methods: {
-    getLists() {
+    getLists(size) {
+      if (!size) {
+        size = 3
+      }
+      this.axios.get('/receive_estimate?page=1&size=' + size, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          console.log(res.data)
+          this.requestData = res.data.data.data
+          this.totalCount = res.data.data.total
+          this.favoriteCount = res.data.favoriteCount
+          this.perPage = res.data.data.perPage
+        }
+      }).catch(e => {
 
+      })
+    },
+    changeCount(val) {
+      this.favoriteCount = val;
     }
   },
   mounted() {
-
+    this.getLists()
   }
 }
 </script>

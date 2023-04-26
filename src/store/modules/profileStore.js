@@ -42,7 +42,7 @@ const profileStore = {
                     Authorization: `Bearer ${localStorage.getItem('access_token')}`
                 }
             }).then(res => {
-                console.log(res.data.data)
+                // console.log(res.data.data)
                 commit("setAvatar", res.data.data)
             }).catch(error => {
 

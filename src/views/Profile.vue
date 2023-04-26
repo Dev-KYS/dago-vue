@@ -96,8 +96,8 @@
       </div>
     </div>
     <div class="area-select-field">
-      <data-selector :list-data="cityData" @updateSelectedData="getSelectCity" />
-      <data-selector :list-data="cityData2" @updateSelectedData="getSelectCity2" />
+      <data-selector :list-data="cityData" @updateSelectedData="getSelectCity" :parent-value="selectedCityData"/>
+      <data-selector :list-data="cityData2" @updateSelectedData="getSelectCity2" :parent-value="selectedCityData2"/>
     </div>
   </div>
 
@@ -108,7 +108,7 @@
       </div>
     </div>
     <div class="contact-time-select-wrapper">
-      <select v-model="communicate_start_time">
+      <select v-model="communicate_start_time" :value="communicate_start_time">
         <option value="">시간선택</option>
         <option value="00:00:00">오전 12시</option>
         <option value="01:00:00">오전 1시</option>
@@ -183,7 +183,7 @@
     </div>
   </div>
 
-  <profile-input-file-group label="자격증 및 기타서류" type="cert" @file-input-group-listener="fileInputGroupListener"/>
+  <profile-input-file-group label="자격증 및 기타서류" type="cert" @file-input-group-listener="fileInputGroupListener" :parent-files="certificateFiles"/>
   <Teleport to="body">
     <certificate-document :show="showCertificateDocumentModal" @close="showCertificateDocumentModal = false"/>
   </Teleport>
@@ -225,7 +225,7 @@
     <education-create :show="showEducationModal" @close="showEducationModal = false"/>
   </Teleport>
 
-  <profile-input-file-group label="사진 및 동영상" type="pic" @file-input-group-listener="fileInputGroupListener"/>
+  <profile-pic-video-file-group label="사진 및 동영상" type="pic" @file-input-group-listener="fileInputGroupListener" :parent-files="picVideoList"/>
   <Teleport to="body">
     <profile-picture-video :show="showPictureVideoModal" @close="showPictureVideoModal = false"/>
   </Teleport>
@@ -242,12 +242,12 @@
     </div>
     <div class="link-input-item">
       <label>홈페이지</label>
-      <input type="text" placeholder="대표 홈페이지 URL">
+      <input type="text" placeholder="대표 홈페이지 URL" v-model="homepage">
     </div>
 
     <div class="link-input-item">
       <label>SNS</label>
-      <input type="text" placeholder="대표 SNS URL">
+      <input type="text" placeholder="대표 SNS URL" v-model="sns">
     </div>
   </div>
 
@@ -282,10 +282,12 @@ import ProfilePictureVideo from "@/components/modal/ProfilePictureVideo.vue";
 import RequestComplete from "@/components/modal/RequestComplete.vue";
 import DataSelector from "@/components/atoms/DataSelector.vue";
 import {useStore} from "vuex";
+import ProfilePicVideoFileGroup from "@/components/atoms/ProfilePicVideoFileGroup.vue";
 
 export default {
   name: "Profile",
   components: {
+    ProfilePicVideoFileGroup,
     DataSelector,
     CertificateDocument,
     IdentityVerification,
@@ -325,11 +327,14 @@ export default {
       childText: '',
       communicate_start_time: '',
       communicate_end_time: '',
-      certificate: false,
+      // certificate: false,
       company_name: '',
       careerList: [],
-      picVideoList: {},
+      picVideoList: Object,
+      certificateFiles: [],
       avatar: '',
+      homepage: '',
+      sns: ''
     }
   },
   created() {
@@ -407,15 +412,19 @@ export default {
       formData.append('end_time', this.communicate_end_time)
       formData.append('category', JSON.stringify(this.serviceIntroContent))
       formData.append('city', this.selectedCityData2)
+      formData.append('homepage', this.homepage)
+      formData.append('sns', this.sns)
       formData.append('pay_card', this.cardButtonState)
       formData.append('pay_bank', this.accountButtonState)
-      formData.append('certificate', this.certificate)
+      formData.append('certificate', this.businessYn)
       this.axios.post('/profile', formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       }).then(res => {
-        this.showSaveCompleteModal = true
+        if (res.data.status === 'success') {
+          this.showSaveCompleteModal = true
+        }
       }).catch(error => {
 
       })
@@ -456,7 +465,7 @@ export default {
     },
     getMyCategory() {
       this.$store.dispatch('getCategoryFormList')
-      console.log('dd')
+      // console.log('dd')
       this.categoryList = this.$store.getters.getCategoryFormList
     },
     companyCreate(bol) {
@@ -512,16 +521,75 @@ export default {
     },
     getSelectCity2(id) {
       this.selectedCityData2 = id
-      console.log(this.selectedCityData2)
+      // console.log(this.selectedCityData2)
     },
     getAvatar() {
       this.avatar = this.$store.getters.getAvatar
     },
+    getProfile() {
+      this.axios.get('/profile', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          const profile = res.data.data
+          const underCity = res.data.city_info
+          console.log(profile)
+          this.axios.get('/city').then(res => {
+            this.cityData = res.data.data
+            this.selectedCityData = underCity.upper_id
+            // console.log(this.selectedCityData)
+            this.axios.get('/city/'+this.selectedCityData).then(res => {
+              this.cityData2 = res.data.data
+              this.selectedCityData2 = profile.city
+            })
+          })
+          this.businessYn = profile.certificate
+          this.communicate_start_time = profile.start_communicate_time
+          this.communicate_end_time = profile.end_communicate_time
+          this.cardButtonState = profile.pay_card
+          this.accountButtonState = profile.pay_bank
+          this.homepage = profile.homepage
+          this.sns = profile.sns
+        }
+      })
+    },
+    getProfileCertificate() {
+      this.axios.get('certificate', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          this.certificateFiles = res.data.data
+        }
+      }).catch(e => {
+
+      })
+    },
+    getPicVideos() {
+      this.axios.get('pic_video', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          console.log(res.data.data)
+          this.picVideoList = res.data.data
+        }
+      }).catch(e => {
+
+      })
+    }
   },
   mounted() {
     this.getCityData()
     this.getMyCategory()
     this.getAvatar()
+    this.getProfileCertificate()
+    this.getPicVideos()
+    this.getProfile()
   }
 }
 </script>

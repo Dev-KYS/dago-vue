@@ -1,9 +1,10 @@
 <template>
   <div class="question-item">
     <div class="index">Q{{index}}</div>
-    <textarea class="question-input" @input="autoResize"></textarea>
+    <textarea class="question-input" @input="$emit('questionChange', {index: index, value: $event.target.value})"></textarea>
+<!--    <textarea class="question-input" :value="question" @input="question = $event.target.value"></textarea>-->
     <button class="remove-btn">
-      <img src="/assets/icons/close_gray.png" />
+      <img src="/assets/icons/close_gray.png" @click="remove"/>
     </button>
   </div>
 </template>
@@ -13,6 +14,19 @@ export default {
   name: "QuestionItem",
   props: {
     index: Number,
+  },
+  emits: [
+      'questionChange'
+  ],
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    remove() {
+      console.log(this.question)
+    }
   }
 }
 </script>

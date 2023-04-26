@@ -8,7 +8,7 @@
           </div>
           <div class="detailed-estimate-modal-body">
             <div class="detailed-estimate-modal-desc">
-              <label>김다른 고객님과의 상담을 통해 최종 결정된<br>전문가님의 견적을 보내주세요.</label>
+              <label>{{cUserName}} 고객님과의 상담을 통해 최종 결정된<br>전문가님의 견적을 보내주세요.</label>
             </div>
             <div class="detailed-estimate-modal-tooltip">
               <span><span class="tip">Tip : </span>전문가님 00000</span>
@@ -27,6 +27,9 @@
               </div>
             </div>
             <div class="detailed-estimate-item-wrapper">
+              <textarea-group label="난이도 산출 근거" rows="4" placeholder="고객님의 의뢰 서비스는 ~~에 따라 ~~책정되었고 ~~ 추가에 따라 금액이 증가될 수 있습니다.." @child-input="difficultyReasonChange"/>
+            </div>
+            <div class="detailed-estimate-item-wrapper">
               <div class="detailed-estimate-item-title">
                 <label>견적금액</label>
               </div>
@@ -43,13 +46,13 @@
               </div>
             </div>
             <div class="detailed-estimate-item-wrapper">
-              <textarea-group label="견적 산출 근거" rows="7" placeholder="고객님의 의뢰 서비스는 ~~에 따라 ~~책정되었고 ~~ 추가에 따라 금액이 증가될 수 있습니다.." />
+              <textarea-group label="견적 산출 근거" rows="4" placeholder="고객님의 의뢰 서비스는 ~~에 따라 ~~책정되었고 ~~ 추가에 따라 금액이 증가될 수 있습니다.." @child-input="reasonChange"/>
             </div>
           </div>
         </div>
         <div class="detailed-estimate-modal-footer">
           <div class="button-wrapper">
-            <custom-button type="button" text="견적보내기" button-class="button primary mid" />
+            <custom-button type="button" text="견적보내기" button-class="button primary mid" @click="savePrice"/>
             <custom-button type="button" text="취소" button-class="button natural mid" @click="$emit('close')"/>
           </div>
         </div>
@@ -68,21 +71,48 @@ export default {
   components: {CategorySelectBtn, TextareaGroup, CustomButton},
   props: {
     show: Boolean,
-
+    cUserName: String,
+    pUserName: String
   },
   data() {
     return {
       selectCategory: '하',
       price: '0',
-      addedPrice: '0'
+      addedPrice: '0',
+      reason: '',
+      difficultyReason: ''
+    }
+  },
+  methods: {
+    savePrice() {
+      this.$emit('save-price', {
+        "selectCategory": this.selectCategory,
+        "price": this.price,
+        "addedPrice": this.addedPrice,
+        "reason": this.reason,
+        "difficultyReason": this.difficultyReason
+      })
+    },
+    replacePrice(price) {
+      return String(price)
+          .replace(/(^0+)/, "")
+          .replace(/,/g, '')
+          .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+          .replace(/([^0-9,]+)/g, '');
+    },
+    reasonChange(val) {
+      this.reason = val
+    },
+    difficultyReasonChange(val) {
+      this.difficultyReason = val
     }
   },
   watch: {
     addedPrice () {
-      this.addedPrice = String(this.addedPrice).replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      this.addedPrice = this.replacePrice(this.addedPrice)
     },
     price() {
-      this.price = String(this.price).replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+      this.price = this.replacePrice(this.price);
     }
   }
 }
@@ -101,7 +131,7 @@ export default {
   transition: opacity 0.3s ease;
   .detailed-estimate-modal-container {
     width: 500px;
-    height: 750px !important;
+    height: 850px !important;
     margin: auto;
     padding: 20px 30px;
     background-color: #fff;

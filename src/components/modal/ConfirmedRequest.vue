@@ -14,7 +14,7 @@
         </div>
         <div class="confirmed-request-modalfooter">
           <div class="button-wrapper">
-            <custom-button type="button" text="프로젝트 의뢰하기" button-class="primary mid"/>
+            <custom-button type="button" text="프로젝트 의뢰하기" button-class="primary mid" @click="sendContractRequest"/>
             <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
           </div>
         </div>
@@ -31,7 +31,24 @@ export default {
   components: {CustomButton},
   props: {
     show: Boolean,
-    name: String
+    name: String,
+    detailId: Number
+  },
+  methods: {
+    sendContractRequest() {
+      this.axios.get('/estimate_detail/contract/' + this.detailId, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          this.$router.push('/chat-list')
+          this.$emit('close')
+        }
+      }).catch(e => {
+
+      })
+    }
   }
 }
 </script>

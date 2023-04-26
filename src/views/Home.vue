@@ -5,7 +5,8 @@
         <h1>정확하고 합리적인<br>전문가 매칭 플랫폼</h1>
         <p>정확하고 합리적인 전문가 매칭 플랫폼입니다 정확하고<br>합리적인 전문가 매칭 플랫폼입니다 정확하고 합리적인<br>전문가 매칭 플랫폼입니다 정확하고 합리적인<br>
           전문가 매칭 플랫폼입니다 </p>
-        <button class="button primary mid">전문가에게 의뢰하기</button>
+        <router-link to="/estimate/request" class="button primary mid">전문가에게 의뢰하기</router-link>
+<!--        <button class="button primary mid">전문가에게 의뢰하기</button>-->
       </div>
       <div class="right-wrapper">
         <img src="/assets/images/main-banner.png" />

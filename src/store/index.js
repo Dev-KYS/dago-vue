@@ -6,6 +6,7 @@ import profileStore from "@/store/modules/profileStore.js";
 import educationStore from "@/store/modules/educationStore.js";
 import careerStore from "@/store/modules/careerStore.js";
 import profilePicStore from "@/store/modules/profilePicStore.js";
+import estimateQuestionStore from "@/store/modules/estimateQuestionStore"
 
 const store = createStore({
     modules: {
@@ -14,10 +15,11 @@ const store = createStore({
         profileStore: profileStore,
         educationStore: educationStore,
         careerStore: careerStore,
-        profilePicStore: profilePicStore
+        profilePicStore: profilePicStore,
+        estimateQuestionStore: estimateQuestionStore
     },
     plugins: [createPersistedState({
-        paths: ["userStore"]
+        paths: ["userStore", "estimateQuestionStore"]
     })]
 })
 

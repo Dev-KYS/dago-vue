@@ -12,11 +12,20 @@
 export default {
   name: "DataSelector",
   props: {
-    listData: Array
+    listData: Array,
+    parentValue: ''
+  },
+  mounted() {
+    this.selectedData = this.parentValue
   },
   data() {
     return {
       selectedData: ''
+    }
+  },
+  watch: {
+    parentValue(val) {
+      this.selectedData = val
     }
   }
 }

@@ -12,24 +12,25 @@
       <div class="request-contents-wrapper">
         <div class="contents-item">
           <span class="title">1. 세부 카테고리</span>
-          <p class="contents">- 사업계획서 작성</p>
+          <p class="contents">- {{receiveEstimate.has_estimate.has_category.title}}</p>
         </div>
         <div class="contents-item">
           <span class="title">2. 프로젝트 희망 마감일정</span>
-          <p class="contents">- 2023년 2월 3일</p>
+          <p class="contents">- {{receiveEstimate.has_estimate.end_date}}</p>
         </div>
         <div class="contents-item">
           <span class="title">3. 지역 및 진행방식</span>
-          <p class="contents">- 대전광역시 유성구</p>
-          <p class="contents">- 제가 있는 곳으로 와주세요</p>
+          <p class="contents">- {{receiveEstimate.has_estimate.has_city.fullname}}</p>
+          <p class="contents">- {{receiveEstimate.has_estimate.has_proceed.title}}</p>
         </div>
         <div class="contents-item">
           <span class="title">4. 의뢰내용</span>
-          <p class="contents">- 예비창업패키지 지원 희망합니다</p>
+<!--          <p class="contents">- {{receiveEstimate.has_estimate.contents}}</p>-->
+          <p class="contents" v-for="content in replacedContents">- {{content}}</p>
         </div>
         <div class="contents-item">
           <span class="title">5. 참고자료</span>
-          <p class="contents">- 사업계획서 초안.hwp</p>
+          <p class="contents" v-for="attach in receiveEstimate.has_estimate.has_attach">- {{attach.has_file.origin_name}}</p>
         </div>
       </div>
     </div>
@@ -39,7 +40,7 @@
           <h2>질문 작성</h2>
           <span><b>TIP</b>. 정확하고 상세한 견적과 원할한 프로젝트 진행을 위해 질문을 작성 해주세요.</span>
           <div class="question-list-wrapper">
-            <question-item :index="++index" :key="index" v-for="(item, index) in questionInputList" />
+            <question-item :index="++index" :key="index" :question="questionInputList[index]" v-for="(item, index) in questionInputList" @question-change="questionChange"/>
           </div>
           <div class="question-item-add-wrapper" v-show="questionInputList.length < 5">
             <button class="question-add-btn" @click="questionItemAdd">
@@ -49,9 +50,9 @@
           </div>
         </div>
         <div class="submit-wrapper">
-          <button class="button primary mid" @click="showSaveCompleteModal = true">질문보내기</button>
+          <button class="button primary mid" @click="submitQuestion">질문보내기</button>
           <Teleport to="body">
-            <request-complete :show="showSaveCompleteModal" @close="showSaveCompleteModal = false" msg="질문을 고객에게 보냈습니다!"/>
+            <request-complete :show="showSaveCompleteModal" @close="completeModal" msg="질문을 고객에게 보냈습니다!"/>
           </Teleport>
         </div>
       </div>
@@ -69,8 +70,22 @@ export default {
   data() {
     return {
       questionInputList: [],
-      showSaveCompleteModal: false
+      showSaveCompleteModal: false,
+      receiveEstimate: {
+        "has_estimate": {
+          "has_user": {},
+          "has_category": {},
+          "has_attach": [],
+          "has_city": {},
+          "has_proceed": {}
+        },
+        "has_status": {
+        }
+      },
+      replacedContents: []
     }
+  },
+  setup() {
   },
   methods: {
     autoResize(event) {
@@ -78,9 +93,52 @@ export default {
       event.target.style.height = `${event.target.scrollHeight}px`
     },
     questionItemAdd() {
-      this.questionInputList.push(QuestionItem)
+      this.questionInputList.push('')
+    },
+    getEstimate() {
+      const id = this.$route.query.id
+      this.axios.get('/receive_estimate/' + id, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          this.receiveEstimate = res.data.data
+          this.replacedContents = this.receiveEstimate.has_estimate.contents.split('\r\n')
+        }
+      })
+    },
+    questionChange(value) {
+      this.questionInputList[value.index-1] = value.value
+    },
+    submitQuestion() {
+      // for (var i = 0; i < this.questionInputList.length; i++) {
+      //   console.log(this.questionInputList[i])
+      // }
+      const formData = new FormData
+      formData.append('receive_id', this.receiveEstimate.id)
+      formData.append('estimate_id', this.receiveEstimate.has_estimate.id)
+      formData.append('questions', JSON.stringify(this.questionInputList))
+      this.axios.post('/estimate_question', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          this.showSaveCompleteModal = true
+        }
+      }).catch(e => {
+
+      })
+    },
+    completeModal() {
+      this.showSaveCompleteModal = false
+      this.$router.push('/request/received')
     }
   },
+  mounted() {
+    this.getEstimate()
+  }
 }
 </script>
 

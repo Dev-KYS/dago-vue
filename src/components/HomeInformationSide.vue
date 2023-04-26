@@ -16,7 +16,7 @@
   <div class="information-link-container">
     <div class="information-link-item-wrapper">
       <p><b>소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게 보호해드려요! 소중한 내 돈, 걱정되지 않나요<br>에스크로 결제 시스템으로 안전하게 보호해드려요!</b></p>
-      <router-link to="" class="information-link-item-button">
+      <router-link to="/estimate/request" class="information-link-item-button">
         <span>전문가에게 의뢰하기</span>
       </router-link>
     </div>

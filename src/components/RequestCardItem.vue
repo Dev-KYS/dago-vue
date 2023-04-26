@@ -1,7 +1,8 @@
 <template>
 <div class="request-card-item">
   <div class="profile-wrapper">
-    <img class="profile-img" src="" />
+    <img class="profile-img" :src="'http://localhost:8000/avatars/' + avatar" />
+<!--    <img class="profile-img" src="" />-->
     <p class="name">{{ name }} 고객님</p>
     <span class="label request-send" :class="{'complete': state === '답변완료'}">{{state}}</span>
   </div>
@@ -15,14 +16,14 @@
     </div>
   </div>
   <div class="button-wrapper">
-    <button class="like-btn" @click="isActive = !isActive">
+    <button class="like-btn" @click="onChangeFavorite(itemId)">
       <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg" :class="isActive ? 'active' : ''">
         <path d="M8.88659 16.6603L8.88587 16.6596C6.30081 14.3155 4.19567 12.4057 2.73078 10.6147C1.27162 8.83074 0.5 7.22576 0.5 5.5C0.5 2.69614 2.69614 0.5 5.5 0.5C7.08861 0.5 8.62112 1.24197 9.61932 2.41417L10 2.8612L10.3807 2.41417C11.3789 1.24197 12.9114 0.5 14.5 0.5C17.3039 0.5 19.5 2.69614 19.5 5.5C19.5 7.22577 18.7284 8.83077 17.2691 10.6161C15.8065 12.4055 13.7058 14.3144 11.1265 16.6583L11.1148 16.669L11.1137 16.67L10.0013 17.675L8.88659 16.6603Z" fill="white" stroke="#FF0099"/>
       </svg>
     </button>
-    <button class="button natural small" @click="$router.push('/question/create')" v-if="state === '의뢰도착'">상세보기</button>
-    <button class="button natural small" @click="$router.push('/question/create')" v-else-if="state === '의뢰진행중'">상세보기</button>
-    <button class="button natural small" @click="$router.push('/question/answer')" v-else-if="state === '답변완료'">답변보기</button>
+    <button class="button natural small" @click="$router.push({name: 'QuestionCreate', query: {'id': itemId}})" v-if="state === '의뢰도착'">상세보기</button>
+    <button class="button natural small" @click="$router.push({name: 'QuestionCreate', query: {'id': itemId}})" v-else-if="state === '의뢰진행중'">상세보기</button>
+    <button class="button natural small" @click="$router.push('/question/answer/' + itemId)" v-else-if="state === '답변완료'">답변보기</button>
   </div>
 </div>
 </template>
@@ -38,20 +39,39 @@ export default {
     }
   },
   props: {
+    itemId: Number,
     name: String,
     state: String,
     title: String,
     contents: String,
     date: Date,
     endTime: Number,
+    avatar: String,
+    isFavorite: Boolean
   },
   data() {
     return {
-      isActive: false
+      isActive: false,
     }
   },
+  mounted() {
+    this.isActive = this.isFavorite
+  },
   methods: {
+    onChangeFavorite(id) {
+      this.axios.get('receive_estimate/change-favorite?id=' + id, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          this.isActive = res.data.data.is_favorite
+          this.$emit('favorite-count', res.data.favoriteCount)
+        }
+      }).catch(e => {
 
+      });
+    }
   }
 }
 </script>

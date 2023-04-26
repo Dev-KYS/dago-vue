@@ -96,10 +96,11 @@
             <div class="process-type-wrapper">
               <p>진행방식</p>
               <div class="process-type">
-                <q-radio keep-color v-model="processType" val="1" label="전문가가 있는 곳으로 갈께요" color="red" />
-                <q-radio keep-color v-model="processType" val="2" label="제가 있는 곳으로 와주세요" color="red" />
-                <q-radio keep-color v-model="processType" val="3" label="온라인으로 진행 원해요" color="red" />
-                <q-radio keep-color v-model="processType" val="4" label="진행방식은 따로 협의 해요" color="red" />
+                <q-radio keep-color v-model="processType" v-for="proceed in proceeds" :val="proceed.id" :label="proceed.title" color="red" />
+<!--                <q-radio keep-color v-model="processType" val="1" label="전문가가 있는 곳으로 갈께요" color="red" />-->
+<!--                <q-radio keep-color v-model="processType" val="2" label="제가 있는 곳으로 와주세요" color="red" />-->
+<!--                <q-radio keep-color v-model="processType" val="3" label="온라인으로 진행 원해요" color="red" />-->
+<!--                <q-radio keep-color v-model="processType" val="4" label="진행방식은 따로 협의 해요" color="red" />-->
               </div>
             </div>
             <div class="button-wrapper">
@@ -260,7 +261,8 @@ export default {
       files: ref([]),
       selectCategory: null,
       contentText: null,
-      showCompleteModal: false
+      showCompleteModal: false,
+      proceeds: ref([])
     }
   },
   methods: {
@@ -343,7 +345,7 @@ export default {
         case 3:
           break;
         case 4:
-          console.log(this.selectedData2);
+          // console.log(this.selectedData2);
           if (this.selectedData2 === '') {
             alert('지역 선택은 필수입니다!');
             return;
@@ -372,7 +374,7 @@ export default {
         this.files = [];
       }
       this.files.push(e.target.files[0])
-      console.log(this.files.length)
+      // console.log(this.files.length)
     },
     fileRemove(index) {
       this.files.splice(index, 1)
@@ -380,10 +382,22 @@ export default {
     completeRequest() {
       // 요청목록 이동
       this.$router.push('/myrequest')
+    },
+    getEstimateProceeds() {
+      this.axios.get('/estimate_proceed', {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          this.proceeds = res.data.data
+        }
+      })
     }
   },
   mounted() {
     this.getCityData()
+    this.getEstimateProceeds()
   },
   watch: {
     selectedData(id) {

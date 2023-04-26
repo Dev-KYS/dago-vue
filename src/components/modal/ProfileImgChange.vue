@@ -47,7 +47,7 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.$store.dispatch('getAvatar')
         this.$emit('close')
       }).catch(error => {

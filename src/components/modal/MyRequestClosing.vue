@@ -7,12 +7,12 @@
             <label>의뢰 요청 마감하기</label>
           </div>
           <div class="request-closing-modal-body">
-            <q-radio v-model="picked" v-for="item in items" :label="item.title" :val="item.id" color="red"/>
+            <q-radio v-model="picked" v-for="item in types" :label="item.title" :val="item.id" color="red"/>
           </div>
         </div>
         <div class="request-closing-modal-footer">
           <div class="button-wrapper">
-            <custom-button type="button" text="의뢰 마감하기" button-class="primary mid" />
+            <custom-button type="button" text="의뢰 마감하기" button-class="primary mid" @click="requestFinishType"/>
             <custom-button type="button" text="취소" button-class="natural mid" @click="$emit('close')"/>
           </div>
         </div>
@@ -29,19 +29,42 @@ export default {
   name: "MyRequestClosing",
   components: {CustomCheckbox, CustomButton},
   props: {
-    show: Boolean
+    show: Boolean,
+    types: {}
   },
   data() {
     return {
-      picked: '1',
-      items: [
-        {id: 1, title: '다고 내 전문가와 프로젝트 확정'},
-        {id: 2, title: '다른 방법으로 프로젝트 진행'},
-        {id: 3, title: '프로젝트 계획의 변경'},
-        {id: 4, title: '마음에 드는 전문가가 없음'}
-      ]
+      picked: {},
+      // items: [
+      //   {id: 1, title: '다고 내 전문가와 프로젝트 확정'},
+      //   {id: 2, title: '다른 방법으로 프로젝트 진행'},
+      //   {id: 3, title: '프로젝트 계획의 변경'},
+      //   {id: 4, title: '마음에 드는 전문가가 없음'}
+      // ]
     }
-  }
+  },
+  methods: {
+    requestFinishType() {
+      const id = this.$route.query.id
+
+      const formData = new FormData
+      formData.append('estimate_id', id)
+      formData.append('finish_id', this.picked)
+      this.axios.post('/estimate/finish', formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          this.$emit('finishComplete')
+          this.$emit('close')
+        }
+      })
+    }
+  },
+  emits: [
+      'finishComplete'
+  ]
 }
 </script>
 

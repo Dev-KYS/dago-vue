@@ -13,10 +13,12 @@
             <div class="estimation-basis-body-detail-wrapper">
               <p class="estimation-basis-body-detail-header">전문가의 견적 설명</p>
               <div class="estimation-basis-body-detail">
-                <p class="estimation-basis-body-detail-price">견적금액 : 50,000원</p>
-                <span>사업계획서 5페이지 작성 및 자료조사까지 겸한 견적금액입니다.</span>
+                <p class="estimation-basis-body-detail-price">견적금액 : {{String(detail.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}}원</p>
+                <span>난이도 : {{detail.difficulty}}</span><br>
+                <span>난이도 근거 : {{detail.difficulty_reason}}</span><br>
+                <span>견적 근거 : {{detail.amount_reason}}</span>
                 <ul>
-                  <li>최종견적 금액에서 예상되는 최고 추가금액 : <b>50,000</b>원</li>
+                  <li>최종견적 금액에서 예상되는 최고 추가금액 : <b>{{String(detail.add_amount).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}}</b>원</li>
                   <li>추가금액은 발생하지 않을 수 있습니다.</li>
                 </ul>
               </div>
@@ -40,7 +42,36 @@ export default {
   name: "EstimationBasis",
   components: {CustomButton},
   props: {
-    show: Boolean
+    show: Boolean,
+    estimateId: Number,
+    userId: Number
+  },
+  data() {
+    return {
+      detail: {}
+    }
+  },
+  methods: {
+    getEstimateDetail() {
+      this.axios.get('/estimate_detail/detail?estimate_id=' + this.estimateId + '&user_id=' + this.userId, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          console.log(res.data.data)
+          this.detail = res.data.data
+        }
+      }).catch(e => {
+
+      })
+    }
+  },
+  mounted() {
+
+  },
+  updated() {
+    this.getEstimateDetail()
   }
 }
 </script>

@@ -13,37 +13,32 @@
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length < 1">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length > 0 && picVideoList[0].has_doc_file.type.indexOf('image/') === -1">
-          <img :src="'http://localhost:8000/storage/' + picVideoList[0].has_doc_file.hash_name" v-if="picVideoList.length > 0 && picVideoList[0].has_doc_file.type.indexOf('image/') > -1">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.has_image1 === null">
+          <img v-if="picVideoList.has_image1 !== null" :src="'http://localhost:8000/storage/' + picVideoList.has_image1.hash_name">
         </div>
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length < 2">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length > 1 && picVideoList[1].has_doc_file.type.indexOf('image/') === -1">
-          <img :src="'http://localhost:8000/storage/' + picVideoList[1].has_doc_file.hash_name" v-if="picVideoList.length > 1 && picVideoList[1].has_doc_file.type.indexOf('image/') > -1">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.has_image2 === null">
+<!--          <img :src="'http://localhost:8000/storage/' + picVideoList.has_image2.hash_name" v-if="picVideoList.image_2_id !== null">-->
         </div>
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length < 3">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length > 2 && picVideoList[2].has_doc_file.type.indexOf('image/') === -1">
-          <img :src="'http://localhost:8000/storage/' + picVideoList[2].has_doc_file.hash_name" v-if="picVideoList.length > 2 && picVideoList[2].has_doc_file.type.indexOf('image/') > -1">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.has_image3 === null">
+<!--          <img :src="'http://localhost:8000/storage/' + picVideoList.has_image3.hash_name" v-if="picVideoList.image_3_id !== null">-->
         </div>
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length < 4">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length > 3 && picVideoList[3].has_doc_file.type.indexOf('image/') === -1">
-          <img :src="'http://localhost:8000/storage/' + picVideoList[3].has_doc_file.hash_name" v-if="picVideoList.length > 3 && picVideoList[3].has_doc_file.type.indexOf('image/') > -1">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.has_image4 === null">
+<!--          <img :src="'http://localhost:8000/storage/' + picVideoList.has_image4.hash_name" v-if="picVideoList.image_4_id !== null">-->
         </div>
       </div>
       <div class="document-input-file-empty">
         <div class="document-input-img-wrapper">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length < 5">
-          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.length > 4 && picVideoList[4].has_doc_file.type.indexOf('image/') === -1">
-          <img :src="'http://localhost:8000/storage/' + picVideoList[4].has_doc_file.hash_name" v-if="picVideoList.length > 4 && picVideoList[4].has_doc_file.type.indexOf('image/') > -1">
+          <img src="/assets/icons/default_upload_img.png" v-if="picVideoList.has_image5 === null">
+<!--          <img :src="'http://localhost:8000/storage/' + picVideoList.has_image5.hash_name" v-if="picVideoList.image_5_id !== null">-->
         </div>
       </div>
     </div>
@@ -55,11 +50,11 @@ import {onMounted, reactive} from "vue";
 import {useStore} from "vuex";
 
 export default {
-  name: "ProfileInputFileGroup",
+  name: "ProfilePicVideoFileGroup",
   props: {
     label: String,
     type: String,
-    parentFiles: []
+    parentFiles: Object
   },
   created() {
     // this.picVideoList = this.$store.getters.getProfilePic
@@ -70,7 +65,7 @@ export default {
   },
   data() {
     return {
-      picVideoList: []
+      picVideoList: { has_image1: null, has_image2: null, has_image3: null, has_image4: null, has_image5: null }
     }
   },
   emits: [
@@ -79,6 +74,7 @@ export default {
   watch: {
     parentFiles: {
       handler(val, oldVal) {
+        // console.log(val)
         this.picVideoList = val
       }
     }

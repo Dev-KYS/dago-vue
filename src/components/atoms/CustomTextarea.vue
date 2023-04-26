@@ -8,7 +8,7 @@ export default {
   props: {
     rows: Number,
     placeholder: String,
-    parentValue: '',
+    parentValue: ''
   },
   mounted() {
     this.value = this.parentValue

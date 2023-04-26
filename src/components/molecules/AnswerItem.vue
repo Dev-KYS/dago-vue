@@ -3,7 +3,7 @@
     <div class="index">Q{{index}}</div>
     <div class="answer-input-wrapper">
       <span>{{question}}</span>
-      <textarea class="answer-input" :readonly="readOnly === true">{{answer}}</textarea>
+      <textarea class="answer-input" :readonly="readOnly === true" @input="$emit('changeAnswer', {index: index, id: id, value: $event.target.value})">{{answer}}</textarea>
     </div>
   </div>
 </template>
@@ -15,8 +15,12 @@ export default {
     index: Number,
     question: String,
     answer: String,
-    readOnly: false
-  }
+    readOnly: false,
+    id: Number
+  },
+  emits: [
+    "changeAnswer"
+  ]
 }
 </script>
 

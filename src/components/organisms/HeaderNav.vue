@@ -76,7 +76,15 @@
               <q-item clickable v-close-popup @click="onItemClick" v-if="proCheck === true">
                 <q-item-section>
                   <q-item-label>
-                    <router-link to="">받은 견적</router-link>
+                    <router-link to="/request/received">받은 의뢰</router-link>
+                  </q-item-label>
+                </q-item-section>
+              </q-item>
+
+              <q-item clickable v-close-popup @click="onItemClick" v-if="proCheck === false">
+                <q-item-section>
+                  <q-item-label>
+                    <router-link to="/myrequest">내 요청목록</router-link>
                   </q-item-label>
                 </q-item-section>
               </q-item>
@@ -153,7 +161,7 @@ export default {
       });
     },
     changePro() {
-      console.log(this.proCheck)
+      // console.log(this.proCheck)
       if (this.proCheck) {
         this.$store.dispatch('changePro', false)
       } else {
