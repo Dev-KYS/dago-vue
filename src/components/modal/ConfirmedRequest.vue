@@ -32,21 +32,36 @@ export default {
   props: {
     show: Boolean,
     name: String,
-    detailId: Number
+    detailId: Number,
+    customerId: Number,
+    proId: Number
   },
   methods: {
     sendContractRequest() {
-      this.axios.get('/estimate_detail/contract/' + this.detailId, {
+      const formData = new FormData()
+      formData.append('estimate_detail_id', this.detailId)
+      formData.append('customer_id', this.customerId)
+      formData.append('pro_id', this.proId)
+
+      this.axios.post('/chatting', formData, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       }).then(res => {
         if (res.data.status === 'success') {
-          this.$router.push('/chat-list')
-          this.$emit('close')
-        }
-      }).catch(e => {
+          this.axios.get('/estimate_detail/contract/' + this.detailId, {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            }
+          }).then(res => {
+            if (res.data.status === 'success') {
+              this.$router.push('/chat-list/' + this.detailId)
+              this.$emit('close')
+            }
+          }).catch(e => {
 
+          })
+        }
       })
     }
   }

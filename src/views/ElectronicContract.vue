@@ -16,48 +16,53 @@
           </div>
           <div class="electronic-contract-content-input-group">
             <label>계약명</label>
-            <input placeholder="ex) 사업계획서 작성" />
+            <input placeholder="ex) 사업계획서 작성" v-model="name"/>
           </div>
           <div class="electronic-contract-content-input-group">
             <label>계약기간</label>
-            <input class="electronic-contract-content-input-date" type="date" placeholder="ex) 사업계획서 작성" />
+            <input class="electronic-contract-content-input-date" type="date" placeholder="ex) 사업계획서 작성" v-model="start_term"/>
             <span class="electronic-contract-content-input-division">~</span>
-            <input class="electronic-contract-content-input-date" type="date" placeholder="ex) 사업계획서 작성" />
+            <input class="electronic-contract-content-input-date" type="date" placeholder="ex) 사업계획서 작성" v-model="end_term"/>
           </div>
           <div class="electronic-contract-content-input-group">
             <label>과업범위</label>
-            <input placeholder="ex) 사업계획서 작성" />
+            <input placeholder="ex) 사업계획서 작성" v-model="scope"/>
           </div>
           <hr>
 
           <div class="electronic-contract-content-input-group">
             <label>지급방법</label>
-            <category-select-btn text="선금+잔금" :class="{'active': selectedPayment === true}" @click="selectedPayment = true"/>
-            <category-select-btn text="잔금 (과업 종료 후 지급)" :class="{'active': selectedPayment === false}" @click="selectedPayment = false"/>
+            <category-select-btn text="선금+잔금" :class="{'active': selectedPayment === true}" @click="changeMethod(true)"/>
+            <category-select-btn text="잔금 (과업 종료 후 지급)" :class="{'active': selectedPayment === false}" @click="changeMethod(false)"/>
           </div>
 
           <div class="electronic-contract-content-input-group">
             <label>지급일</label>
-            <div class="electronic-contract-payment-wrapper">
+            <div class="electronic-contract-payment-wrapper" v-if="selectedPayment === true">
               <div class="payment">
                 <div class="inner">
                   <label>선금</label>
                 </div>
               </div>
               <div class="payment-input">
-                <input type="number" style="margin-bottom: 5px">
-                <input type="date">
+                <input type="number" style="margin-bottom: 5px" v-model="down_payment">
+                <input type="date" v-model="down_payment_date">
               </div>
             </div>
             <div class="electronic-contract-payment-wrapper">
-              <div class="payment">
+              <div class="payment single" v-if="selectedPayment === false">
+                <div class="inner">
+                  <label>잔금</label>
+                </div>
+              </div>
+              <div class="payment" v-if="selectedPayment === true">
                 <div class="inner">
                   <label>잔금</label>
                 </div>
               </div>
               <div class="payment-input">
-                <input type="number" style="margin-bottom: 5px">
-                <input type="date">
+                <input type="number" style="margin-bottom: 5px" v-model="balance">
+                <input type="date" v-model="balance_date">
               </div>
             </div>
           </div>
@@ -71,7 +76,7 @@
                 </div>
               </div>
               <div class="payment-input">
-                <input>
+                <input readonly v-model="requests.has_user.name">
               </div>
             </div>
           </div>
@@ -85,7 +90,7 @@
                 </div>
               </div>
               <div class="payment-input">
-                <input>
+                <input readonly v-model="requests.has_user.email">
               </div>
             </div>
           </div>
@@ -99,20 +104,24 @@
                   </div>
                 </div>
                 <div class="payment-phone-input">
-                  <input>
-                  <label class="electronic-contract-content-input-division">-</label>
-                  <input>
-                  <label class="electronic-contract-content-input-division">-</label>
-                  <input>
+                  <input readonly v-model="requests.has_user.phone">
+<!--                  <input readonly v-model="phone1">-->
+<!--                  <label class="electronic-contract-content-input-division">-</label>-->
+<!--                  <input readonly v-model="phone2">-->
+<!--                  <label class="electronic-contract-content-input-division">-</label>-->
+<!--                  <input readonly v-model="phone3">-->
                 </div>
               </div>
           </div>
 
         </div>
         <div class="electronic-contract-button">
-          <custom-button type="button" text="저장하기" button-class="primary-natural mid" />
-          <custom-button type="button" text="계약서 전송하기" button-class="primary mid" />
+          <custom-button type="button" text="저장하기" button-class="primary-natural mid" @click="saveContract"/>
+          <custom-button type="button" text="계약서 전송하기" button-class="primary mid" @click="sendContract"/>
         </div>
+        <Teleport to="body">
+          <request-complete :show="showSaveCompleteModal" @close="showSaveCompleteModal = false" msg="전자계약서 저장 완료!"/>
+        </Teleport>
       </div>
       <div class="electronic-contract-request-wrapper">
         <div class="electronic-contract-request-title">
@@ -124,13 +133,38 @@
         <div class="electronic-contract-request-container">
           <ul>
             <ol type="1">
-              <li v-for="request in requests">{{request.title}}
-                <ul>
-                  <li v-for="content in request.contents">{{content.content}}</li>
-                </ul>
+              <li>
+                세부 카테고리
+                <ul><li>{{requests.has_category.title}}</li></ul>
+              </li>
+              <li>
+                프로젝트 희망 마감일정
+                <ul><li>{{requests.end_date}}</li></ul>
+              </li>
+              <li>
+                지역 및 진행방식
+                <ul><li>{{requests.has_city.fullname}}</li></ul>
+                <ul><li>{{requests.has_proceed.title}}</li></ul>
+              </li>
+              <li>
+                의뢰내용
+                <ul v-for="item in String(requests.contents).split('\r\n')"><li>{{item}}</li></ul>
+              </li>
+              <li>
+                참고자료
+                <ul v-for="item in requests.has_attach"><li>{{item.has_file.origin_name}}</li></ul>
               </li>
             </ol>
           </ul>
+<!--          <ul>-->
+<!--            <ol type="1">-->
+<!--              <li v-for="request in requests">{{request.title}}-->
+<!--                <ul>-->
+<!--                  <li v-for="content in request.contents">{{content.content}}</li>-->
+<!--                </ul>-->
+<!--              </li>-->
+<!--            </ol>-->
+<!--          </ul>-->
         </div>
 
         <div class="electronic-contract-request-title">
@@ -146,7 +180,7 @@
         </div>
         <div class="electronic-contract-question-container" v-for="(question, index) in questions">
           <div class="electronic-contract-question">
-            <span style="margin-right: 20px">Q{{index + 1}}</span><span>{{question.title}}</span>
+            <span style="margin-right: 20px">Q{{index + 1}}</span><span>{{question.question}}</span>
           </div>
           <div class="electronic-contract-answer">
             <span style="margin-right: 20px">A{{index + 1}}</span><span>{{question.answer}}</span>
@@ -161,25 +195,159 @@
 import CustomButton from "@/components/atoms/CustomButton.vue";
 import CustomInput from "@/components/atoms/CustomInput.vue";
 import CategorySelectBtn from "@/components/atoms/CategorySelectBtn.vue";
+import RequestComplete from "@/components/modal/RequestComplete.vue";
 
 export default {
   name: "ElectronicContract",
-  components: {CategorySelectBtn, CustomInput, CustomButton},
+  components: {RequestComplete, CategorySelectBtn, CustomInput, CustomButton},
   data() {
     return {
-      requests: [
-        {'id' : 1, 'title': '세부 카테고리', 'contents': [{'content': '사업계획서 작성'}]},
-        {'id' : 2, 'title': '프로젝트 희망 마감일정', 'contents': [{'content': '2023년 2월 3일'}]},
-        {'id' : 3, 'title': '지역 및 진행방식', 'contents': [{'content': '대전광역시 유성구'}, {'content': '제가 있는 곳으로 와주세요'}]},
-        {'id' : 4, 'title': '의뢰내용', 'contents': [{'content': '예비창업패키지 지원 희망합니다'}]},
-        {'id' : 5, 'title': '참고자료', 'contents': [{'content': '사업계획서 초안.hwp'}]}
-      ],
+      requests: {
+        has_category: {},
+        has_attach: [{
+          has_file: {}
+        }],
+        has_city: {},
+        has_proceed: {},
+        has_status: {},
+        has_user: {}
+      },
       questions: [
-        {'id': 1, 'title': '몇 장 작성을 원하시나요?', 'answer': '3장 작성 원합니다'},
-        {'id': 2, 'title': '아이템에 대해서 간단히 설명해주세요. ', 'answer': '재능 거래 플랫폼입니다'}
+        {'id': 1, 'question': '몇 장 작성을 원하시나요?', 'answer': '3장 작성 원합니다'},
+        {'id': 2, 'question': '아이템에 대해서 간단히 설명해주세요. ', 'answer': '재능 거래 플랫폼입니다'}
       ],
-      selectedPayment: true
+      selectedPayment: true,
+      contractId: 0,
+      name: '',
+      start_term: {},
+      end_term: {},
+      scope: '',
+      method: 'down',
+      down_payment: '',
+      down_payment_date: {},
+      balance: '',
+      balance_date: {},
+      isNew: Boolean,
+      showSaveCompleteModal: false,
+      phone1: '',
+      phone2: '',
+      phone3: ''
     }
+  },
+  methods: {
+    getContract() {
+      const detailId = this.$route.params.id
+      this.axios.get('/contract/detailId/' + detailId, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          // res.data.data -> empty check
+          // hasUser
+          console.log(res.data.data);
+
+          this.requests = res.data.data.has_estimate
+          this.questions = res.data.data.has_questions
+
+          // if (this.requests.has_user.phone.length === 11) {
+          //   this.phone1 = this.requests.has_user.phone.substring(0, 3)
+          //   this.phone2 = this.requests.has_user.phone.substring(3, 7)
+          //   this.phone3 = this.requests.has_user.phone.substring(7, 11)
+          // } else {
+          //   this.phone1 = this.requests.has_user.phone.substring(0, 3)
+          //   this.phone2 = this.requests.has_user.phone.substring(3, 6)
+          //   this.phone3 = this.requests.has_user.phone.substring(6, 10)
+          // }
+
+          if (res.data.data.has_contracts.length > 0) {
+            // 생성 필요
+            this.isNew = false
+            console.log(false)
+
+            const contract = res.data.data.has_contracts[0]
+            this.contractId = contract.id
+            this.name = contract.name
+            this.start_term = contract.start_term
+            this.end_term = contract.end_term
+            this.scope = contract.scope
+            this.method = contract.method
+            this.down_payment = contract.down_payment
+            this.down_payment_date = contract.down_payment_date
+            this.balance = contract.balance
+            this.balance_date = contract.balance_date
+
+            this.selectedPayment = this.method === 'down'
+          } else {
+            // 기존 계약서 있음
+            this.isNew = true
+            console.log(true)
+          }
+        }
+      }).catch(e => {
+
+      })
+    },
+    changeMethod(type) {
+      if (type) {
+        this.method = "down"
+      } else {
+        this.method = "balance"
+      }
+      this.selectedPayment = type
+    },
+    saveContract() {
+      const formData = new FormData()
+      formData.append('estimate_detail_id', this.$route.params.id)
+      // formData.append('contract_id', this.contractId)
+      formData.append('name', this.name)
+      formData.append('start_term', this.start_term)
+      formData.append('end_term', this.end_term)
+      formData.append('scope', this.scope)
+      formData.append('method', this.method)
+      formData.append('down_payment', this.down_payment)
+      formData.append('down_payment_date', this.down_payment_date)
+      formData.append('balance', this.balance)
+      formData.append('balance_date', this.balance_date)
+
+      if (this.isNew) {
+        this.axios.post('/contract', formData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          }
+        }).then(res => {
+          console.log(res.data)
+          if (res.data.status === 'success') {
+            // 저장완료
+            this.showSaveCompleteModal = true
+          }
+        }).catch(e => {
+          console.log(e)
+        })
+      } else {
+        this.axios.post('/contract/update/' + this.contractId, formData, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+          }
+        }).then(res => {
+          console.log(res.data)
+          if (res.data.status === 'success') {
+            // 저장완료
+            this.showSaveCompleteModal = true
+          }
+        }).catch(e => {
+          console.log(e)
+        })
+      }
+    },
+    sendContract() {
+      if (this.contractId) {
+        this.$router.push('/contract/sign/' + this.contractId)
+      }
+    }
+  },
+  mounted() {
+    this.getContract()
   }
 }
 </script>
@@ -251,6 +419,9 @@ export default {
             width: 50%;
             position: relative;
             margin-right: 5px;
+            &.single {
+              width: 19%;
+            }
             &:after {
               content: "";
               display: block;

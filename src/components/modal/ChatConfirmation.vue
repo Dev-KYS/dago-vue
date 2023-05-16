@@ -36,8 +36,8 @@ export default {
   },
   methods: {
     confirm() {
-      this.$emit('close')
       this.$emit('confirm')
+      // this.$emit('close')
     }
   }
 }

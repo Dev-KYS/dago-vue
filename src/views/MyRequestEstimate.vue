@@ -33,7 +33,7 @@
             <span class="badge wait" v-if="item.has_receive_estimate.has_status.title !== '답변완료'">{{item.has_receive_estimate.has_status.title}}</span>
             <span class="badge complete" v-else>{{item.has_receive_estimate.has_status.title}}</span>
             <button class="button natural small" v-if="item.has_receive_estimate.has_status.title === '견적발송'" @click="showEstimationBasis = true">견적보기</button>
-            <button class="button natural small" v-else @click="$router.push('/request/answer?id=' + item.has_estimate.id + '&user_id=' + estimate.id)">질문보기</button>
+            <button class="button natural small" v-else @click="$router.push('/request/answer?id=' + item.has_estimate.id + '&user_id=' + item.has_user.id)">질문보기</button>
             <!-- 견적 산출 근거 모달 -->
             <Teleport to="body">
               <estimation-basis :show="showEstimationBasis" @close="showEstimationBasis = false" :estimate-id="estimate.id" :user-id="item.has_user.id"/>
@@ -115,6 +115,7 @@ export default {
         }
       }).then(res => {
         if (res.data.status === 'success') {
+          console.log(res.data.data)
           this.users = res.data.data.data
           this.estimate = res.data.estimate
           this.total = res.data.data.total

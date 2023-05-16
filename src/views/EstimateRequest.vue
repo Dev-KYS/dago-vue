@@ -306,7 +306,8 @@ export default {
           Authorization: `Bearer ${localStorage.getItem('access_token')}`
         }
       }).then(res => {
-        if (res.status === 200) {
+        if (res.data.status === 'success') {
+          console.log(res.data.data)
           const estimateId = res.data.data.id
           if (this.files.length > 0) {
             // File upload

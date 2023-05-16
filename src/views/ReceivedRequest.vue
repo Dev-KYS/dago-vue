@@ -17,9 +17,9 @@
                            :name="item.has_estimate.has_user.name"
                            :title="item.has_estimate.has_category.title"
                            :contents="item.has_estimate.contents"
-                           :date="item.date"
-                           :is-favorite="item.is_favorite"
-                           :end-time="item.endTime"
+                           :date="item.has_estimate.end_date"
+                           :is-favorite="item.has_estimate.is_favorite"
+                           :end-time="item.has_estimate.endTime"
                            @favorite-count="changeCount"
         />
       </div>
@@ -56,11 +56,11 @@ export default {
         }
       }).then(res => {
         if (res.data.status === 'success') {
-          console.log(res.data)
+          console.log(res.data.data)
           this.requestData = res.data.data.data
           this.totalCount = res.data.data.total
           this.favoriteCount = res.data.favoriteCount
-          this.perPage = res.data.data.perPage
+          this.perPage = res.data.data.per_page
         }
       }).catch(e => {
 
@@ -71,7 +71,7 @@ export default {
     }
   },
   mounted() {
-    this.getLists()
+    this.getLists(3)
   }
 }
 </script>

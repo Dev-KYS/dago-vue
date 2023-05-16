@@ -51,7 +51,13 @@
               </Teleport>
               <button class="button primary small" @click="showConfirmedRequest = true">의뢰하기</button>
               <Teleport to="body">
-                <confirmed-request :show="showConfirmedRequest" :name="item.has_user.name" :detail-id="item.id" @close="showConfirmedRequest = false" />
+                <confirmed-request
+                    :show="showConfirmedRequest"
+                    :name="item.has_user.name"
+                    :detail-id="item.id"
+                    :pro-id="item.has_user.id"
+                    :customer-id="item.has_estimate.user_id"
+                    @close="showConfirmedRequest = false" />
               </Teleport>
             </div>
           </div>
@@ -82,7 +88,10 @@ export default {
       perPage: 3,
       total: 0,
       users: [{
-        "has_user": {}
+        "has_user": {},
+        'has_estimate': {
+          'has_user': {}
+        }
       }],
     }
   },
@@ -99,7 +108,7 @@ export default {
       }).then(res => {
         console.log(res.data.data)
         this.users = res.data.data.data
-        // this.estimate = res.data.estimate
+        // this.estimate = res.data.data.data.has_estimate
         this.total = res.data.data.total
         this.perPage = res.data.data.per_page
       }).catch(e => {

@@ -62,12 +62,12 @@ const routes = [
         component: () => import("@/views/SelectEstimate.vue")
     },
     {
-        path: "/request/contract",
+        path: "/request/contract/:id",
         name: "ElectronicContract",
         component: () => import("@/views/ElectronicContract.vue")
     },
     {
-        path: "/chat-list",
+        path: "/chat-list/:id",
         name: "ChatList",
         component: () => import("@/views/ChatList.vue")
     },
@@ -75,6 +75,11 @@ const routes = [
         path: "/chat-room/:id",
         name: "ChatRoom",
         component: () => import("@/views/ChatRoom.vue")
+    },
+    {
+        path: "/contract/sign/:id",
+        name: "ContractSign",
+        component: () => import("@/views/ContractSign.vue")
     }
 ];
 

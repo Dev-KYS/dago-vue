@@ -22,42 +22,43 @@
           <div class="chat">
             <div class="q-pa-md row justify-center">
               <q-scroll-area ref="scrollAreaRef" style="width: 100%; margin: 10px; height: 640px;">
-                <q-chat-message :text="['견적서']" bg-color="white">
-                  <div class="chat-estimate-detail-wrapper">
-                    <div class="chat-estimate-detail-title">
-                      <label>견적서</label>
-                    </div>
+                <q-chat-message :text-html="true" :text="[firstInfo.msg]" bg-color="white"></q-chat-message>
+<!--                <q-chat-message :text="['견적서']" bg-color="white">-->
+<!--                  <div class="chat-estimate-detail-wrapper">-->
+<!--                    <div class="chat-estimate-detail-title">-->
+<!--                      <label>견적서</label>-->
+<!--                    </div>-->
 
-                    <div class="chat-estimate-detail-desc">
-                      <span>김다른 고객님 안녕하세요. 사업계획서 작성 전문가 김진한 입니다. 상담 후 상세견적금액과 최대 예상견적 금액입니다.</span>
-                    </div>
+<!--                    <div class="chat-estimate-detail-desc">-->
+<!--                      <span>김다른 고객님 안녕하세요. 사업계획서 작성 전문가 김진한 입니다. 상담 후 상세견적금액과 최대 예상견적 금액입니다.</span>-->
+<!--                    </div>-->
 
-                    <div class="division"></div>
+<!--                    <div class="division"></div>-->
 
-                    <div class="chat-estimate-detail-price">
-                      <div class="chat-estimate-detail-price-title">서비스</div>
-                      <div class="chat-estimate-detail-price-item">사업계획서 작성</div>
-                    </div>
-                    <div class="chat-estimate-detail-price">
-                      <div class="chat-estimate-detail-price-title">견적금액</div>
-                      <div class="chat-estimate-detail-price-item">50,000원</div>
-                    </div>
-                    <div class="chat-estimate-detail-price">
-                      <div class="chat-estimate-detail-price-title">최대 예상금액</div>
-                      <div class="chat-estimate-detail-price-item">100,000원</div>
-                    </div>
+<!--                    <div class="chat-estimate-detail-price">-->
+<!--                      <div class="chat-estimate-detail-price-title">서비스</div>-->
+<!--                      <div class="chat-estimate-detail-price-item">사업계획서 작성</div>-->
+<!--                    </div>-->
+<!--                    <div class="chat-estimate-detail-price">-->
+<!--                      <div class="chat-estimate-detail-price-title">견적금액</div>-->
+<!--                      <div class="chat-estimate-detail-price-item">50,000원</div>-->
+<!--                    </div>-->
+<!--                    <div class="chat-estimate-detail-price">-->
+<!--                      <div class="chat-estimate-detail-price-title">최대 예상금액</div>-->
+<!--                      <div class="chat-estimate-detail-price-item">100,000원</div>-->
+<!--                    </div>-->
 
-                    <div class="division"></div>
+<!--                    <div class="division"></div>-->
 
-                    <div class="chat-estimate-sys-msg">
-                      <span>*계약 전 궁금한 점을 물어보세요</span>
-                    </div>
+<!--                    <div class="chat-estimate-sys-msg">-->
+<!--                      <span>*계약 전 궁금한 점을 물어보세요</span>-->
+<!--                    </div>-->
 
-                    <div class="chat-estimate-profile-button">
-                      <custom-button type="button" class="button primary mid" text="고수 프로필 보기"/>
-                    </div>
-                  </div>
-                </q-chat-message>
+<!--                    <div class="chat-estimate-profile-button">-->
+<!--                      <custom-button type="button" class="button primary mid" text="고수 프로필 보기"/>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </q-chat-message>-->
 
                 <div v-for="item in chats">
                   <q-chat-message bg-color="white" :text="[item.msg]" :sent="item.type === 'send'"/>
@@ -136,7 +137,7 @@
       <chat-confirmation :show="chatConfirmationShow" @close="chatConfirmationShow = false" @confirm="confirmationOfRequest"/>
     </Teleport>
     <Teleport to="body">
-      <confirmation-of-request :show="chatConfirmationShow" @close="chatConfirmationShow = false" msg="sdf"/>
+      <confirmation-of-request :detail-id="$route.params.id" :show="tempRequestShow" @close="tempRequestShow = false" msg="sdf"/>
     </Teleport>
   </div>
 </template>
@@ -147,6 +148,7 @@ import ChatReport from "@/components/modal/ChatReport.vue";
 import ChatFinish from "@/components/modal/ChatFinish.vue";
 import ChatConfirmation from "@/components/modal/ChatConfirmation.vue";
 import ConfirmationOfRequest from "@/components/modal/ConfirmationOfRequest.vue";
+import {ref} from "vue";
 
 export default {
   name: "ChatRoom",
@@ -160,25 +162,73 @@ export default {
   props: {
     chatReportShow: false,
     chatFinishShow: false,
-    chatConfirmationShow: false,
-    confirmationOfRequestShow: false
+    // chatConfirmationShow: false,
+    // confirmationOfRequestShow: ref(false)
   },
   data() {
     return {
+      firstInfo: {'type': 'send', 'msg' : '<div class="chat-estimate-detail-wrapper">\n' +
+            '                    <div class="chat-estimate-detail-title">\n' +
+            '                      <label>견적서</label>\n' +
+            '                    </div>\n' +
+            '                    <div class="chat-estimate-detail-desc">\n' +
+            '                      <span>김다른 고객님 안녕하세요. 사업계획서 작성 전문가 김진한 입니다. 상담 후 상세견적금액과 최대 예상견적 금액입니다.</span>\n' +
+            '                    </div>\n' +
+            '                    <div class="division"></div>\n' +
+            '                    <div class="chat-estimate-detail-price">\n' +
+            '                      <div class="chat-estimate-detail-price-title">서비스</div>\n' +
+            '                      <div class="chat-estimate-detail-price-item">사업계획서 작성</div>\n' +
+            '                    </div>\n' +
+            '                    <div class="chat-estimate-detail-price">\n' +
+            '                      <div class="chat-estimate-detail-price-title">견적금액</div>\n' +
+            '                      <div class="chat-estimate-detail-price-item">50,000원</div>\n' +
+            '                    </div>\n' +
+            '                    <div class="chat-estimate-detail-price">\n' +
+            '                      <div class="chat-estimate-detail-price-title">최대 예상금액</div>\n' +
+            '                      <div class="chat-estimate-detail-price-item">100,000원</div>\n' +
+            '                    </div>\n' +
+            '                    <div class="division"></div>\n' +
+            '                    <div class="chat-estimate-sys-msg">\n' +
+            '                      <span>*계약 전 궁금한 점을 물어보세요</span>\n' +
+            '                    </div>\n' +
+            '                    <div class="chat-estimate-profile-button">\n' +
+            '                      <custom-button type="button" class="button primary mid" text="고수 프로필 보기"/>고수 프로필 보기</custom-button>' +
+            '                    </div>\n' +
+            '                  </div>'},
       chats: [
-        {'id': 1, 'sender_id': 1, 'receiver_id': 1, 'msg': '안녕하세요! 전문가님과 계약하고 싶어서 연락드립니다 :)', 'type': 'send'},
-        {'id': 2, 'sender_id': 1, 'receiver_id': 1, 'msg': '안녕하세요! 고객님님과 계약하고 싶어서 답장드립니다 :)', 'type': 'receive'},
-        {'id': 3, 'sender_id': 1, 'receiver_id': 1, 'msg': '계약 진행은 어떻게 하면 될까요?', 'type': 'send'},
-        {'id': 4, 'sender_id': 1, 'receiver_id': 1, 'msg': '다고 의뢰 확정후 다고 전자 서명을 이용해 계약을 진행하면 됩니다 :)', 'type': 'receive'},
-        {'id': 5, 'sender_id': 1, 'receiver_id': 1, 'msg': '개인 연락처를 알 수 있을까요?', 'type': 'send'},
-        {'id': 6, 'sender_id': 1, 'receiver_id': 1, 'msg': '전자서명 이후 전달드리겠습니다!', 'type': 'receive'},
-      ]
+        // {'id': 1, 'sender_id': 1, 'receiver_id': 1, 'msg': '안녕하세요! 전문가님과 계약하고 싶어서 연락드립니다 :)', 'type': 'send'},
+        // {'id': 2, 'sender_id': 1, 'receiver_id': 1, 'msg': '안녕하세요! 고객님님과 계약하고 싶어서 답장드립니다 :)', 'type': 'receive'},
+        // {'id': 3, 'sender_id': 1, 'receiver_id': 1, 'msg': '계약 진행은 어떻게 하면 될까요?', 'type': 'send'},
+        // {'id': 4, 'sender_id': 1, 'receiver_id': 1, 'msg': '다고 의뢰 확정후 다고 전자 서명을 이용해 계약을 진행하면 됩니다 :)', 'type': 'receive'},
+        // {'id': 5, 'sender_id': 1, 'receiver_id': 1, 'msg': '개인 연락처를 알 수 있을까요?', 'type': 'send'},
+        // {'id': 6, 'sender_id': 1, 'receiver_id': 1, 'msg': '전자서명 이후 전달드리겠습니다!', 'type': 'receive'},
+      ],
+      tempRequestShow: false,
+      chatConfirmationShow: false
     }
   },
   methods: {
+    getChats() {
+      this.axios.get('/chatting/chats/' + this.$route.params.id, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if(res.data.status === 'success') {
+          console.log(res.data.data)
+          this.chats = res.data.data.has_chats
+        }
+      })
+    },
     confirmationOfRequest() {
-      this.confirmationOfRequestShow = true
+      this.chatConfirmationShow = ref(false)
+      this.tempRequestShow = ref(true)
+      // this.chatConfirmationShow = false
+      // this.confirmationOfRequestShow = ref(true)
     }
+  },
+  mounted() {
+    this.getChats()
   }
 }
 </script>

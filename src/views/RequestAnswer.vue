@@ -106,6 +106,7 @@ export default {
         }
       }).then(res => {
         if (res.data.status === 'success') {
+          console.log(res.data.data)
           this.estimate = res.data.data.estimate
           this.questionInputList = res.data.data.questions
           for (const q of this.questionInputList) {

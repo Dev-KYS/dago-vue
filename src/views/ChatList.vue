@@ -29,26 +29,26 @@
       </q-tabs>
     </div>
 
-    <div class="chat-content-wrapper" v-if="chats.length === 0">
-      <div class="chat-item" @click="$router.push('/chat-room/1')">
+    <div class="chat-content-wrapper" v-if="chats.length > 0">
+      <div class="chat-item" @click="$router.push('/chat-room/' + item.id)" v-for="item in chats">
         <div class="chat-user-wrapper">
           <img src="public/assets/icons/default_avatar.png">
-          <span>김대표</span>
+          <span>{{item.has_estimate_detail.has_user.name}}</span>
         </div>
         <div class="chat-estimate-wrapper">
-          <label>문서 작성</label>
+          <label>{{ item.has_estimate_detail.has_estimate.has_category.title }}</label>
           <div class="chat-estimate-area-state">
-            <span class="area">대전 유성구</span>
+            <span class="area">{{item.has_estimate_detail.has_estimate.has_city.fullname}}</span>
             <span class="division">|</span>
-            <span class="state">상담완료</span>
+            <span class="state">{{ item.has_estimate_detail.has_estimate.has_status.title }}</span>
           </div>
-          <span>문서 작성 경력만 10년입니다. 제가 최대한 어려운 부분을 도와드리겠습니다. 금일은 휴가중이라 작업이 불가능하고 내일부터 세세히 도와드리겠습니다.</span>
+          <span>{{ item.has_estimate_detail.has_estimate.contents }}</span>
         </div>
         <div class="chat-estimate-division"/>
         <div class="chat-estimate-detail-wrapper">
           <div class="chat-estimate-detail-price">
-            <p>최종 견적가격 10,000원</p>
-            <p>최대 예상견적 20,000원</p>
+            <p>최종 견적가격 {{String(item.has_estimate_detail.amount).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}}원</p>
+            <p>최대 예상견적 {{String(item.has_estimate_detail.amount + Number(item.has_estimate_detail.add_amount)).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}}원</p>
           </div>
         </div>
       </div>
@@ -95,7 +95,16 @@ export default {
   },
   data() {
     return {
-      chats: []
+      chats: [{
+        has_estimate_detail: {
+          has_user: {},
+          has_estimate: {
+            has_category: {},
+            has_city: {},
+            has_status: {}
+          }
+        }
+      }]
     }
   },
   setup() {
@@ -108,7 +117,32 @@ export default {
       console.log(index)
       console.log(this.chats)
       // 채팅 목록 갱신
+    },
+    getChatList() {
+      this.axios.get('/chatting/room/' + this.$route.params.id, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`
+        }
+      }).then(res => {
+        if (res.data.status === 'success') {
+          console.log(res.data.data)
+          this.chats = res.data.data
+        }
+      })
+      // this.axios.get('/estimate_detail/chat-list', {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem('access_token')}`
+      //   }
+      // }).then(res => {
+      //   if (res.data.status === 'success') {
+      //     console.log(res.data.data)
+      //     this.chats = res.data.data
+      //   }
+      // })
     }
+  },
+  mounted() {
+    this.getChatList()
   }
 }
 </script>
