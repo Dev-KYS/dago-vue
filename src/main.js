@@ -9,7 +9,7 @@ import '@quasar/extras/material-icons/material-icons.css'
 import 'quasar/src/css/index.sass'
 
 
-axios.defaults.baseURL = 'http://localhost:8000/api'
+axios.defaults.baseURL = 'http://59.27.29.116:8031/api'
 
 // createApp(App)
 //     .use(router)
