@@ -71,7 +71,9 @@ export default {
       formData.append('password', this.password)
       formData.append('password_confirmation', this.password_confirmation)
       formData.append('phone', this.phone)
-      this.axios.post('/auth/register', formData).then(res => {
+      this.axios.post('/auth/register', formData, {
+        "Access-Control-Allow-Origin": "*"
+      }).then(res => {
         this.goToMain()
       }).catch((err) => {
         console.log(err)
